@@ -48,4 +48,29 @@ spline <- xspline_function(gam_model)
 p <- plot(expl_rf_ale)
 xspline_plot(spline, add = TRUE, p)
 
+#xgboost
+library(xgboost)
+library(xspliner)
+model_matrix_train <- model.matrix(left ~ . -1, HR_data)
+data_train <- xgb.DMatrix(model_matrix_train, label = HR_data$left)
+param <- list(max_depth = 2, objective = "binary:logistic")
 
+HR_xgb_model <- xgb.train(param, data_train, nrounds = 50)
+
+explainer_xgb <- explain(HR_xgb_model, data = model_matrix_train)
+
+## pdp
+expl_xgb_pdp <- single_variable(explainer_xgb, "satisfaction_level", "pdp")
+
+gam_model <- xspline_approx(expl_xgb_pdp, bs = "tp")
+spline <- xspline_function(gam_model)
+p <- plot(expl_xgb_pdp)
+xspline_plot(spline, add = TRUE, p)
+
+## ale
+expl_xgb_ale <- single_variable(explainer_xgb, "satisfaction_level", "ale")
+
+gam_model <- xspline_approx(expl_xgb_ale, bs = "tp")
+spline <- xspline_function(gam_model)
+p <- plot(expl_xgb_ale)
+xspline_plot(spline, add = TRUE, p)
