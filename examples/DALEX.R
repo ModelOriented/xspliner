@@ -13,7 +13,7 @@ explainer_rf  <- explain(HR_rf_model, data = HR_data,
 ## pdp
 expl_rf_pdp  <- single_variable(explainer_rf, variable = "satisfaction_level", type = "pdp", which.class = 2, prob = TRUE)
 
-gam_model <- xspline_approx(expl_rf_pdp, bs = "tp")
+gam_model <- xspline_approx(expl_rf_pdp, k = 1)
 spline <- xspline_function(gam_model)
 p <- plot(expl_rf_pdp)
 xspline_plot(spline, add = TRUE, p)
