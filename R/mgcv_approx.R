@@ -8,9 +8,9 @@
 #' @examples
 #' x <- sort(rnorm(20, 5, 5))
 #' y <- rnorm(20, 2, 2)
-#' xspline_approx(data.frame(x = x, y = y), bs = "tp")
+#' xspline_approx_gam(data.frame(x = x, y = y), bs = "tp")
 #' @export
-xspline_approx <- function(data, ...) {
+xspline_approx_gam <- function(data, ...) {
   if (!all(c("x", "y") %in% colnames(data))) {
     stop("data must have 'x' and 'y' variable")
   }
@@ -22,19 +22,19 @@ xspline_approx <- function(data, ...) {
 
 #" Extract fitted spline function.
 #'
-#' It extracts fitted spline function by \link{xspline_approx}.
+#' It extracts fitted spline function by \link{xspline_approx_gam}.
 #' @param fitted_gam Fitted gam model approximating data.
 #' @param ... Other arguments passed to \link{mgcv::predict.gam} method.
 #' @return
 #' Function of one variable.
 #' @examples
-#' x <- sort(rnorm(20, 5, 5))
-#' y <- rnorm(20, 2, 2)
-#' gam_model <- xspline_approx(data.frame(x = x, y = y), bs = "tp")
-#' spline <- xspline_function(gam_model)
-#' plot(spline)
+#' x <- sort(rnorm(20, 0, 5))
+#' y <- x^3 + rnorm(20, 0, 1)
+#' gam_model <- xspline_approx_gam(data.frame(x = x, y = y), bs = "tp")
+#' spline <- xspline_function_gam(gam_model)
+#' plot(spline, min(x), max(x))
 #' @export
-xspline_function <- function(fitted_gam, ...) {
+xspline_function_gam <- function(fitted_gam, ...) {
   if (!("gam" %in% class(fitted_gam))) {
     stop("fitted_gam should be of 'gam' class")
   }
@@ -42,6 +42,62 @@ xspline_function <- function(fitted_gam, ...) {
   spline <- function(val) {
     data <- data.frame(x = val)
     mgcv::predict.gam(model, data, ...)
+  }
+  attr(spline, "variable_range") <- range(model$model$x)
+  spline
+}
+
+#" Approximate spline on data
+#'
+#' It aproximates data with spline function by fitting GAM model with rms package.
+#' @param data Data with \code{x} and \code{y} variables.
+#' @param ... Other arguments passed to \link{mgcv::s} function.
+#' @return
+#' Object of class "rms".
+#' @examples
+#' x <- sort(rnorm(20, 0, 5))
+#' y <- x^3 + rnorm(20, 0, 1)
+#' rms_model <- xspline_approx_rms(data.frame(x = x, y = y))
+#' @export
+xspline_approx_rms <- function(data) {
+  if (!all(c("x", "y") %in% colnames(data))) {
+    stop("data must have 'x' and 'y' variable")
+  }
+  x <- data$x
+  y <- data$y
+  if (!is.null(getOption("ols_knots_number"))) {
+    model <- rms::ols(y ~ rms::rcs(x, getOption("ols_knots_number")))
+  } else {
+    model <- rms::ols(y ~ rms::rcs(x))
+  }
+
+  model$model <- data
+  model
+}
+
+#" Extract fitted spline function for rms estimator.
+#'
+#' It extracts fitted spline function by \link{xspline_approx}.
+#' @param fitted_gam Fitted gam model approximating data.
+#' @param ... Other arguments passed to \link{mgcv::predict.gam} method.
+#' @return
+#' Function of one variable.
+#' @examples
+#' x <- sort(rnorm(20, 0, 5))
+#' y <- x^3 + rnorm(20, 0, 1)
+#' rms_model <- xspline_approx_rms(data.frame(x = x, y = y))
+#' spline <- xspline_function_rms(rms_model)
+#' plot(x, y)
+#' plot(spline, min(x), max(x))
+#' @export
+xspline_function_rms <- function(fitted_rms) {
+  if (!("rms" %in% class(fitted_rms))) {
+    stop("fitted_rms should be of 'rms' class")
+  }
+  model <- fitted_rms
+  spline <- function(val) {
+    data <- data.frame(x = val)
+    predict(model, data)
   }
   attr(spline, "variable_range") <- range(model$model$x)
   spline
