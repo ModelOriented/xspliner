@@ -2,25 +2,54 @@
 % Please edit documentation in R/mgcv_approx.R
 \name{xspline_function_gam}
 \alias{xspline_function_gam}
+\alias{xspline_function_rms}
+\alias{xspline_function}
 \title{It extracts fitted spline function by \link{xspline_approx_gam}.}
 \usage{
 xspline_function_gam(fitted_gam, ...)
+
+xspline_function_rms(fitted_rms)
+
+xspline_function(fitted_model, ...)
 }
 \arguments{
+\item{fitted_gam}{Fitted gam model approximating data.}
+
+\item{...}{Other arguments passed to \link{mgcv::predict.gam} method.}
+
 \item{fitted_gam}{Fitted gam model approximating data.}
 
 \item{...}{Other arguments passed to \link{mgcv::predict.gam} method.}
 }
 \value{
 Function of one variable.
+
+Function of one variable.
 }
 \description{
 It extracts fitted spline function by \link{xspline_approx_gam}.
+
+It extracts fitted spline function by \link{xspline_approx}.
 }
 \examples{
 x <- sort(rnorm(20, 0, 5))
 y <- x^3 + rnorm(20, 0, 1)
 gam_model <- xspline_approx_gam(data.frame(x = x, y = y), bs = "tp")
 spline <- xspline_function_gam(gam_model)
+plot(spline, min(x), max(x))
+
+set.seed(123)
+x <- sort(rnorm(40, 0, 5))
+y <- sin(x) + log(abs(x)) + rnorm(40, 0, 1)
+plot(x, y)
+gam_model_mon <- xspline_approx_gam_mon(data.frame(x = x, y = y), increasing = TRUE, bs = "tp")
+spline_mon <- xspline_function_gam(gam_model_mon)
+gam_model <- xspline_approx_gam(data.frame(x = x, y = y), bs = "tp")
+spline <- xspline_function_gam(gam_model)
+x <- sort(rnorm(20, 0, 5))
+y <- x^3 + rnorm(20, 0, 1)
+rms_model <- xspline_approx_rms(data.frame(x = x, y = y))
+spline <- xspline_function_rms(rms_model)
+plot(x, y)
 plot(spline, min(x), max(x))
 }
