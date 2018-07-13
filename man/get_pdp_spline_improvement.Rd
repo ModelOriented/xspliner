@@ -4,13 +4,13 @@
 \alias{get_pdp_spline_improvement}
 \title{It builds two glm models with single predictor variable.
 The first one is just simple glm model with predictor variable as is.
-The second one transforms predictor variable with estimated slpine function on the main model response.}
+The second one transforms predictor variable with estimated spline function on the main model response.}
 \usage{
 get_pdp_spline_improvement(model, data, pred_var, response_var,
-  spline_pkg = "gam", type = "pdp", ...)
+  spline_pkg = "gam", type = "pdp", monotonic = NULL, ...)
 }
 \arguments{
-\item{model}{Output of \link{DALEX::exlain} function.}
+\item{model}{Output of \link{DALEX::explain} function.}
 
 \item{data}{Data used for prediction}
 
@@ -28,5 +28,5 @@ List containing transformation function for respoonse_var, plot on the model and
 \description{
 It builds two glm models with single predictor variable.
 The first one is just simple glm model with predictor variable as is.
-The second one transforms predictor variable with estimated slpine function on the main model response.
+The second one transforms predictor variable with estimated spline function on the main model response.
 }
