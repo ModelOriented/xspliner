@@ -33,11 +33,31 @@ get_pdp_spline_improvement <- function(model, data, pred_var, response_var, spli
                       spline_plot = NULL,
                       aic = NULL)
 
-  if (class(data[[pred_var]]) %in% c("factor", "ordered"))
-    return(base_output)
+  model_variable_response  <- variable_response(model, variable = pred_var, type = type, which.class = 2, prob = TRUE)
+  p <- plot(model_variable_response)
+
+  if ("factorMerger" %in% class(model_variable_response)) {
+    merged_factors <- factorMerger::getOptimalPartitionDf(model_variable_response, "GIC", 3)
+    avg_group_response <- data.frame(x = model_variable_response$factor, y = model_variable_response$response) %>%
+      dplyr::group_by(x) %>%
+      dplyr::summarise(y = mean(y)) %>%
+      dplyr::left_join(merged_factors, by = c('x' = 'orig')) %>%
+      dplyr::group_by(pred) %>%
+      dplyr::mutate(y = mean(y)) %>%
+      dplyr::ungroup() %>%
+      dplyr::select(x, y)
+
+    transform <- function(val) lapply(val, function(val) {avg_group_response[avg_group_response$x == val, ]$y}) %>%
+      unlist()
+
+    return(
+      list(transform = transform,
+           transform_plot = p,
+           aic = NULL)
+    )
+  }
 
   tryCatch({
-    model_variable_response  <- variable_response(model, variable = pred_var, type = type, which.class = 2, prob = TRUE)
     xspline_approx_model <- function(data) xspline_approx(data, type = spline_pkg, monotonicity = monotonic, ...)
 
     spline_on_model_variable_response <- xspline_approx_model(model_variable_response)
@@ -53,10 +73,9 @@ get_pdp_spline_improvement <- function(model, data, pred_var, response_var, spli
     if (glm_on_spline_approx$aic < glm_on_raw_variable$aic)
       transform <- spline
 
-    p <- plot(model_variable_response)
     return(
       list(transform = transform,
-           spline_plot = xspline_plot(spline, add = TRUE, p),
+           transform_plot = xspline_plot(spline, add = TRUE, p),
            aic = c(
              "spline" = glm_on_spline_approx$aic,
              "raw" = glm_on_raw_variable$aic))

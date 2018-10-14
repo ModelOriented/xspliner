@@ -197,7 +197,7 @@ xspline_function_rms <- function(fitted_rms) {
 xspline_function <- function(fitted_model, ...) {
   if (!any(c("gam", "rms") %in% class(fitted_model)))
     stop("fitted_model should be of class gam or rms")
-  if (class(model) == gam) {
+  if (class(model) == "gam") {
     return(xspline_function_gam(fitted_model, ...))
   } else {
     return(xspline_function_rms(fitted_model))
