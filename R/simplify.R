@@ -120,11 +120,15 @@ model.frame(form_final, data = df)
 
 ###
 xp_gam <- function(formula, blackbox, data = model.frame(blackbox)) {
+
+  # some assumption checks
+
   xs_call <- list()
   xf_call <- list()
 
   formula_details <- get_formula_details(formula)
 
+  # below should be named: prepare_formula_env
   for (xs_var in formula_details$xs_variables) {
     spline_params <- as.list(parse(text = formula_details$formula_labels[1])[[1]])
     spline_opts <- eval(spline_params$spline_opts)
@@ -137,6 +141,7 @@ xp_gam <- function(formula, blackbox, data = model.frame(blackbox)) {
 
   # find out how parent.frame works to get below correctly (maybe we don't want it):
   transformed_formula <- build_spline_formula(formula_details, env = c(xs_call, xf_call)) # we want "response ~ xs_call('x1')(x1) + xf_call('x2')(x2)"
+
   model <- glm(transformed_formula)
 
   list(
@@ -146,10 +151,7 @@ xp_gam <- function(formula, blackbox, data = model.frame(blackbox)) {
   )
 }
 
-xp_gam_predict <-
-
-xs <- function() {
+xp_gam_predict <- function(xp_gam, newdata) {
 
 }
 
-terms.formula(y ~ xs(x) + xf(z) + t, data)
