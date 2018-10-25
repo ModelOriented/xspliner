@@ -11,7 +11,7 @@ get_formula_details <- function(formula, data) {
     formula = formula,
     raw_response = formula_variables[1],
     raw_pred_vars = formula_variables[-1],
-    raponse = response,
+    response = response,
     rhs_formula = rhs_formula,
     additive_components = additive_components,
     xs_variables = formula_variables[attr(formula_terms, "specials")$xs],
@@ -101,10 +101,11 @@ transform_formula_chr <- function(formula_details, additive_components_details) 
   sprintf("%s ~ %s", formula_details$response, transformed_rhs)
 }
 
-approx_with_splines <- function(fun_data, pred_var, env, ...) {
-  formula <- as.formula(sprintf("yhat ~ s(%s, ...)", pred_var), env = env)
+approx_with_splines <- function(fun_data, pred_var, ...) {
   s <- mgcv::s
-  mgcv::gam(yhat ~ s(x, ...), data = fun_data)
+  names(fun_data)[1] <- "pred_var"
+  #formula <- as.formula(sprintf("yhat ~ s(%s, ...)", pred_var), env = env)
+  mgcv::gam(yhat ~ s(pred_var, ...), data = fun_data)
 }
 
 single_component_env_pdp <- function(formula_details, component_details, blackbox, data) {
@@ -117,19 +118,19 @@ single_component_env_pdp <- function(formula_details, component_details, blackbo
   blackbox_response_obj <- do.call(pdp::partial, methos_params)
 
   spline_params <- component_details$spline_opts
-  spline_params[["fun_data"]] <- attr(blackbox_response_obj, "partial.data")
+  spline_params[["fun_data"]] <- blackbox_response_obj # attr(blackbox_response_obj, "partial.data") do.call loses attributes
   spline_params[["pred_var"]] <- component_details$var
-  spline_params[["env"]] <- attr(formula, ".Environment")
+  #spline_params[["env"]] <- attr(formula_details$formula, ".Environment")
 
   blackbox_response_approx <- do.call(approx_with_splines, spline_params)
   list(
-    blackbox_response_obj,
-    blackbox_response_approx
+    blackbox_response_obj = blackbox_response_obj,
+    blackbox_response_approx = blackbox_response_approx
   )
 }
 
 single_component_env <- function(formula_details, component_details, blackbox, data) {
-  if (component_details$type == "pdp") {
+  if (component_details$method_opts$type == "pdp") {
     single_component_env_pdp(formula_details, component_details, blackbox, data)
   }
 }
@@ -158,14 +159,14 @@ common_components_env <- function(formula_details, additive_components_details, 
 
   list(
     xs_env = xs_env,
-    xs_env = xs_env
+    xf_env = xf_env
   )
 }
 
 get_xs_call <- function(xs_env, pred_var_name) {
   function(pred_var) {
     data <- data.frame(pred_var)
-    names(data) <- pred_var_name
+    names(data) <- "pred_var" # pred_var_name need to fix calling mgcv::s
     mgcv::predict.gam(xs_env[[pred_var_name]]$blackbox_response_approx, newdata = data)
   }
 }
@@ -176,11 +177,12 @@ get_xf_call <- function(xs_env, pred_var_name) {
   }
 }
 
-transformed_formula_object <- function(formula_details) {
+transformed_formula_object <- function(formula_details, blackbox, data) {
 
   additive_components_details <- get_all_components_info(formula_details)
   transformed_formula_string <- transform_formula_chr(formula_details, additive_components_details)
   transformed_formula_calls <- common_components_env(formula_details, additive_components_details, blackbox, data)
+  browser()
 
   transformed_formula_env <- attr(formula_details$formula, ".Environment")
   xs_env_list <- transformed_formula_calls$xs_env
@@ -194,7 +196,9 @@ transformed_formula_object <- function(formula_details) {
   transformed_formula_env$xs_call <- xs_call
   transformed_formula_env$xf_call <- xf_call
   list(
-    transformed_formula = as.formula(sprintf("%s ~ %s", response, rhs_formula), env = transformed_formula_env),
+    transformed_formula = as.formula(
+      sprintf("%s ~ %s", formula_details$response, formula_details$rhs_formula),
+      env = transformed_formula_env),
     xs_env = xs_env_list,
     xf_env = xf_env_list
   )
@@ -204,5 +208,5 @@ transformed_formula_object <- function(formula_details) {
 xp_gam <- function(formula, blackbox, data = model.frame(blackbox), env = parent.frame()) {
   attr(formula, ".Environment") <- env
   formula_details <- get_formula_details(formula, data)
-  transformed_formula_object(formula_details)
+  transformed_formula_object(formula_details, blackbox, data)
 }
