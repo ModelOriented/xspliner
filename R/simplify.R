@@ -1,6 +1,6 @@
 library(magrittr)
 
-formula <- log(y) ~ xs(x, spline_opts = list(k = 6), method_opts = list(type = "pdp")) * z + xf(t) + w ^ 2
+formula <- log(y) ~ xs(x, spline_opts = list(k = 6), method_opts = list(type = "pdp", bb = rf_model)) * z + xf(t) + w ^ 2
 
 get_formula_details <- function(formula) {
   formula_variables <- all.vars(formula)
