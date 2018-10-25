@@ -167,7 +167,7 @@ get_xs_call <- function(xs_env, pred_var_name) {
   function(pred_var) {
     data <- data.frame(pred_var)
     names(data) <- "pred_var" # pred_var_name need to fix calling mgcv::s
-    mgcv::predict.gam(xs_env[[pred_var_name]]$blackbox_response_approx, newdata = data)
+    mgcv::predict.gam(xs_env$blackbox_response_approx, newdata = data)
   }
 }
 
@@ -182,7 +182,6 @@ transformed_formula_object <- function(formula_details, blackbox, data) {
   additive_components_details <- get_all_components_info(formula_details)
   transformed_formula_string <- transform_formula_chr(formula_details, additive_components_details)
   transformed_formula_calls <- common_components_env(formula_details, additive_components_details, blackbox, data)
-  browser()
 
   transformed_formula_env <- attr(formula_details$formula, ".Environment")
   xs_env_list <- transformed_formula_calls$xs_env
@@ -197,7 +196,7 @@ transformed_formula_object <- function(formula_details, blackbox, data) {
   transformed_formula_env$xf_call <- xf_call
   list(
     transformed_formula = as.formula(
-      sprintf("%s ~ %s", formula_details$response, formula_details$rhs_formula),
+      transformed_formula_string,
       env = transformed_formula_env),
     xs_env = xs_env_list,
     xf_env = xf_env_list
@@ -208,5 +207,6 @@ transformed_formula_object <- function(formula_details, blackbox, data) {
 xp_gam <- function(formula, blackbox, data = model.frame(blackbox), env = parent.frame()) {
   attr(formula, ".Environment") <- env
   formula_details <- get_formula_details(formula, data)
-  transformed_formula_object(formula_details, blackbox, data)
+  transformed_formula <- transformed_formula_object(formula_details, blackbox, data)
+  gam::gam(transformed_formula$transformed_formula, data = data)
 }
