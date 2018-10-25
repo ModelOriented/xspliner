@@ -1,8 +1,9 @@
-get_formula_details <- function(formula) {
+get_formula_details <- function(formula, data) {
 
   response <- as.character(formula)[[2]]
   rhs_formula <- as.character(formula)[[3]]
   formula_variables <- all.vars(formula)
+  formula_variables <- formula_variables[formula_variables %in% names(data)]
   formula_terms <- terms.formula(formula, specials = c("xs", "xf"))
   additive_components <- as.character(attr(formula_terms,"variables"))[-c(1, 2)]
 
@@ -30,17 +31,17 @@ prepare_call <- function(string) {
   sprintf("%s_call[['%s']](%s)", fun, var, var)
 }
 
-get_component_params <- function(additive_component) {
+get_component_params <- function(additive_component, env) {
   spline_params <- as.list(parse(text = additive_component[1])[[1]])
-  spline_opts <- eval(spline_params$spline_opts)
-  method_opts <- eval(spline_params$method_opts)
+  spline_opts <- eval(spline_params$spline_opts, envir = env)
+  method_opts <- eval(spline_params$method_opts, envir = env)
   list(
     spline_opts = spline_opts,
     method_opts = method_opts
   )
 }
 
-single_component_details <- function(raw_variable_name, additive_component) {
+single_component_details <- function(raw_variable_name, additive_component, env) {
 
   if (raw_variable_name == additive_component) {
     return(
@@ -55,7 +56,7 @@ single_component_details <- function(raw_variable_name, additive_component) {
   }
 
   transformed_component <- prepare_call(additive_component)
-  component_params <- get_component_params(additive_component)
+  component_params <- get_component_params(additive_component, env)
 
   component_details <- list(
     var = raw_variable_name,
@@ -73,7 +74,8 @@ get_all_components_info <- function(formula_details) {
   additive_component_details <- purrr::map2(
     formula_details$raw_pred_vars,
     formula_details$additive_components,
-    single_component_details
+    single_component_details,
+    env = attr(formula_details$formula, ".Environment")
   )
   names(additive_component_details) <- formula_details$raw_pred_vars
   additive_component_details
@@ -96,38 +98,111 @@ transform_formula_chr <- function(formula_details, additive_components_details) 
     .init = formula_details$rhs_formula
   )
 
-  sprintf("%s ~ %s", formula_details$raponse, transformed_rhs)
+  sprintf("%s ~ %s", formula_details$response, transformed_rhs)
 }
 
-single_component_env <- function(component_details) {
-  blackbox_response_fun <- get_bb_response(component_details$method_opts)
-  blackbox_response_approx <- get_bb_response_fun_approx(blackbox_response_fun, component_details$spline_opts)
+approx_with_splines <- function(fun_data, pred_var, env, ...) {
+  formula <- as.formula(sprintf("yhat ~ s(%s, ...)", pred_var), env = env)
+  s <- mgcv::s
+  mgcv::gam(yhat ~ s(x, ...), data = fun_data)
+}
+
+single_component_env_pdp <- function(formula_details, component_details, blackbox, data) {
+  methos_params <- component_details$method_opts
+  methos_params[["type"]] <- NULL
+  methos_params[["object"]] <- blackbox
+  methos_params[["pred.var"]] <- component_details$var
+  methos_params[["train"]] <- data
+
+  blackbox_response_obj <- do.call(pdp::partial, methos_params)
+
+  spline_params <- component_details$spline_opts
+  spline_params[["fun_data"]] <- attr(blackbox_response_obj, "partial.data")
+  spline_params[["pred_var"]] <- component_details$var
+  spline_params[["env"]] <- attr(formula, ".Environment")
+
+  blackbox_response_approx <- do.call(approx_with_splines, spline_params)
   list(
-    blackbox_response_fun,
+    blackbox_response_obj,
     blackbox_response_approx
   )
 }
 
-common_components_env <- function() {
+single_component_env <- function(formula_details, component_details, blackbox, data) {
+  if (component_details$type == "pdp") {
+    single_component_env_pdp(formula_details, component_details, blackbox, data)
+  }
+}
 
+common_components_env <- function(formula_details, additive_components_details, blackbox, data) {
+
+  xs_env <- list()
+  xf_env <- list()
+
+  xs_vars <- formula_details$xs_variables
+  xf_vars <- formula_details$xf_variables
+
+  if (length(xs_vars)) {
+    xs_env <- additive_components_details %>%
+      purrr::keep(function(component_details) component_details[["var"]] %in% xs_vars) %>%
+      purrr::map(function(component_details) single_component_env(formula_details, component_details, blackbox, data)) %>%
+      purrr::set_names(xs_vars)
+  }
+
+  if (length(xf_vars)) {
+    xf_env <- additive_components_details %>%
+      purrr::keep(function(component_details) component_details[["var"]] %in% xf_vars) %>%
+      purrr::map(function(component_details) single_component_env(formula_details, component_details, blackbox, data)) %>%
+      purrr::set_names(xf_vars)
+  }
+
+  list(
+    xs_env = xs_env,
+    xs_env = xs_env
+  )
+}
+
+get_xs_call <- function(xs_env, pred_var_name) {
+  function(pred_var) {
+    data <- data.frame(pred_var)
+    names(data) <- pred_var_name
+    mgcv::predict.gam(xs_env[[pred_var_name]]$blackbox_response_approx, newdata = data)
+  }
+}
+
+get_xf_call <- function(xs_env, pred_var_name) {
+  function(pred_var) {
+    pred_var
+  }
 }
 
 transformed_formula_object <- function(formula_details) {
 
   additive_components_details <- get_all_components_info(formula_details)
   transformed_formula_string <- transform_formula_chr(formula_details, additive_components_details)
-  transformed_formula_env <-
+  transformed_formula_calls <- common_components_env(formula_details, additive_components_details, blackbox, data)
 
-  for (i in seq_along(formula_variables)) {
-    details <- extract_call(formula_variables[i], vars[i])
-    rhs_formula <- sub(details$call, details$new_call, rhs_formula, fixed = TRUE)
-  }
-  rhs_formula
+  transformed_formula_env <- attr(formula_details$formula, ".Environment")
+  xs_env_list <- transformed_formula_calls$xs_env
+  xs_call <- purrr::map2(xs_env_list, names(xs_env_list), get_xs_call) %>%
+    purrr::set_names(names(xs_env_list))
 
-  # xs_call <- list("x" = function(x) x ^ 2)
-  # xf_call <- list("t" = function(t) sqrt(t))
-  # enn <- new.env()
-  # enn$xs_call <- xs_call
-  # enn$xf_call <- xf_call
-  form_final <- as.formula(sprintf("%s ~ %s", response, rhs_formula), env = env)
+  xf_env_list <- transformed_formula_calls$xf_env
+  xf_call <- purrr::map2(xf_env_list, names(xf_env_list), get_xf_call) %>%
+    purrr::set_names(names(xf_env_list))
+
+  transformed_formula_env$xs_call <- xs_call
+  transformed_formula_env$xf_call <- xf_call
+  list(
+    transformed_formula = as.formula(sprintf("%s ~ %s", response, rhs_formula), env = transformed_formula_env),
+    xs_env = xs_env_list,
+    xf_env = xf_env_list
+  )
+
+}
+
+xp_gam <- function(formula, blackbox, data = model.frame(blackbox), env = parent.frame()) {
+  attr(formula, ".Environment") <- env
+  formula_details <- get_formula_details(formula, data)
+  transformed_formula_object(formula_details)
 }
