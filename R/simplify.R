@@ -151,7 +151,5 @@ xp_gam <- function(formula, blackbox, data = model.frame(blackbox)) {
   )
 }
 
-xp_gam_predict <- function(xp_gam, newdata) {
 
-}
 
