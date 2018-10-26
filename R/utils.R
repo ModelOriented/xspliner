@@ -28,7 +28,7 @@ prepare_call <- function(string) {
   var <- sub("(,|\\)).*$", '', string) %>%
     substr(4, nchar(.))
 
-  sprintf("%s_call[['%s']](%s)", fun, var, var)
+  sprintf("%s(%s)", fun, var)
 }
 
 get_component_params <- function(additive_component, env) {
@@ -187,13 +187,21 @@ transformed_formula_object <- function(formula_details, blackbox, data) {
   xs_env_list <- transformed_formula_calls$xs_env
   xs_call <- purrr::map2(xs_env_list, names(xs_env_list), get_xs_call) %>%
     purrr::set_names(names(xs_env_list))
+  xs <- function(variable) {
+    var_name <- deparse(substitute(variable))
+    xs_call[[var_name]](variable)
+  }
 
   xf_env_list <- transformed_formula_calls$xf_env
   xf_call <- purrr::map2(xf_env_list, names(xf_env_list), get_xf_call) %>%
     purrr::set_names(names(xf_env_list))
+  xf <- function(variable) {
+    var_name <- deparse(substitute(variable))
+    xf_call[[var_name]](variable)
+  }
 
-  transformed_formula_env$xs_call <- xs_call
-  transformed_formula_env$xf_call <- xf_call
+  transformed_formula_env$xs <- xs
+  transformed_formula_env$xf <- xf
   list(
     transformed_formula = as.formula(
       transformed_formula_string,
@@ -208,5 +216,9 @@ xp_gam <- function(formula, blackbox, data = model.frame(blackbox), env = parent
   attr(formula, ".Environment") <- env
   formula_details <- get_formula_details(formula, data)
   transformed_formula <- transformed_formula_object(formula_details, blackbox, data)
-  gam::gam(transformed_formula$transformed_formula, data = data)
+  mgcv::gam(transformed_formula$transformed_formula, data = data)
+}
+
+xp_gam_predict <- function(xp_gam_model, newdata) {
+  mgcv::predict.gam(xp_gam_model, newdata = newdata)
 }
