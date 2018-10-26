@@ -11,13 +11,13 @@ boston.rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
 model <- xp_gam(
   cmedv ~ xs(lstat, spline_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
           xs(ptratio, spline_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
-          xs(age, spline_opts = list(k = 8), method_opts = list(type = "pdp", grid.resolution = 120)),
+          age,
   blackbox = boston.rf,
   data = boston
 )
 
 summary(model)
-summary(gam::gam(cmedv ~ lstat + ptratio + age, data = boston))
+summary(mgcv::gam(cmedv ~ s(lstat, k = 6) + s(ptratio, k = 4) + s(age, k = 8), data = boston))
 
 var <- "age"
 pred_var <- pretty(range(boston[[var]]), 100)
