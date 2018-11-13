@@ -109,13 +109,13 @@ approx_with_splines <- function(fun_data, pred_var, ...) {
 }
 
 single_component_env_pdp <- function(formula_details, component_details, blackbox, data) {
-  methos_params <- component_details$method_opts
-  methos_params[["type"]] <- NULL
-  methos_params[["object"]] <- blackbox
-  methos_params[["pred.var"]] <- component_details$var
-  methos_params[["train"]] <- data
+  method_params <- component_details$method_opts
+  method_params[["type"]] <- NULL
+  method_params[["object"]] <- blackbox
+  method_params[["pred.var"]] <- component_details$var
+  method_params[["train"]] <- data
 
-  blackbox_response_obj <- do.call(pdp::partial, methos_params)
+  blackbox_response_obj <- do.call(pdp::partial, method_params)
 
   spline_params <- component_details$spline_opts
   spline_params[["fun_data"]] <- blackbox_response_obj # attr(blackbox_response_obj, "partial.data") do.call loses attributes
@@ -215,8 +215,8 @@ transformed_formula_object <- function(formula_details, blackbox, data) {
 xp_gam <- function(formula, blackbox, data = model.frame(blackbox), env = parent.frame()) {
   attr(formula, ".Environment") <- env
   formula_details <- get_formula_details(formula, data)
-  transformed_formula <- transformed_formula_object(formula_details, blackbox, data)
-  mgcv::gam(transformed_formula$transformed_formula, data = data)
+  cleared_formula <- transformed_formula_object(formula_details, blackbox, data)
+  mgcv::gam(cleared_formula$transformed_formula, data = data)
 }
 
 xp_gam_predict <- function(xp_gam_model, newdata) {
