@@ -17,7 +17,7 @@ model <- xp_gam(
 )
 
 summary(model)
-summary(mgcv::gam(cmedv ~ s(lstat, k = 6) + s(ptratio, k = 4) + s(age, k = 8), data = boston))
+summary(mgcv::gam(cmedv ~ s(lstat, k = 6) + s(ptratio, k = 4) + age, data = boston))
 
 var <- "age"
 pred_var <- pretty(range(boston[[var]]), 100)
