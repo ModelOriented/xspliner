@@ -36,7 +36,7 @@ single_component_env <- function(formula_details, component_details, blackbox, d
 }
 
 #' @export
-common_components_env <- function(formula_details, additive_components_details, blackbox, data) {
+common_components_env <- function(formula_details, special_components_details, blackbox, data) {
 
   xs_env <- list()
   xf_env <- list()
@@ -45,14 +45,14 @@ common_components_env <- function(formula_details, additive_components_details, 
   xf_vars <- formula_details$xf_variables
 
   if (length(xs_vars)) {
-    xs_env <- additive_components_details %>%
+    xs_env <- special_components_details %>%
       purrr::keep(function(component_details) component_details[["var"]] %in% xs_vars) %>%
       purrr::map(function(component_details) single_component_env(formula_details, component_details, blackbox, data)) %>%
       purrr::set_names(xs_vars)
   }
 
   if (length(xf_vars)) {
-    xf_env <- additive_components_details %>%
+    xf_env <- special_components_details %>%
       purrr::keep(function(component_details) component_details[["var"]] %in% xf_vars) %>%
       purrr::map(function(component_details) single_component_env(formula_details, component_details, blackbox, data)) %>%
       purrr::set_names(xf_vars)
