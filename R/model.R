@@ -1,6 +1,7 @@
 #' @export
 xp_gam <- function(formula, blackbox, data = model.frame(blackbox), env = parent.frame()) {
-  attr(formula, ".Environment") <- env
+  formula_environment <- new.env(parent = env)
+  attr(formula, ".Environment") <- formula_environment
   formula_details <- get_formula_details(formula, extract_formula_var_names(formula, data))
   cleared_formula <- transformed_formula_object(formula_details, blackbox, data)
   mgcv::gam(cleared_formula, data = data)
