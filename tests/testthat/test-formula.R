@@ -158,3 +158,59 @@ test_that("additive component details are extracted and stored correctly", {
          new_call = "xs(x)", spline_opts = list(k = 1), method_opts = list(type = "pdp"))
   )
 })
+
+test_that("get_special_components_info properly identifies special components and extracts its details", {
+  formula_details <- list(
+    formula = log(y) ~ xs(x, method_opts = list(type = "type")) * z + xf(t) + log(a) + xs(d),
+    raw_response_name = "y", raw_predictor_names = c("x", "z", "t", "a", "d"),
+    response = "log(y)",
+    rhs_formula = "xs(x, method_opts = list(type = \"type\")) * z + xf(t) + log(a) + xs(d)",
+    additive_components = c("xs(x, method_opts = list(type = \"type\"))", "z", "xf(t)", "log(a)", "xs(d)"),
+    xs_variables = c("x", "d"), xf_variables = "t", xs_variables_idx = c(1, 5), xf_variables_idx = 3)
+
+  special_components_info <- get_special_components_info(formula_details)
+  expect_equal(names(special_components_info), c("x", "d", "t"))
+  expect_equal(
+    special_components_info$x,
+    list(var = "x", call = "xs(x, method_opts = list(type = \"type\"))",
+         new_call = "xs(x)", spline_opts = NULL, method_opts = list(type = "type"))
+  )
+
+})
+
+
+test_that("formula last string form is correct", {
+  formula_details <- list(
+    formula = log(y) ~ xs(x, method_opts = list(type = "type")) * z + xf(t) + log(a),
+    raw_response_name = "log(y)", raw_predictor_names = c("x", "z", "t", "a"),
+    response = "log(y)",
+    rhs_formula = "xs(x, method_opts = list(type = \"type\")) * z + xf(t) + log(a)",
+    additive_components = c("xs(x, method_opts = list(type = \"type\"))", "z", "xf(t)", "log(a)"),
+    xs_variables = "x", xf_variables = "t", xs_variables_idx = 1, xf_variables_idx = 3)
+
+  special_component_info <- list(
+    x = list(var = "x", call = "xs(x, method_opts = list(type = \"type\"))",
+             new_call = "xs(x)", spline_opts = NULL, method_opts = list(type = "type")),
+    t = list(var = "t", call = "xf(t)",
+             new_call = "xf(t)", spline_opts = NULL, method_opts = NULL))
+
+  expect_equal(transform_formula_chr(formula_details, special_component_info), "log(y) ~ xs(x) * z + xf(t) + log(a)")
+
+})
+
+test_that("transformed_formula_object returns correct formula form and environment", {
+  formula <-  log(y) ~ xs(x, method_opts = list(type = "pdp")) * z + xf(t) + log(a)
+  formula_details <- get_formula_details(formula, c("y" ,"x", "z", "t", "a"))
+  set.seed(123)
+  data <- data.frame(y = rnorm(10, 2), x = rnorm(10), z = rnorm(10, 10), t = runif(10), a = rexp(10))
+  blackbox <- randomForest::randomForest(y ~ ., data)
+
+  transformed_formula <- transformed_formula_object(formula_details, blackbox, data)
+  env <- attr(transformed_formula, ".Environment")
+
+  expect_true(inherits(transformed_formula, "formula"))
+  expect_true(all(c("xf", "xs") %in% ls(env)))
+  expect_equal(length(env$xs), 1)
+  expect_equal(length(env$xf), 1)
+
+})

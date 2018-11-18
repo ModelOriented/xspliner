@@ -120,14 +120,14 @@ get_special_components_info <- function(formula_details) {
 }
 
 #' @export
-transform_formula_chr <- function(formula_details, additive_components_details) {
+transform_formula_chr <- function(formula_details, special_components_details) {
 
   replace_component_call <- function(rhs_string_formula, component_details) {
     sub(component_details$call, component_details$new_call, rhs_string_formula, fixed = TRUE)
   }
 
   transformed_rhs <- purrr::reduce(
-    additive_components_details,
+    special_components_details,
     replace_component_call,
     .init = formula_details$rhs_formula
   )
@@ -140,7 +140,7 @@ transformed_formula_object <- function(formula_details, blackbox, data) {
 
   special_components_details <- get_special_components_info(formula_details)
   transformed_formula_string <- transform_formula_chr(formula_details, special_components_details)
-  transformed_formula_calls <- common_components_env(formula_details, special_components_details, blackbox, data)
+  transformed_formula_calls <- get_common_components_env(formula_details, special_components_details, blackbox, data)
 
   transformed_formula_env <- attr(formula_details$formula, ".Environment")
   xs_env_list <- transformed_formula_calls$xs_env
@@ -161,11 +161,6 @@ transformed_formula_object <- function(formula_details, blackbox, data) {
 
   transformed_formula_env$xs <- xs
   transformed_formula_env$xf <- xf
-  list(
-    transformed_formula = as.formula(
-      transformed_formula_string,
-      env = transformed_formula_env),
-    xs_env = xs_env_list,
-    xf_env = xf_env_list
-  )
+
+  as.formula(transformed_formula_string, env = transformed_formula_env)
 }
