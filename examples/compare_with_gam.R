@@ -22,3 +22,4 @@ summary(model)
 
 # compare with standard gam model
 summary(mgcv::gam(cmedv ~ s(lstat, k = 6) + s(ptratio, k = 4) + age, data = boston))
+
