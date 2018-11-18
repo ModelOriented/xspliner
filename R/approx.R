@@ -40,14 +40,43 @@ single_component_env_pdp <- function(formula_details, component_details, blackbo
 }
 
 #' @export
+single_component_env_ale <- function(formula_details, component_details, blackbox, data) {
+  method_params <- component_details$method_opts
+  method_params[["type"]] <- NULL
+  method_params[["X.model"]] <- blackbox
+  method_params[["J"]] <- component_details$var
+  method_params[["X"]] <- data
+  method_params[["pred.fun"]] <- function(X.model, newdata) predict(object = X.model, newdata = newdata)
+  method_params[["NA.plot"]] <- FALSE
+
+  blackbox_response_obj <- do.call(ALEPlot::ALEPlot, method_params)
+  blackbox_response_obj <- data.frame(blackbox_response_obj$x.values, blackbox_response_obj$f.values)
+  names(blackbox_response_obj) <- c(component_details$var, "yhat")
+
+  spline_params <- component_details$spline_opts
+  spline_params[["bb_response_data"]] <- blackbox_response_obj
+  spline_params[["pred_var"]] <- component_details$var
+  spline_params[["response_var"]] <- "yhat"
+  spline_params[["env"]] <- attr(formula_details$formula, ".Environment")
+
+  blackbox_response_approx <- do.call(approx_with_splines, spline_params)
+  list(
+    blackbox_response_obj = blackbox_response_obj,
+    blackbox_response_approx = blackbox_response_approx
+  )
+}
+
+#' @export
 single_component_env <- function(formula_details, component_details, blackbox, data) {
   if (is.null(component_details$method_opts$type)) {
     stop("No specified type for method!")
   }
 
-  if (component_details$method_opts$type == "pdp") {
-    single_component_env_pdp(formula_details, component_details, blackbox, data)
-  }
+  switch(component_details$method_opts$type,
+    pdp = single_component_env_pdp(formula_details, component_details, blackbox, data),
+    ale = single_component_env_ale(formula_details, component_details, blackbox, data)
+  )
+
 }
 
 #' @export
