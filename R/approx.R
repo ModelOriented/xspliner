@@ -1,16 +1,18 @@
+
 #' @export
-get_spline_formula_chr <- function(response_var, pred_var, env, ...) {
+get_spline_formula <- function(response_var, pred_var, env, ...) {
   formula_call <- substitute(list(pred_var, ...))
   formula_call[[1]] <- quote(s)
   formula_call[[2]] <- quote(predictor)
   formula_call <- sub("predictor", pred_var, deparse(formula_call), fixed = TRUE)
   formula <- as.formula(sprintf("%s ~ %s", response_var, formula_call), env = env)
+  formula
 }
 
 #' @export
 approx_with_splines <- function(bb_response_data, response_var, pred_var, env, ...) {
   s <- mgcv::s
-  formula <- get_spline_formula_chr(response_var, pred_var, env, ...)
+  formula <- get_spline_formula(response_var, pred_var, env, ...)
   mgcv::gam(formula, data = bb_response_data)
 }
 
@@ -40,7 +42,7 @@ single_component_env_pdp <- function(formula_details, component_details, blackbo
 #' @export
 single_component_env <- function(formula_details, component_details, blackbox, data) {
   if (is.null(component_details$method_opts$type)) {
-    stop("Not specified type for method!")
+    stop("No specified type for method!")
   }
 
   if (component_details$method_opts$type == "pdp") {
