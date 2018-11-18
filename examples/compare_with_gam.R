@@ -8,7 +8,7 @@ set.seed(101)
 boston.rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston_raw)
 
 # build xp_gam model with specified response method and approximation options
-model <- xp_gam(
+model_pdp <- xp_gam(
   cmedv ~
     xs(lstat, spline_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
     xs(ptratio, spline_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
@@ -17,8 +17,19 @@ model <- xp_gam(
   data = boston_raw
 )
 
+model_ale <- xp_gam(
+  cmedv ~
+    xs(lstat, spline_opts = list(k = 6), method_opts = list(type = "ale", K = 60)) +
+    xs(ptratio, spline_opts = list(k = 4), method_opts = list(type = "ale", K = 40)) +
+    age,
+  blackbox = boston.rf,
+  data = boston_raw
+)
+
 # check model summary
-summary(model)
+summary(model_pdp)
+
+summary(model_ale)
 
 # compare with standard gam model
 summary(mgcv::gam(cmedv ~ s(lstat, k = 6) + s(ptratio, k = 4) + age, data = boston_raw))
