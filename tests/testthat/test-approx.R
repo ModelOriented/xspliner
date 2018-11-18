@@ -51,6 +51,22 @@ test_that("single_component_env_pdp correctly gets pdp response and its approxim
   expect_equal(colnames(x_var_approx_env$blackbox_response_obj), c("x", "yhat"))
 })
 
+test_that("single_component_env_ale correctly gets pdp response and its approximation", {
+  formula <-  log(y) ~ xs(x, method_opts = list(type = "pdp")) * z + xf(t) + log(a)
+  formula_details <- get_formula_details(formula, c("y" ,"x", "z", "t", "a"))
+  set.seed(123)
+  data <- data.frame(y = rnorm(10, 2), x = rnorm(10), z = rnorm(10, 10), t = runif(10), a = rexp(10))
+  blackbox <- randomForest::randomForest(y ~ ., data)
+  special_components_details <- get_special_components_info(formula_details)
+
+  x_var_approx_env <- single_component_env_ale(formula_details, special_components_details$x, blackbox, data)
+
+  expect_equal(names(x_var_approx_env), c("blackbox_response_obj", "blackbox_response_approx"))
+  expect_equal(class(x_var_approx_env$blackbox_response_obj), "data.frame")
+  expect_true("gam" %in% class(x_var_approx_env$blackbox_response_approx))
+  expect_equal(colnames(x_var_approx_env$blackbox_response_obj), c("x", "yhat"))
+})
+
 test_that("single_component_env correctly gets response and its approximation", {
   formula <-  log(y) ~ xs(x, method_opts = list(type = "pdp")) * z + xf(t) + log(a)
   formula_details <- get_formula_details(formula, c("y" ,"x", "z", "t", "a"))
@@ -100,8 +116,7 @@ test_that("get_xs_call correctly use gam object for prediction", {
   expect_equivalent(round(xs(1)), 2)
 
   xs <- get_xs_call(xs_env, "t")
-  expect_warning(xs(1))
-  expect_length(suppressWarnings(xs(1)), 10) # by default predict is made on training data
+  expect_error(suppressWarnings(xs(1)))
 
 })
 
