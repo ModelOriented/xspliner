@@ -80,8 +80,12 @@ approx_with_monotonic_spline <- function(bb_response_data, response_var,
   gam_init
 }
 
+prepare_pdp_params <- function() {
+
+}
+
 #' @export
-single_component_env_pdp <- function(formula_details, component_details, blackbox, data) {
+spline_params_pdp <- function(formula_details, component_details, blackbox, data) {
   method_params <- component_details$method_opts
   method_params[["type"]] <- NULL
   method_params[["object"]] <- blackbox
@@ -96,16 +100,7 @@ single_component_env_pdp <- function(formula_details, component_details, blackbo
   spline_params[["response_var"]] <- "yhat"
   spline_params[["env"]] <- attr(formula_details$formula, ".Environment")
 
-  if (is.null(spline_params[["increasing"]])) {
-    blackbox_response_approx <- do.call(approx_with_spline, spline_params)
-  } else {
-    blackbox_response_approx <- do.call(approx_with_monotonic_spline, spline_params)
-  }
-
-  list(
-    blackbox_response_obj = blackbox_response_obj,
-    blackbox_response_approx = blackbox_response_approx
-  )
+  spline_params
 }
 
 #' @export
@@ -128,11 +123,7 @@ single_component_env_ale <- function(formula_details, component_details, blackbo
   spline_params[["response_var"]] <- "yhat"
   spline_params[["env"]] <- attr(formula_details$formula, ".Environment")
 
-  blackbox_response_approx <- do.call(approx_with_spline, spline_params)
-  list(
-    blackbox_response_obj = blackbox_response_obj,
-    blackbox_response_approx = blackbox_response_approx
-  )
+  spline_params
 }
 
 #' @export
@@ -141,9 +132,20 @@ single_component_env <- function(formula_details, component_details, blackbox, d
     stop("No specified type for method!")
   }
 
-  switch(component_details$method_opts$type,
-    pdp = single_component_env_pdp(formula_details, component_details, blackbox, data),
-    ale = single_component_env_ale(formula_details, component_details, blackbox, data)
+  spline_params <- switch(component_details$method_opts$type,
+    pdp = spline_params_pdp(formula_details, component_details, blackbox, data),
+    ale = spline_params_ale(formula_details, component_details, blackbox, data)
+  )
+
+  if (is.null(spline_params[["increasing"]])) {
+    blackbox_response_approx <- do.call(approx_with_spline, spline_params)
+  } else {
+    blackbox_response_approx <- do.call(approx_with_monotonic_spline, spline_params)
+  }
+
+  list(
+    blackbox_response_obj = spline_params[["bb_response_data"]],
+    blackbox_response_approx = blackbox_response_approx
   )
 
 }
