@@ -77,12 +77,11 @@ test_that("single_component_env_pdp correctly gets pdp response and its approxim
   blackbox <- randomForest::randomForest(y ~ ., data)
   special_components_details <- get_special_components_info(formula_details)
 
-  x_var_approx_env <- single_component_env_pdp(formula_details, special_components_details$x, blackbox, data)
+  x_var_spline_params <- prepare_spline_params_pdp(formula_details, special_components_details$x, blackbox, data)
 
-  expect_equal(names(x_var_approx_env), c("blackbox_response_obj", "blackbox_response_approx"))
-  expect_true("partial" %in% class(x_var_approx_env$blackbox_response_obj))
-  expect_true("gam" %in% class(x_var_approx_env$blackbox_response_approx))
-  expect_equal(colnames(x_var_approx_env$blackbox_response_obj), c("x", "yhat"))
+  expect_equal(names(x_var_spline_params), c("bb_response_data", "pred_var", "response_var", "env"))
+  expect_true("partial" %in% class(x_var_spline_params$bb_response_data))
+  expect_equal(colnames(x_var_spline_params$bb_response_data), c("x", "yhat"))
 })
 
 test_that("single_component_env_ale correctly gets ale response and its approximation", {
@@ -93,12 +92,11 @@ test_that("single_component_env_ale correctly gets ale response and its approxim
   blackbox <- randomForest::randomForest(y ~ ., data)
   special_components_details <- get_special_components_info(formula_details)
 
-  x_var_approx_env <- single_component_env_ale(formula_details, special_components_details$x, blackbox, data)
+  x_var_spline_params <- prepare_spline_params_ale(formula_details, special_components_details$x, blackbox, data)
 
-  expect_equal(names(x_var_approx_env), c("blackbox_response_obj", "blackbox_response_approx"))
-  expect_equal(class(x_var_approx_env$blackbox_response_obj), "data.frame")
-  expect_true("gam" %in% class(x_var_approx_env$blackbox_response_approx))
-  expect_equal(colnames(x_var_approx_env$blackbox_response_obj), c("x", "yhat"))
+  expect_equal(names(x_var_spline_params), c("bb_response_data", "pred_var", "response_var", "env"))
+  expect_equal("data.frame", class(x_var_spline_params$bb_response_data))
+  expect_equal(colnames(x_var_spline_params$bb_response_data), c("x", "yhat"))
 })
 
 test_that("single_component_env correctly gets response and its approximation", {
