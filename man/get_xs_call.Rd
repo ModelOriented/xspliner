@@ -18,29 +18,38 @@ Function of one variable.
 It extracts fitted spline function by \link{xspline_approx_gam}.
 }
 \examples{
-x <- sort(rnorm(20, 0, 5))
-y <- x ^ 3 + rnorm(20, 0, 1)
-z <- log(abs(x)) + rnorm(20, 0, 0.01)
-data <- data.frame(x, y)
-blackbox <- randomForest(y ~ ., data)
-x_var_response <- pdp::partial(blackbox, "z")
+set.seed(123)
+x <- rnorm(20, 5, 5)
+z <- rnorm(20, 0, 10)
+y <- - sin(x) + z ^ 3 + rnorm(20, 0, 0.1)
+data <- data.frame(x, y, z)
+blackbox <- randomForest::randomForest(y ~ ., data)
+
+z_var_response <- pdp::partial(blackbox, "z")
+z_var_response_approx <- approx_with_spline(z_var_response, "yhat", "z")
+z_env <- list(
+  blackbox_response_obj = z_var_response,
+  blackbox_response_approx = z_var_response_approx
+)
+z_var_spline <- get_xs_call(z_env, "z")
+z_range <- attr(z_var_spline, "variable_range")
+z_axis <- seq(z_range[1], z_range[2], length.out = 50)
+
+plot(z, y)
+lines(z_var_response)
+lines(z_axis, z_var_spline(z_axis))
+
+x_var_response <- pdp::partial(blackbox, "x")
 x_var_response_approx <- approx_with_spline(x_var_response, "yhat", "x")
 x_env <- list(
-  blackbox_response_obj = x_var_response
+  blackbox_response_obj = x_var_response,
   blackbox_response_approx = x_var_response_approx
 )
 x_var_spline <- get_xs_call(x_env, "x")
+x_range <- attr(x_var_spline, "variable_range")
+x_axis <- seq(x_range[1], x_range[2], length.out = 50)
 
-gam_model <- xspline_approx_gam(data.frame(x = x, y = y), bs = "tp")
-spline <- xspline_function_gam(gam_model)
-plot(spline, min(x), max(x))
-
-set.seed(123)
-x <- sort(rnorm(40, 0, 5))
-y <- sin(x) + log(abs(x)) + rnorm(40, 0, 1)
 plot(x, y)
-gam_model_mon <- xspline_approx_gam_mon(data.frame(x = x, y = y), increasing = TRUE, bs = "tp")
-spline_mon <- xspline_function_gam(gam_model_mon)
-gam_model <- xspline_approx_gam(data.frame(x = x, y = y), bs = "tp")
-spline <- xspline_function_gam(gam_model)
+lines(x_var_response)
+lines(x_axis, x_var_spline(x_axis))
 }
