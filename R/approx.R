@@ -85,7 +85,7 @@ prepare_pdp_params <- function() {
 }
 
 #' @export
-spline_params_pdp <- function(formula_details, component_details, blackbox, data) {
+prepare_spline_params_pdp <- function(formula_details, component_details, blackbox, data) {
   method_params <- component_details$method_opts
   method_params[["type"]] <- NULL
   method_params[["object"]] <- blackbox
@@ -104,7 +104,7 @@ spline_params_pdp <- function(formula_details, component_details, blackbox, data
 }
 
 #' @export
-single_component_env_ale <- function(formula_details, component_details, blackbox, data) {
+prepare_spline_params_ale <- function(formula_details, component_details, blackbox, data) {
   method_params <- component_details$method_opts
   method_params[["type"]] <- NULL
   method_params[["X.model"]] <- blackbox
@@ -133,8 +133,8 @@ single_component_env <- function(formula_details, component_details, blackbox, d
   }
 
   spline_params <- switch(component_details$method_opts$type,
-    pdp = spline_params_pdp(formula_details, component_details, blackbox, data),
-    ale = spline_params_ale(formula_details, component_details, blackbox, data)
+    pdp = prepare_spline_params_pdp(formula_details, component_details, blackbox, data),
+    ale = prepare_spline_params_ale(formula_details, component_details, blackbox, data)
   )
 
   if (is.null(spline_params[["increasing"]])) {
@@ -166,13 +166,13 @@ get_common_components_env <- function(formula_details, special_components_detail
       purrr::set_names(xs_vars)
   }
 
-  # (todo)
-  # if (length(xf_vars)) {
-  #   xf_env <- special_components_details %>%
-  #     purrr::keep(function(component_details) component_details[["var"]] %in% xf_vars) %>%
-  #     purrr::map(function(component_details) single_component_env(formula_details, component_details, blackbox, data)) %>%
-  #     purrr::set_names(xf_vars)
-  # }
+  # (todo) temporary fix for tests
+  if (length(xf_vars)) {
+    xf_env <- special_components_details %>%
+      purrr::keep(function(component_details) component_details[["var"]] %in% xf_vars) %>%
+      purrr::map(function(component_details) data[, c(formula_details$raw_response_name, component_details$var)]) %>%
+      purrr::set_names(xf_vars)
+  }
 
   list(
     xs_env = xs_env,
