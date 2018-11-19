@@ -147,7 +147,12 @@ is_lm_better_than_approx <- function(data, response, predictor, approx_fun, comp
   approx_model <- lm(approx_model_formula, data)
   lm_model_formula <- as.formula(sprintf("%s ~ %s", response, predictor))
   lm_model <- lm(lm_model_formula, data)
-  compare_stat(approx_model) <= compare_stat(lm_model)
+  comparison <- compare_stat(approx_model) <= compare_stat(lm_model)
+  if (attr(compare_stat, "better") == "higher") {
+    comparison
+  } else {
+    !comparison
+  }
 }
 
 #' @export
