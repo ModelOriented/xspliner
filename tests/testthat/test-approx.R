@@ -16,23 +16,57 @@ test_that("spline approximation is made correctly with mgcv::gam and mgcv::s", {
 
   with_mock(
     get_spline_formula = function(response_var, pred_var, env, ...) as.formula("y ~ s(x)", env = env),
-    expect_true("gam" %in% class(approx_with_splines(data, "y", "x", env)))
+    expect_true("gam" %in% class(approx_with_spline(data, "y", "x", env)))
   )
 
   with_mock(
     get_spline_formula = function(response_var, pred_var, env, ...) as.formula("y ~ s(x)", env = env),
-    expect_equal(approx_with_splines(data, "y", "x", env)$formula, as.formula("y ~ s(x)", env = env))
+    expect_equal(approx_with_spline(data, "y", "x", env)$formula, as.formula("y ~ s(x)", env = env))
   )
 
   with_mock(
     get_spline_formula = function(response_var, pred_var, env, ...) as.formula("y ~ s(x, k = 6)", env = env),
-    expect_equal(approx_with_splines(data, "y", "x", env, k = 6)$smooth[[1]]$bs.dim, 6)
+    expect_equal(approx_with_spline(data, "y", "x", env, k = 6)$smooth[[1]]$bs.dim, 6)
   )
 
   with_mock(
     get_spline_formula = function(response_var, pred_var, env, ...) as.formula("y ~ s(x, k = 6)", env = env),
-    expect_equal(approx_with_splines(data, "y", "x", env, k = 6)$formula, as.formula("y ~ s(x, k = 6)", env = env))
+    expect_equal(approx_with_spline(data, "y", "x", env, k = 6)$formula, as.formula("y ~ s(x, k = 6)", env = env))
   )
+})
+
+test_that("monotonic spline approximation is made correctly with mgcv::gam and mgcv::s", {
+  env <- new.env()
+  data <- data.frame(x = 1:10, y = sort(rnorm(10)))
+  suppressWarnings({
+    with_mock(
+      get_spline_formula = function(response_var, pred_var, env, ...)
+        as.formula("y ~ s(x)", env = env),
+      expect_true("gam" %in% class(approx_with_monotonic_spline(data, "y", "x", env, TRUE)))
+    )
+
+    with_mock(
+      get_spline_formula = function(response_var, pred_var, env, ...)
+        as.formula("y ~ s(x)", env = env),
+      expect_equal(
+        approx_with_monotonic_spline(data, "y", "x", env, TRUE)$formula,
+        as.formula("y ~ s(x)", env = env))
+    )
+
+    with_mock(
+      get_spline_formula = function(response_var, pred_var, env, ...)
+        as.formula("y ~ s(x, k = 6)", env = env),
+      expect_equal(approx_with_monotonic_spline(data, "y", "x", env, TRUE, k = 6)$smooth[[1]]$bs.dim, 6)
+    )
+
+    with_mock(
+      get_spline_formula = function(response_var, pred_var, env, ...)
+        as.formula("y ~ s(x, k = 6)", env = env),
+      expect_equal(
+        approx_with_monotonic_spline(data, "y", "x", env, TRUE, k = 6)$formula,
+        as.formula("y ~ s(x, k = 6)", env = env))
+    )
+  })
 })
 
 test_that("single_component_env_pdp correctly gets pdp response and its approximation", {
@@ -51,8 +85,8 @@ test_that("single_component_env_pdp correctly gets pdp response and its approxim
   expect_equal(colnames(x_var_approx_env$blackbox_response_obj), c("x", "yhat"))
 })
 
-test_that("single_component_env_ale correctly gets pdp response and its approximation", {
-  formula <-  log(y) ~ xs(x, method_opts = list(type = "pdp")) * z + xf(t) + log(a)
+test_that("single_component_env_ale correctly gets ale response and its approximation", {
+  formula <-  log(y) ~ xs(x, method_opts = list(type = "ale")) * z + xf(t) + log(a)
   formula_details <- get_formula_details(formula, c("y" ,"x", "z", "t", "a"))
   set.seed(123)
   data <- data.frame(y = rnorm(10, 2), x = rnorm(10), z = rnorm(10, 10), t = runif(10), a = rexp(10))
