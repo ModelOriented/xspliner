@@ -4,8 +4,8 @@
 \alias{approx_with_monotonic_spline}
 \title{Approximate monotonic spline on data}
 \usage{
-approx_with_monotonic_spline(bb_response_data, response_var, pred_var, env,
-  increasing, ...)
+approx_with_monotonic_spline(bb_response_data, response_var, pred_var,
+  env = parent.frame(), increasing, ...)
 }
 \arguments{
 \item{bb_response_data}{Blackbox response data, for example pdp curve.}
