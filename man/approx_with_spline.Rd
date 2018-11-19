@@ -4,7 +4,8 @@
 \alias{approx_with_spline}
 \title{Approximate spline on data}
 \usage{
-approx_with_spline(bb_response_data, response_var, pred_var, env, ...)
+approx_with_spline(bb_response_data, response_var, pred_var,
+  env = parent.frame(), ...)
 }
 \arguments{
 \item{bb_response_data}{Blackbox response data, for example pdp curve.}

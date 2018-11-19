@@ -25,7 +25,7 @@ get_spline_formula <- function(response_var, pred_var, env, ...) {
 #' env <- new.env()
 #' approx_with_spline(data.frame(x = x, y = y), "y", "x", env)
 #' @export
-approx_with_spline <- function(bb_response_data, response_var, pred_var, env, ...) {
+approx_with_spline <- function(bb_response_data, response_var, pred_var, env = parent.frame(), ...) {
   s <- mgcv::s
   formula <- get_spline_formula(response_var, pred_var, env, ...)
   mgcv::gam(formula, data = bb_response_data)
@@ -49,7 +49,8 @@ approx_with_spline <- function(bb_response_data, response_var, pred_var, env, ..
 #' approx_with_monotonic_spline(data.frame(x = x, y = y), "y", "x", env, TRUE)
 #' @export
 #' @export
-approx_with_monotonic_spline <- function(bb_response_data, response_var, pred_var, env, increasing, ...) {
+approx_with_monotonic_spline <- function(bb_response_data, response_var,
+                                         pred_var, env = parent.frame(), increasing, ...) {
   s <- mgcv::s
   formula <- get_spline_formula(response_var, pred_var, env, ...)
   G <- mgcv::gam(formula, data = bb_response_data, fit = FALSE)
@@ -177,13 +178,57 @@ get_common_components_env <- function(formula_details, special_components_detail
   )
 }
 
+#" Extract fitted spline function.
+#'
+#' It extracts fitted spline function by \link{xspline_approx_gam}.
+#' @param fitted_gam Fitted gam model approximating data.
+#' @param ... Other arguments passed to \link{mgcv::predict.gam} method.
+#' @return
+#' Function of one variable.
+#' @examples
+#' set.seed(123)
+#' x <- rnorm(20, 5, 5)
+#' z <- rnorm(20, 0, 10)
+#' y <- - sin(x) + z ^ 3 + rnorm(20, 0, 0.1)
+#' data <- data.frame(x, y, z)
+#' blackbox <- randomForest::randomForest(y ~ ., data)
+#'
+#' z_var_response <- pdp::partial(blackbox, "z")
+#' z_var_response_approx <- approx_with_spline(z_var_response, "yhat", "z")
+#' z_env <- list(
+#'   blackbox_response_obj = z_var_response,
+#'   blackbox_response_approx = z_var_response_approx
+#' )
+#' z_var_spline <- get_xs_call(z_env, "z")
+#' z_range <- attr(z_var_spline, "variable_range")
+#' z_axis <- seq(z_range[1], z_range[2], length.out = 50)
+#'
+#' plot(z, y)
+#' lines(z_var_response)
+#' lines(z_axis, z_var_spline(z_axis))
+#'
+#' x_var_response <- pdp::partial(blackbox, "x")
+#' x_var_response_approx <- approx_with_spline(x_var_response, "yhat", "x")
+#' x_env <- list(
+#'   blackbox_response_obj = x_var_response,
+#'   blackbox_response_approx = x_var_response_approx
+#' )
+#' x_var_spline <- get_xs_call(x_env, "x")
+#' x_range <- attr(x_var_spline, "variable_range")
+#' x_axis <- seq(x_range[1], x_range[2], length.out = 50)
+#'
+#' plot(x, y)
+#' lines(x_var_response)
+#' lines(x_axis, x_var_spline(x_axis))
 #' @export
 get_xs_call <- function(xs_env, pred_var_name) {
-  function(pred_var) {
+  xs_approximation <- function(pred_var) {
     data <- data.frame(pred_var)
     names(data) <- pred_var_name
     mgcv::predict.gam(xs_env$blackbox_response_approx, newdata = data)
   }
+  attr(xs_approximation, "variable_range") <- range(xs_env$blackbox_response_obj[[pred_var_name]])
+  xs_approximation
 }
 
 #' @export
