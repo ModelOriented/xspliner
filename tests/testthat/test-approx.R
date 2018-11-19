@@ -146,11 +146,12 @@ test_that("get_xs_call correctly use gam object for prediction", {
   data <- data.frame(x, y)
   xs_env <- list()
   xs_env$blackbox_response_approx <- mgcv::gam(y ~ x, data = data)
+  xs_env$blackbox_response_obj <- data.frame(x, y)
   xs <- get_xs_call(xs_env, "x")
   expect_equivalent(round(xs(1)), 2)
+  expect_equal(attr(xs, "variable_range"), range(xs_env$blackbox_response_obj$x))
 
-  xs <- get_xs_call(xs_env, "t")
-  expect_error(suppressWarnings(xs(1)))
+  expect_error(suppressWarnings(get_xs_call(xs_env, "t")(1)))
 
 })
 
