@@ -77,12 +77,11 @@ test_that("single_component_env_pdp correctly gets pdp response and its approxim
   blackbox <- randomForest::randomForest(y ~ ., data)
   special_components_details <- get_special_components_info(formula_details)
 
-  x_var_approx_env <- single_component_env_pdp(formula_details, special_components_details$x, blackbox, data)
+  x_var_spline_params <- prepare_spline_params_pdp(formula_details, special_components_details$x, blackbox, data)
 
-  expect_equal(names(x_var_approx_env), c("blackbox_response_obj", "blackbox_response_approx"))
-  expect_true("partial" %in% class(x_var_approx_env$blackbox_response_obj))
-  expect_true("gam" %in% class(x_var_approx_env$blackbox_response_approx))
-  expect_equal(colnames(x_var_approx_env$blackbox_response_obj), c("x", "yhat"))
+  expect_equal(names(x_var_spline_params), c("bb_response_data", "pred_var", "response_var", "env"))
+  expect_true("partial" %in% class(x_var_spline_params$bb_response_data))
+  expect_equal(colnames(x_var_spline_params$bb_response_data), c("x", "yhat"))
 })
 
 test_that("single_component_env_ale correctly gets ale response and its approximation", {
@@ -93,12 +92,11 @@ test_that("single_component_env_ale correctly gets ale response and its approxim
   blackbox <- randomForest::randomForest(y ~ ., data)
   special_components_details <- get_special_components_info(formula_details)
 
-  x_var_approx_env <- single_component_env_ale(formula_details, special_components_details$x, blackbox, data)
+  x_var_spline_params <- prepare_spline_params_ale(formula_details, special_components_details$x, blackbox, data)
 
-  expect_equal(names(x_var_approx_env), c("blackbox_response_obj", "blackbox_response_approx"))
-  expect_equal(class(x_var_approx_env$blackbox_response_obj), "data.frame")
-  expect_true("gam" %in% class(x_var_approx_env$blackbox_response_approx))
-  expect_equal(colnames(x_var_approx_env$blackbox_response_obj), c("x", "yhat"))
+  expect_equal(names(x_var_spline_params), c("bb_response_data", "pred_var", "response_var", "env"))
+  expect_equal("data.frame", class(x_var_spline_params$bb_response_data))
+  expect_equal(colnames(x_var_spline_params$bb_response_data), c("x", "yhat"))
 })
 
 test_that("single_component_env correctly gets response and its approximation", {
@@ -159,3 +157,37 @@ test_that("get_xs_call correctly use gam object for prediction", {
 # test_that("get_xf_call correctly use gam object for prediction", {
 # })
 
+test_that("is_lm_better_than_approx correctly chooses model", {
+  x = 1:10
+  y = 2 * x + rnorm(10, 0, 0.001)
+  data <- data.frame(x, y)
+  approx_fun <- sin
+  expect_true(is_lm_better_than_approx(data, "y", "x", approx_fun, r_squared))
+
+  y = x ^ 2 + rnorm(10, 0, 0.001)
+  data <- data.frame(x, y)
+  approx_fun <- function(x) x ^ 2
+  expect_false(is_lm_better_than_approx(data, "y", "x", approx_fun, r_squared))
+})
+
+test_that("correct_improved_components changes calls", {
+  formula <-  y ~ xs(x, method_opts = list(type = "pdp")) + log(a)
+  formula_details <- get_formula_details(formula, c("y" ,"x", "a"))
+  x = 1:10
+  data <- data.frame(y = 2 * x + rnorm(10, 0, 0.1), x, a = rexp(10))
+  special_components_details <- get_special_components_info(formula_details)
+  xs <- sin
+  xf <- function(x) x
+
+  expect_equal(
+    correct_improved_components(FALSE, r_squared, xs, xf, special_components_details, data, "log(y)"),
+    special_components_details)
+  expect_equal(
+    correct_improved_components(TRUE, r_squared, xs, xf, special_components_details, data, "y")$x$new_call,
+    "x")
+
+  data <- data.frame(y = sin(x) + rnorm(10, 0, 0.1), x, a = rexp(10))
+  expect_equal(
+    correct_improved_components(TRUE, r_squared, xs, xf, special_components_details, data, "y"),
+    special_components_details)
+})
