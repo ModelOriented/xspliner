@@ -2,7 +2,7 @@
 
 export(approx_with_monotonic_spline)
 export(approx_with_spline)
-export(choose_improved_components)
+export(correct_improved_components)
 export(extract_formula_var_names)
 export(get_common_components_env)
 export(get_component_params)
