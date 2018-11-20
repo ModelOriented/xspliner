@@ -63,7 +63,7 @@ get_formula_details <- function(formula, variable_names) {
 }
 
 #' @export
-prepare_call <- function(component_string) {
+prepare_call <- function(component_string, add_variable = TRUE) {
   fun <- substr(component_string, 1, 2)
   if (!(fun %in% c("xs", "xf"))) {
     return(component_string)
@@ -71,8 +71,12 @@ prepare_call <- function(component_string) {
 
   var <- sub("(,|\\)).*$", '', component_string) %>%
     substr(4, nchar(.))
+  if (add_variable) {
+    sprintf("%s(%s)", fun, var)
+  } else {
+    fun
+  }
 
-  sprintf("%s(%s)", fun, var)
 }
 
 #' @export
@@ -87,15 +91,17 @@ get_component_params <- function(additive_component, env) {
 }
 
 #' @export
-special_component_details <- function(raw_variable_name, additive_component_chr, env) {
+get_special_component_details <- function(raw_variable_name, additive_component_chr, env) {
 
   transformed_component <- prepare_call(additive_component_chr)
+  call_function <- prepare_call(additive_component_chr, FALSE)
   component_params <- get_component_params(additive_component_chr, env)
 
   component_details <- list(
     var = raw_variable_name,
     call = additive_component_chr,
     new_call = transformed_component,
+    call_fun = call_function,
     spline_opts = component_params$spline_opts,
     method_opts = component_params$method_opts
   )
@@ -112,7 +118,7 @@ get_special_components_info <- function(formula_details) {
   special_component_details <- purrr::map2(
     special_predictor_names,
     special_predictor_additive_components,
-    special_component_details,
+    get_special_component_details,
     env = attr(formula_details$formula, ".Environment")
   )
   names(special_component_details) <- special_predictor_names
@@ -136,13 +142,11 @@ transform_formula_chr <- function(formula_details, special_components_details) {
 }
 
 #' @export
-transformed_formula_object <- function(formula_details, blackbox, data) {
+transformed_formula_object <- function(formula_details, blackbox, data, auto_approx, compare_stat) {
 
   special_components_details <- get_special_components_info(formula_details)
-  transformed_formula_string <- transform_formula_chr(formula_details, special_components_details)
   transformed_formula_calls <- get_common_components_env(formula_details, special_components_details, blackbox, data)
 
-  transformed_formula_env <- attr(formula_details$formula, ".Environment")
   xs_env_list <- transformed_formula_calls$xs_env
   xs_call <- purrr::map2(xs_env_list, names(xs_env_list), get_xs_call) %>%
     purrr::set_names(names(xs_env_list))
@@ -159,8 +163,12 @@ transformed_formula_object <- function(formula_details, blackbox, data) {
     xf_call[[var_name]](variable)
   }
 
+  transformed_formula_env <- attr(formula_details$formula, ".Environment")
   transformed_formula_env$xs <- xs
   transformed_formula_env$xf <- xf
+  special_components_details <- correct_improved_components(
+    auto_approx, compare_stat, xs, xf, special_components_details, data, formula_details$response)
+  transformed_formula_string <- transform_formula_chr(formula_details, special_components_details)
 
   as.formula(transformed_formula_string, env = transformed_formula_env)
 }
