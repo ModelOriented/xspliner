@@ -212,9 +212,10 @@ test_that("transformed_formula_object returns correct formula form and environme
   expect_true(all(c("xf", "xs") %in% ls(env)))
   expect_equal(length(env$xs), 1)
   expect_equal(length(env$xf), 1)
+  compare_stat <- function(lm_model) 1
+  attr(compare_stat, "better") <- "higher"
 
-
-  transformed_formula <- transformed_formula_object(formula_details, blackbox, data, TRUE, function(lm_model) 1)
+  transformed_formula <- transformed_formula_object(formula_details, blackbox, data, TRUE, compare_stat)
   env <- attr(transformed_formula, ".Environment")
 
   expect_true(inherits(transformed_formula, "formula"))

@@ -142,53 +142,6 @@ transform_formula_chr <- function(formula_details, special_components_details) {
 }
 
 #' @export
-is_lm_better_than_approx <- function(data, response, predictor, approx_fun, compare_stat) {
-  approx_model_formula <- as.formula(sprintf("%s ~ approx_fun(%s)", response, predictor))
-  approx_model <- lm(approx_model_formula, data)
-  lm_model_formula <- as.formula(sprintf("%s ~ %s", response, predictor))
-  lm_model <- lm(lm_model_formula, data)
-  comparison <- compare_stat(approx_model) <= compare_stat(lm_model)
-  if (attr(compare_stat, "better") == "higher") {
-    comparison
-  } else {
-    !comparison
-  }
-}
-
-#' @export
-choose_improved_components <- function(auto_approx, compare_stat, xs, xf, special_components_details, data, response) {
-  if (!auto_approx) {
-    return(special_components_details)
-  }
-  get_component_call <- function(special_component_details) {
-    if (special_component_details$call_fun == "xs") {
-      xs
-    } else {
-      xf
-    }
-  }
-
-  use_untransformed <- function(special_component_details) {
-    is_lm_better_than_approx(
-      data,
-      response,
-      special_component_details$var,
-      get_component_call(special_component_details),
-      compare_stat
-    )
-  }
-
-  use_bare_call <- function(special_component_details) {
-    special_component_details$new_call <- special_component_details$var
-    special_component_details
-  }
-
-  special_components_details %>%
-    purrr::map_if(use_untransformed, use_bare_call)
-
-}
-
-#' @export
 transformed_formula_object <- function(formula_details, blackbox, data, auto_approx, compare_stat) {
 
   special_components_details <- get_special_components_info(formula_details)
@@ -213,7 +166,7 @@ transformed_formula_object <- function(formula_details, blackbox, data, auto_app
   transformed_formula_env <- attr(formula_details$formula, ".Environment")
   transformed_formula_env$xs <- xs
   transformed_formula_env$xf <- xf
-  special_components_details <- choose_improved_components(
+  special_components_details <- correct_improved_components(
     auto_approx, compare_stat, xs, xf, special_components_details, data, formula_details$response)
   transformed_formula_string <- transform_formula_chr(formula_details, special_components_details)
 
