@@ -157,3 +157,37 @@ test_that("get_xs_call correctly use gam object for prediction", {
 # test_that("get_xf_call correctly use gam object for prediction", {
 # })
 
+test_that("is_lm_better_than_approx correctly chooses model", {
+  x = 1:10
+  y = 2 * x + rnorm(10, 0, 0.001)
+  data <- data.frame(x, y)
+  approx_fun <- sin
+  expect_true(is_lm_better_than_approx(data, "y", "x", approx_fun, r_squared))
+
+  y = x ^ 2 + rnorm(10, 0, 0.001)
+  data <- data.frame(x, y)
+  approx_fun <- function(x) x ^ 2
+  expect_false(is_lm_better_than_approx(data, "y", "x", approx_fun, r_squared))
+})
+
+test_that("correct_improved_components changes calls", {
+  formula <-  y ~ xs(x, method_opts = list(type = "pdp")) + log(a)
+  formula_details <- get_formula_details(formula, c("y" ,"x", "a"))
+  x = 1:10
+  data <- data.frame(y = 2 * x + rnorm(10, 0, 0.1), x, a = rexp(10))
+  special_components_details <- get_special_components_info(formula_details)
+  xs <- sin
+  xf <- function(x) x
+
+  expect_equal(
+    correct_improved_components(FALSE, r_squared, xs, xf, special_components_details, data, "log(y)"),
+    special_components_details)
+  expect_equal(
+    correct_improved_components(TRUE, r_squared, xs, xf, special_components_details, data, "y")$x$new_call,
+    "x")
+
+  data <- data.frame(y = sin(x) + rnorm(10, 0, 0.1), x, a = rexp(10))
+  expect_equal(
+    correct_improved_components(TRUE, r_squared, xs, xf, special_components_details, data, "y"),
+    special_components_details)
+})
