@@ -239,3 +239,51 @@ get_xf_call <- function(xs_env, pred_var_name) {
     pred_var
   }
 }
+
+#' @export
+is_lm_better_than_approx <- function(data, response, predictor, approx_fun, compare_stat) {
+  approx_model_formula <- as.formula(sprintf("%s ~ approx_fun(%s)", response, predictor))
+  approx_model <- lm(approx_model_formula, data)
+  lm_model_formula <- as.formula(sprintf("%s ~ %s", response, predictor))
+  lm_model <- lm(lm_model_formula, data)
+  comparison <- compare_stat(approx_model) <= compare_stat(lm_model)
+  if (attr(compare_stat, "better") == "higher") {
+    comparison
+  } else {
+    !comparison
+  }
+}
+
+
+#' @export
+correct_improved_components <- function(auto_approx, compare_stat, xs, xf, special_components_details, data, response) {
+  if (!auto_approx) {
+    return(special_components_details)
+  }
+  get_component_call <- function(special_component_details) {
+    if (special_component_details$call_fun == "xs") {
+      xs
+    } else {
+      xf
+    }
+  }
+
+  use_untransformed <- function(special_component_details) {
+    is_lm_better_than_approx(
+      data,
+      response,
+      special_component_details$var,
+      get_component_call(special_component_details),
+      compare_stat
+    )
+  }
+
+  use_bare_call <- function(special_component_details) {
+    special_component_details$new_call <- special_component_details$var
+    special_component_details
+  }
+
+  special_components_details %>%
+    purrr::map_if(use_untransformed, use_bare_call)
+
+}
