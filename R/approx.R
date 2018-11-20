@@ -80,8 +80,12 @@ approx_with_monotonic_spline <- function(bb_response_data, response_var,
   gam_init
 }
 
+prepare_pdp_params <- function() {
+
+}
+
 #' @export
-single_component_env_pdp <- function(formula_details, component_details, blackbox, data) {
+prepare_spline_params_pdp <- function(formula_details, component_details, blackbox, data) {
   method_params <- component_details$method_opts
   method_params[["type"]] <- NULL
   method_params[["object"]] <- blackbox
@@ -96,20 +100,11 @@ single_component_env_pdp <- function(formula_details, component_details, blackbo
   spline_params[["response_var"]] <- "yhat"
   spline_params[["env"]] <- attr(formula_details$formula, ".Environment")
 
-  if (is.null(spline_params[["increasing"]])) {
-    blackbox_response_approx <- do.call(approx_with_spline, spline_params)
-  } else {
-    blackbox_response_approx <- do.call(approx_with_monotonic_spline, spline_params)
-  }
-
-  list(
-    blackbox_response_obj = blackbox_response_obj,
-    blackbox_response_approx = blackbox_response_approx
-  )
+  spline_params
 }
 
 #' @export
-single_component_env_ale <- function(formula_details, component_details, blackbox, data) {
+prepare_spline_params_ale <- function(formula_details, component_details, blackbox, data) {
   method_params <- component_details$method_opts
   method_params[["type"]] <- NULL
   method_params[["X.model"]] <- blackbox
@@ -128,11 +123,7 @@ single_component_env_ale <- function(formula_details, component_details, blackbo
   spline_params[["response_var"]] <- "yhat"
   spline_params[["env"]] <- attr(formula_details$formula, ".Environment")
 
-  blackbox_response_approx <- do.call(approx_with_spline, spline_params)
-  list(
-    blackbox_response_obj = blackbox_response_obj,
-    blackbox_response_approx = blackbox_response_approx
-  )
+  spline_params
 }
 
 #' @export
@@ -141,9 +132,20 @@ single_component_env <- function(formula_details, component_details, blackbox, d
     stop("No specified type for method!")
   }
 
-  switch(component_details$method_opts$type,
-    pdp = single_component_env_pdp(formula_details, component_details, blackbox, data),
-    ale = single_component_env_ale(formula_details, component_details, blackbox, data)
+  spline_params <- switch(component_details$method_opts$type,
+    pdp = prepare_spline_params_pdp(formula_details, component_details, blackbox, data),
+    ale = prepare_spline_params_ale(formula_details, component_details, blackbox, data)
+  )
+
+  if (is.null(spline_params[["increasing"]])) {
+    blackbox_response_approx <- do.call(approx_with_spline, spline_params)
+  } else {
+    blackbox_response_approx <- do.call(approx_with_monotonic_spline, spline_params)
+  }
+
+  list(
+    blackbox_response_obj = spline_params[["bb_response_data"]],
+    blackbox_response_approx = blackbox_response_approx
   )
 
 }
@@ -164,13 +166,13 @@ get_common_components_env <- function(formula_details, special_components_detail
       purrr::set_names(xs_vars)
   }
 
-  # (todo)
-  # if (length(xf_vars)) {
-  #   xf_env <- special_components_details %>%
-  #     purrr::keep(function(component_details) component_details[["var"]] %in% xf_vars) %>%
-  #     purrr::map(function(component_details) single_component_env(formula_details, component_details, blackbox, data)) %>%
-  #     purrr::set_names(xf_vars)
-  # }
+  # (todo) temporary fix for tests
+  if (length(xf_vars)) {
+    xf_env <- special_components_details %>%
+      purrr::keep(function(component_details) component_details[["var"]] %in% xf_vars) %>%
+      purrr::map(function(component_details) data[, c(formula_details$raw_response_name, component_details$var)]) %>%
+      purrr::set_names(xf_vars)
+  }
 
   list(
     xs_env = xs_env,
@@ -236,4 +238,52 @@ get_xf_call <- function(xs_env, pred_var_name) {
   function(pred_var) {
     pred_var
   }
+}
+
+#' @export
+is_lm_better_than_approx <- function(data, response, predictor, approx_fun, compare_stat) {
+  approx_model_formula <- as.formula(sprintf("%s ~ approx_fun(%s)", response, predictor))
+  approx_model <- lm(approx_model_formula, data)
+  lm_model_formula <- as.formula(sprintf("%s ~ %s", response, predictor))
+  lm_model <- lm(lm_model_formula, data)
+  comparison <- compare_stat(approx_model) <= compare_stat(lm_model)
+  if (attr(compare_stat, "better") == "higher") {
+    comparison
+  } else {
+    !comparison
+  }
+}
+
+
+#' @export
+correct_improved_components <- function(auto_approx, compare_stat, xs, xf, special_components_details, data, response) {
+  if (!auto_approx) {
+    return(special_components_details)
+  }
+  get_component_call <- function(special_component_details) {
+    if (special_component_details$call_fun == "xs") {
+      xs
+    } else {
+      xf
+    }
+  }
+
+  use_untransformed <- function(special_component_details) {
+    is_lm_better_than_approx(
+      data,
+      response,
+      special_component_details$var,
+      get_component_call(special_component_details),
+      compare_stat
+    )
+  }
+
+  use_bare_call <- function(special_component_details) {
+    special_component_details$new_call <- special_component_details$var
+    special_component_details
+  }
+
+  special_components_details %>%
+    purrr::map_if(use_untransformed, use_bare_call)
+
 }
