@@ -166,6 +166,11 @@ transformed_formula_object <- function(formula_details, blackbox, data, auto_app
   transformed_formula_env <- attr(formula_details$formula, ".Environment")
   transformed_formula_env$xs <- xs
   transformed_formula_env$xf <- xf
+  transformed_formula_env$xs_call <- xs_call
+  transformed_formula_env$xf_call <- xf_call
+  transformed_formula_env$xs_env_list <- xs_env_list
+  transformed_formula_env$xf_env_list <- xf_env_list
+  transformed_formula_env$response_name <- formula_details$raw_response_name
   special_components_details <- correct_improved_components(
     auto_approx, compare_stat, xs, xf, special_components_details, data, formula_details$response)
   transformed_formula_string <- transform_formula_chr(formula_details, special_components_details)
