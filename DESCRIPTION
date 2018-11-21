@@ -15,4 +15,7 @@ Suggests:
     pdp,
     ALEPlot,
     factoMerger,
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
