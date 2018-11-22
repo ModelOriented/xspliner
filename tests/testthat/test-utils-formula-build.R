@@ -1,4 +1,4 @@
-context("test-formula")
+context("test-utils-formula-build")
 
 test_that("raw variable names correspond to additive components", {
   type <- "pdp"
@@ -27,9 +27,9 @@ test_that("raw variable names correspond to additive components", {
 test_that("formula variables are extracted properly", {
   data <- data.frame(y = rnorm(10, 2), x = rnorm(10), z = rnorm(10, 10), t = runif(10), w = rexp(10))
   is_centered <- FALSE
-  formula_1 <- y ~ log(x) + xs(z, spline_opts = list(k = 6))
+  formula_1 <- y ~ log(x) + xs(z, transform_opts = list(k = 6))
   formula_2 <- log(y) ~
-    xs(x, spline_opts = list(k = 6), method_opts = list(type = "pdp", center = is_centered)) * z + xf(t) + w ^ 2
+    xs(x, transform_opts = list(k = 6), method_opts = list(type = "pdp", center = is_centered)) * z + xf(t) + w ^ 2
 
   expect_equal(extract_formula_var_names(formula_1, data), c("y", "x", "z"))
   expect_equal(extract_formula_var_names(formula_2, data), c("y", "x", "z", "t", "w"))
@@ -40,7 +40,7 @@ test_that("formula variables are extracted properly", {
   x <- rnorm(10)
   y <- x + rnorm(10, 0, 0.001)
   z <- x ^ 2 + rnorm(10, 0, 0.001)
-  formula_3 <- y ~ log(x, method_opts = list(type = type)) + xs(z, spline_opts = list(k = 6))
+  formula_3 <- y ~ log(x, method_opts = list(type = type)) + xs(z, transform_opts = list(k = 6))
   expect_equal(suppressWarnings(extract_formula_var_names(formula_3)), c("y", "x", "z"))
 
   # (todo) should z be duplicated?
@@ -54,7 +54,7 @@ test_that("get_formula_details returns formula info in correct form", {
   # get_formula_details depends on other functions -> use with_mock
   is_centered <- FALSE
   formula <- log(y) ~
-    xs(x, spline_opts = list(k = 6), method_opts = list(type = "pdp", center = is_centered)) * z + xf(t) + w ^ 2
+    xs(x, transform_opts = list(k = 6), method_opts = list(type = "pdp", center = is_centered)) * z + xf(t) + w ^ 2
   variable_names <- c("y", "x", "z", "t", "w")
   formula_details <- get_formula_details(formula, variable_names)
 
@@ -66,7 +66,7 @@ test_that("get_formula_details returns formula info in correct form", {
   expect_equal(formula_details$xf_variables, "t")
   expect_identical(
     formula_details$additive_components,
-    c("xs(x, spline_opts = list(k = 6), method_opts = list(type = \"pdp\", center = is_centered))",
+    c("xs(x, transform_opts = list(k = 6), method_opts = list(type = \"pdp\", center = is_centered))",
       "z", "xf(t)", "w")
   )
 })
@@ -92,15 +92,15 @@ test_that("formula component parameters are extracted correctly", {
   additive_component_1 <- "xf(x)"
   additive_component_2 <- "xs(x, method_opts = list(type = 'pdp'))"
   additive_component_3 <- "xs(x, method_opts = list(type = type))"
-  additive_component_4 <- "xs(x, method_opts = list(type = type), spline_opts = list(k = a))"
+  additive_component_4 <- "xs(x, method_opts = list(type = type), transform_opts = list(k = a))"
 
   expect_identical(
     get_component_params(additive_component_1, env_0),
-    list(spline_opts = NULL, method_opts = NULL)
+    list(transform_opts = NULL, method_opts = NULL)
   )
   expect_identical(
     get_component_params(additive_component_2, env_0),
-    list(spline_opts = NULL, method_opts = list(type = "pdp"))
+    list(transform_opts = NULL, method_opts = list(type = "pdp"))
   )
   expect_error(
     get_component_params(additive_component_3, env_0)
@@ -108,11 +108,11 @@ test_that("formula component parameters are extracted correctly", {
 
   expect_identical(
     get_component_params(additive_component_3, env_1),
-    list(spline_opts = NULL, method_opts = list(type = "pdp"))
+    list(transform_opts = NULL, method_opts = list(type = "pdp"))
   )
   expect_identical(
     get_component_params(additive_component_4, env_1),
-    list(spline_opts = list(k = 1), method_opts = list(type = "pdp"))
+    list(transform_opts = list(k = 1), method_opts = list(type = "pdp"))
   )
 
   expect_error(
@@ -132,17 +132,17 @@ test_that("additive component details are extracted and stored correctly", {
   additive_component_1 <- "xf(x)"
   additive_component_2 <- "xs(x, method_opts = list(type = 'pdp'))"
   additive_component_3 <- "xs(x, method_opts = list(type = type))"
-  additive_component_4 <- "xs(x, method_opts = list(type = type), spline_opts = list(k = a))"
+  additive_component_4 <- "xs(x, method_opts = list(type = type), transform_opts = list(k = a))"
 
   expect_equal(
     get_special_component_details("x", additive_component_1, env_0),
     list(var = "x", call = "xf(x)", new_call = "xf(x)",
-         call_fun = "xf", spline_opts = NULL, method_opts = NULL)
+         call_fun = "xf", transform_opts = NULL, method_opts = NULL)
   )
   expect_equal(
     get_special_component_details("x", additive_component_2, env_0),
     list(var = "x", call = "xs(x, method_opts = list(type = 'pdp'))",
-         new_call = "xs(x)", call_fun = "xs", spline_opts = NULL, method_opts = list(type = "pdp"))
+         new_call = "xs(x)", call_fun = "xs", transform_opts = NULL, method_opts = list(type = "pdp"))
   )
   expect_error(
     get_special_component_details("x", additive_component_3, env_0)
@@ -150,12 +150,12 @@ test_that("additive component details are extracted and stored correctly", {
   expect_equal(
     get_special_component_details("x", additive_component_3, env_1),
     list(var = "x", call = "xs(x, method_opts = list(type = type))", new_call = "xs(x)",
-         call_fun = "xs", spline_opts = NULL, method_opts = list(type = "pdp"))
+         call_fun = "xs", transform_opts = NULL, method_opts = list(type = "pdp"))
   )
   expect_equal(
     get_special_component_details("x", additive_component_4, env_1),
-    list(var = "x", call = "xs(x, method_opts = list(type = type), spline_opts = list(k = a))", new_call = "xs(x)",
-         call_fun = "xs", spline_opts = list(k = 1), method_opts = list(type = "pdp"))
+    list(var = "x", call = "xs(x, method_opts = list(type = type), transform_opts = list(k = a))", new_call = "xs(x)",
+         call_fun = "xs", transform_opts = list(k = 1), method_opts = list(type = "pdp"))
   )
 })
 
@@ -173,7 +173,7 @@ test_that("get_special_components_info properly identifies special components an
   expect_equal(
     special_components_info$x,
     list(var = "x", call = "xs(x, method_opts = list(type = \"type\"))",
-         new_call = "xs(x)", call_fun = "xs", spline_opts = NULL, method_opts = list(type = "type"))
+         new_call = "xs(x)", call_fun = "xs", transform_opts = NULL, method_opts = list(type = "type"))
   )
 
 })
@@ -190,32 +190,36 @@ test_that("formula last string form is correct", {
 
   special_component_info <- list(
     x = list(var = "x", call = "xs(x, method_opts = list(type = \"type\"))",
-             new_call = "xs(x)", spline_opts = NULL, method_opts = list(type = "type")),
+             new_call = "xs(x)", transform_opts = NULL, method_opts = list(type = "type")),
     t = list(var = "t", call = "xf(t)",
-             new_call = "xf(t)", spline_opts = NULL, method_opts = NULL))
+             new_call = "xf(t)", transform_opts = NULL, method_opts = NULL))
 
   expect_equal(transform_formula_chr(formula_details, special_component_info), "log(y) ~ xs(x) * z + xf(t) + log(a)")
 
 })
 
 test_that("transformed_formula_object returns correct formula form and environment", {
-  formula <- log(y) ~ xs(x, method_opts = list(type = "pdp")) * z + xf(t) + log(a)
+  formula <- log(y) ~ xs(x, method_opts = list(type = "pdp")) * z + xf(t, method_opts = list(type = "ice")) + log(a)
   formula_details <- get_formula_details(formula, c("y" ,"x", "z", "t", "a"))
   set.seed(123)
-  data <- data.frame(y = rnorm(10, 2), x = rnorm(10), z = rnorm(10, 10), t = runif(10), a = rexp(10))
+  data <- data.frame(y = rnorm(10, 2), x = rnorm(10), z = rnorm(10, 10),
+                     t = factor(sample(LETTERS[1:2], 10, replace = TRUE)), a = rexp(10))
+  alter <- list(numeric = 'always', factor = 'never')
   blackbox <- randomForest::randomForest(y ~ ., data)
 
-  transformed_formula <- transformed_formula_object(formula_details, blackbox, data, FALSE)
+
+  transformed_formula <- transformed_formula_object(formula_details, blackbox, data, alter)
   env <- attr(transformed_formula, ".Environment")
 
   expect_true(inherits(transformed_formula, "formula"))
   expect_true(all(c("xf", "xs") %in% ls(env)))
   expect_equal(length(env$xs), 1)
   expect_equal(length(env$xf), 1)
+  alter <- list(numeric = 'auto', factor = 'never')
   compare_stat <- function(lm_model) 1
-  attr(compare_stat, "better") <- "higher"
+  attr(compare_stat, "higher-better") <- TRUE
 
-  transformed_formula <- transformed_formula_object(formula_details, blackbox, data, TRUE, compare_stat)
+  transformed_formula <- transformed_formula_object(formula_details, blackbox, data, alter, compare_stat)
   env <- attr(transformed_formula, ".Environment")
 
   expect_true(inherits(transformed_formula, "formula"))

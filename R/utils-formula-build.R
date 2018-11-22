@@ -52,8 +52,8 @@ get_formula_details <- function(formula, variable_names) {
     formula = formula,
     raw_response_name = variable_names[1],
     raw_predictor_names = variable_names[-1],
-    response = as.character(formula)[[2]],
-    rhs_formula = as.character(formula)[[3]],
+    response = deparse(formula[[2]]),
+    rhs_formula = gsub("\\s+", " ", trimws(paste0(deparse(formula[[3]]), collapse = ""))),
     additive_components = get_formula_raw_components(formula_terms),
     xs_variables = get_formula_special(variable_names, formula_terms, "xs"),
     xf_variables = get_formula_special(variable_names, formula_terms, "xf"),
@@ -82,10 +82,10 @@ prepare_call <- function(component_string, add_variable = TRUE) {
 #' @export
 get_component_params <- function(additive_component, env) {
   spline_params <- as.list(parse(text = additive_component[1])[[1]])
-  spline_opts <- eval(spline_params$spline_opts, envir = env)
+  transform_opts <- eval(spline_params$transform_opts, envir = env)
   method_opts <- eval(spline_params$method_opts, envir = env)
   list(
-    spline_opts = spline_opts,
+    transform_opts = transform_opts,
     method_opts = method_opts
   )
 }
@@ -102,7 +102,7 @@ get_special_component_details <- function(raw_variable_name, additive_component_
     call = additive_component_chr,
     new_call = transformed_component,
     call_fun = call_function,
-    spline_opts = component_params$spline_opts,
+    transform_opts = component_params$transform_opts,
     method_opts = component_params$method_opts
   )
 
@@ -142,7 +142,7 @@ transform_formula_chr <- function(formula_details, special_components_details) {
 }
 
 #' @export
-transformed_formula_object <- function(formula_details, blackbox, data, auto_approx, compare_stat) {
+transformed_formula_object <- function(formula_details, blackbox, data, alter, compare_stat) {
 
   special_components_details <- get_special_components_info(formula_details)
   transformed_formula_calls <- get_common_components_env(formula_details, special_components_details, blackbox, data)
@@ -172,8 +172,45 @@ transformed_formula_object <- function(formula_details, blackbox, data, auto_app
   transformed_formula_env$xf_env_list <- xf_env_list
   transformed_formula_env$response_name <- formula_details$raw_response_name
   special_components_details <- correct_improved_components(
-    auto_approx, compare_stat, xs, xf, special_components_details, data, formula_details$response)
+    alter, compare_stat, xs, xf, special_components_details, data, formula_details$response)
   transformed_formula_string <- transform_formula_chr(formula_details, special_components_details)
 
   as.formula(transformed_formula_string, env = transformed_formula_env)
+}
+
+#' @export
+factor_opts_default = list(
+  method_opts = list(type = "ice"),
+  transform_opts = list(stat = "GIC", value = 3)
+)
+
+#' @export
+numeric_opts_default = list(
+  method_opts = list(type = "pdp"),
+  transform_opts = list(k = 6)
+)
+
+build_predictor_component <- function(predictor, class, factor_opts, numeric_opts) {
+  if (!(class %in% c("numeric", "integer", "factor"))) {
+    stop("Wrong class passed.")
+  }
+  if (class == "factor") {
+    sprintf(
+      "xf(%s, method_opts = %s, transform_opts = %s)",
+      predictor, deparse(factor_opts$method_opts), deparse(factor_opts$transform_opts)
+    )
+  } else {
+    sprintf(
+      "xs(%s, method_opts = %s, transform_opts = %s)",
+      predictor, deparse(numeric_opts$method_opts), deparse(numeric_opts$transform_opts)
+    )
+  }
+}
+
+build_formula <- function(response, predictors, classes, factor_opts, numeric_opts) {
+  rhs <- purrr::map2_chr(
+    predictors, classes, build_predictor_component, factor_opts = factor_opts, numeric_opts = numeric_opts) %>%
+    paste(collapse = " + ")
+
+  sprintf("%s ~ %s", response, rhs)
 }
