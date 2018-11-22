@@ -1,4 +1,4 @@
-context("test-approx")
+context("test-utils-approximations")
 
 test_that("formula for spline approximation is prepared correctly", {
   env <- new.env()
@@ -69,7 +69,7 @@ test_that("monotonic spline approximation is made correctly with mgcv::gam and m
   })
 })
 
-test_that("single_component_env_pdp correctly gets pdp response and its approximation", {
+test_that("prepare_spline_params_pdp correctly gets pdp response and its approximation", {
   formula <-  log(y) ~ xs(x, method_opts = list(type = "pdp")) * z + xf(t) + log(a)
   formula_details <- get_formula_details(formula, c("y" ,"x", "z", "t", "a"))
   set.seed(123)
@@ -84,7 +84,7 @@ test_that("single_component_env_pdp correctly gets pdp response and its approxim
   expect_equal(colnames(x_var_spline_params$bb_response_data), c("x", "yhat"))
 })
 
-test_that("single_component_env_ale correctly gets ale response and its approximation", {
+test_that("prepare_spline_params_ale correctly gets ale response and its approximation", {
   formula <-  log(y) ~ xs(x, method_opts = list(type = "ale")) * z + xf(t) + log(a)
   formula_details <- get_formula_details(formula, c("y" ,"x", "z", "t", "a"))
   set.seed(123)
@@ -99,7 +99,7 @@ test_that("single_component_env_ale correctly gets ale response and its approxim
   expect_equal(colnames(x_var_spline_params$bb_response_data), c("x", "yhat"))
 })
 
-test_that("single_component_env correctly gets response and its approximation", {
+test_that("numeric_component_env correctly gets response and its approximation", {
   formula <-  log(y) ~ xs(x, method_opts = list(type = "pdp")) * z + xf(t) + log(a)
   formula_details <- get_formula_details(formula, c("y" ,"x", "z", "t", "a"))
   set.seed(123)
@@ -107,14 +107,14 @@ test_that("single_component_env correctly gets response and its approximation", 
   blackbox <- randomForest::randomForest(y ~ ., data)
   special_components_details <- get_special_components_info(formula_details)
 
-  x_var_approx_env <- single_component_env(formula_details, special_components_details$x, blackbox, data)
+  x_var_approx_env <- numeric_component_env(formula_details, special_components_details$x, blackbox, data)
 
   expect_equal(names(x_var_approx_env), c("blackbox_response_obj", "blackbox_response_approx"))
   expect_true("partial" %in% class(x_var_approx_env$blackbox_response_obj))
   expect_true("gam" %in% class(x_var_approx_env$blackbox_response_approx))
   expect_equal(colnames(x_var_approx_env$blackbox_response_obj), c("x", "yhat"))
 
-  expect_error(single_component_env(formula_details, special_components_details$t, blackbox, data))
+  expect_error(numeric_component_env(formula_details, special_components_details$t, blackbox, data))
 })
 
 test_that("get_common_components_env correctly gets response and its approximation for all special calls", {
@@ -178,16 +178,16 @@ test_that("correct_improved_components changes calls", {
   special_components_details <- get_special_components_info(formula_details)
   xs <- sin
   xf <- function(x) x
-
+  alter <- function(type) list(numeric = type)
   expect_equal(
-    correct_improved_components(FALSE, r_squared, xs, xf, special_components_details, data, "log(y)"),
+    correct_improved_components(alter('always'), r_squared, xs, xf, special_components_details, data, "log(y)"),
     special_components_details)
   expect_equal(
-    correct_improved_components(TRUE, r_squared, xs, xf, special_components_details, data, "y")$x$new_call,
+    correct_improved_components(alter('auto'), r_squared, xs, xf, special_components_details, data, "y")$x$new_call,
     "x")
 
   data <- data.frame(y = sin(x) + rnorm(10, 0, 0.1), x, a = rexp(10))
   expect_equal(
-    correct_improved_components(TRUE, r_squared, xs, xf, special_components_details, data, "y"),
+    correct_improved_components(alter('auto'), r_squared, xs, xf, special_components_details, data, "y"),
     special_components_details)
 })

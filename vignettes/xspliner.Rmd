@@ -50,27 +50,27 @@ set.seed(123)
 # build random forest model:
 boston.rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
 
-# build xp_gam model with specified response method and approximation options
-model_pdp <- xp_gam(
+# build xspline model with specified response method and approximation options
+model_pdp <- xspline(
   cmedv ~
-    xs(lstat, spline_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
-    xs(ptratio, spline_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
+    xs(lstat, transform_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
+    xs(ptratio, transform_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
     age,
-  blackbox = boston.rf
+  model = boston.rf
 )
 
-model_ale <- xp_gam(
+model_ale <- xspline(
   cmedv ~
-    xs(lstat, spline_opts = list(k = 6), method_opts = list(type = "ale", K = 60)) +
-    xs(ptratio, spline_opts = list(k = 4), method_opts = list(type = "ale", K = 40)) +
+    xs(lstat, transform_opts = list(k = 6), method_opts = list(type = "ale", K = 60)) +
+    xs(ptratio, transform_opts = list(k = 4), method_opts = list(type = "ale", K = 40)) +
     age,
-  blackbox = boston.rf
+  model = boston.rf
 )
 ```
 
 ```{r fig.width=2, fig.height=2, echo = FALSE, fig.show='hold'}
-xp_plot(model_pdp, "ptratio", plot_approx = FALSE)
-xp_plot(model_ale, "ptratio", plot_approx = FALSE)
+plot(model_pdp, "ptratio", plot_approx = FALSE)
+plot(model_ale, "ptratio", plot_approx = FALSE)
 ```
 
 As we can see, above functions are irregular, making it difficult to interpret explained effect.
@@ -85,8 +85,8 @@ Due to the large errors that occurs with approximation of functions with polynom
 The following graphics show spline approximations of pdp and ale curves:
 
 ```{r fig.width=2, fig.height=2, echo = FALSE, fig.show='hold'}
-xp_plot(model_pdp, "ptratio")
-xp_plot(model_ale, "ptratio")
+plot(model_pdp, "ptratio")
+plot(model_ale, "ptratio")
 ```
 
 ### Linear models based on response function and splines
@@ -153,10 +153,10 @@ Response function is approximated with `mgcv::gam` package and `mgcv::s` smoothi
 `xspliner` allows using all smoothing methods provided by `mgcv::s`.
 You can pass corresponding parameters in
 ```
-spline_opts = <mgcv::s parameters> # named list
+transform_opts = <mgcv::s parameters> # named list
 ```
 **Remark**
-One of special parameters passed for `spline_opts` is `increasing`. 
+One of special parameters passed for `transform_opts` is `increasing`. 
 When the parameter occurs then:
 
 - for `TRUE` value, approximation will be increasing
@@ -181,7 +181,7 @@ So we get the final formula:
 ```
 cmedv ~ rm + lstat + xs(nox, 
   method_opts = list(type = "pdp", grid.resolution = 100),
-  spline_opts = list(k = 10, bs = "cr"))
+  transform_opts = list(k = 10, bs = "cr"))
 ```
 
 ### Building the model
@@ -196,15 +196,15 @@ set.seed(123)
 boston_rf <- randomForest(cmedv ~ rm + lstat + nox, data = boston) 
 ```
 
-As we already have the black box provided, we can use `xp_gam` function to build the desired model.
+As we already have the black box provided, we can use `xspline` function to build the desired model.
 
 ```{r results = FALSE}
-xp_model <- xp_gam(
+xp_model <- xspline(
   cmedv ~ rm + lstat +
     xs(nox, 
        method_opts = list(type = "pdp", grid.resolution = 100), 
-       spline_opts = list(k = 10, bs = "cr")),
-  blackbox = boston_rf
+       transform_opts = list(k = 10, bs = "cr")),
+  model = boston_rf
 )
 ```
 
@@ -222,30 +222,32 @@ All the information about the response functions are stored in `xp_model` enviro
 You may plot simple graphics for resulting model with `xp_plot` function.
 
 ```{r fig.width=3, fig.height=3, fig.show='hold'}
-xp_plot(xp_model, "nox", data = boston, plot_data = TRUE)
-xp_plot(xp_model, "nox")
+plot(xp_model, "nox", data = boston, plot_data = TRUE)
+plot(xp_model, "nox")
 ```
 
-### Is spline transformation always better
+### Is spline transformation always better?
+
+*For qualitative variables only*
 
 When the response function has linear form, approximating it with splines may make the result worse.
-`xp_gam` function offers automatical check if spline approximation is better than linear one, and use it in final model.
+`xspline` function offers automatical check if spline approximation is better than linear one, and use it in final model.
 
 You may find two parameters responsible for that:
-- `auto_approx` - if TRUE, automatically choose whther variable should be transformed with splines
-- `compare_stat` - function of `lm` object. Defines statistic that should be used in decision between spline model and linear one. The function should have attribute `higher`. When the attribute has `"better"` value then the model with higher statistic value is chosen.
+- `alter` - The list of 'numeric' and 'factor'. When `alter$numeric == 'auto'`, automatically choose whther variable should be transformed with splines
+- `compare_stat` - function of `lm` class object. Defines statistic that should be used in decision between spline model and linear one. The function should have attribute `higher`. When the attribute has `"better"` value then the model with higher statistic value is chosen.
 
 You can see the feature in above example:
 ```{r}
 set.seed(123)
 boston_rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston) 
-model_pdp_auto <- xp_gam(
+model_pdp_auto <- xspline(
   cmedv ~
-    xs(lstat, spline_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
-    xs(ptratio, spline_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
+    xs(lstat, transform_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
+    xs(ptratio, transform_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
     age,
-  blackbox = boston_rf,
-  auto_approx = TRUE
+  model = boston_rf,
+  alter = list(numeric = 'auto', factor = 'never')
 )
 
 # r_squared statistic is used by default

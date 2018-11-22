@@ -4,7 +4,7 @@ oko <- 10
 
 # construct formula
 formula <- log(y) ~
-  xs(x, spline_opts = list(k = 6), method_opts = list(type = "pdp", object = oko)) * z + xf(t) + w ^ 2
+  xs(x, transform_opts = list(k = 6), method_opts = list(type = "pdp", object = oko)) * z + xf(t) + w ^ 2
 
 # check if library functions inherits variables from parent.frame()
 formula_var_names <- extract_formula_var_names(formula, data)
