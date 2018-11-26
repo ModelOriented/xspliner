@@ -9,11 +9,12 @@
 \usage{
 xspline(object, ...)
 
-\method{xspline}{default}(model, response = NULL, data = NULL,
-  env = parent.frame(), factor_opts = factor_opts_default,
+\method{xspline}{default}(model, response = NULL, predictors = NULL,
+  data = NULL, env = parent.frame(),
+  factor_opts = factor_opts_default,
   numeric_opts = numeric_opts_default, ...)
 
-\method{xspline}{formula}(formula, model, data = NULL,
+\method{xspline}{formula}(formula, model, data = NULL, exact = TRUE,
   env = parent.frame(), ...)
 
 \method{xspline}{explainer}(explainer, env = parent.frame(), ...)
@@ -27,6 +28,8 @@ xspline(object, ...)
 
 \item{response}{Name of response variable of \code{model}.}
 
+\item{predictors}{Predictor values that should be used in final model.}
+
 \item{data}{Training data of \code{model}.}
 
 \item{env}{Environment in which optional variables passed into parameters are stored.}
@@ -37,6 +40,8 @@ xspline(object, ...)
 variables transformation. See vignette("xspliner") for details.}
 
 \item{formula}{xspliner-specific formula object. Check vignette("xspliner") for more details.}
+
+\item{exact}{If TRUE, exact formula call is used. If not all formula variables are altered.}
 
 \item{explainer}{Object of class 'explainer' (see \link{DALEX} package).}
 }

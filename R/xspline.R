@@ -13,6 +13,7 @@ xspline <- function(object, ...) {
 
 #' @param model Predictive model. Basic model used for extracting predictors transformation.
 #' @param response Name of response variable of \code{model}.
+#' @param predictors Predictor values that should be used in final model.
 #' @param data Training data of \code{model}.
 #' @param env Environment in which optional variables passed into parameters are stored.
 #' @param factor_opts Formula parameters used for factor variable transformatoins inherited from factorMerger package.
@@ -21,11 +22,13 @@ xspline <- function(object, ...) {
 #'
 #' @rdname xspline
 #' @export
-xspline.default <- function(model, response = NULL, data = NULL, env = parent.frame(),
+xspline.default <- function(model, response = NULL, predictors = NULL, data = NULL, env = parent.frame(),
                             factor_opts = factor_opts_default, numeric_opts = numeric_opts_default, ...) {
-  data <- get_model_data(model, data)
+  data <- get_model_data(model, data) # (todo) when y is transformed it differs
   response <- get_model_response(model, response)
-  predictors <- setdiff(colnames(data), response)
+  if (is.null(predictors)) {
+    predictors <- setdiff(colnames(data), response)
+  }
   classes <- get_df_classes(data[, predictors])
   formula <- as.formula(
     build_formula(response, predictors, classes, factor_opts, numeric_opts),
@@ -35,15 +38,23 @@ xspline.default <- function(model, response = NULL, data = NULL, env = parent.fr
 }
 
 #' @param formula xspliner-specific formula object. Check vignette("xspliner") for more details.
+#' @param exact If TRUE, exact formula call is used. If not all formula variables are altered.
 #' @rdname xspline
 #' @export
-xspline.formula <- function(formula, model, data = NULL, env = parent.frame(), ...) {
+xspline.formula <- function(formula, model, data = NULL, exact = TRUE, env = parent.frame(), ...) {
   data <- get_model_data(model, data)
   if (get_formula_rhs(formula) == ".") {
     response <- get_formula_lhs(formula)
-    xspline(model, response, data, env = env, ...)
+    predictors <- setdiff(all.vars(model$terms), response)
+    xspline.default(model, response, predictors, data, env = env, ...)
   } else {
-    build_xspliner(formula, model, data, env = env, ...)
+    if (exact) {
+      build_xspliner(formula, model, data, env = env, ...)
+    } else {
+      response <- get_formula_lhs(formula)
+      predictors <- setdiff(all.vars(formula), response)
+      xspline.default(model, response, predictors, data, env = env, ...)
+    }
   }
 }
 
@@ -51,7 +62,7 @@ xspline.formula <- function(formula, model, data = NULL, env = parent.frame(), .
 #' @rdname xspline
 #' @export
 xspline.explainer <- function(explainer, env = parent.frame(), ...) {
-  xspline(explainer$model, explainer$y, explainer$data, env = env, ...)
+  xspline.default(explainer$model, explainer$y, NULL, explainer$data, env = env, ...)
 }
 
 #' Helper function for building GLM object with transformed variables.
