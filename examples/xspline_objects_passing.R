@@ -19,6 +19,16 @@ model <- xspline(
 )
 summary(model)
 
+# xspliner specific formula (can used just some predictors from the model one)
+
+model <- xspline(
+  cmedv ~ lstat + age,
+  model = boston.rf,
+  data = boston,
+  exact = FALSE
+)
+summary(model)
+
 # 'response ~ .' formula based on data
 
 model <- xspline(

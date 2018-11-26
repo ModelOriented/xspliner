@@ -2,12 +2,18 @@ get_df_classes <- function(data) {
   purrr::map_chr(data, class)
 }
 
+try_get <- function(value, possible) {
+  possible_response <- try(possible, silent = TRUE)
+  if (class(possible_response) != "try-error") {
+    response <- possible_response
+  } else {
+    NULL
+  }
+}
+
 get_model_data <- function(model, data) {
   if (is.null(data)) {
-    possible_data <- try(model.frame(model), silent = TRUE)
-    if (class(possible_data) != "try-error") {
-      data <- possible_data
-    }
+    data <- try_get(data, model.frame(model))
   }
   if (is.null(data)) {
     stop("Data must be provided.")
@@ -17,10 +23,10 @@ get_model_data <- function(model, data) {
 
 get_model_response <- function(model, response) {
   if (is.null(response)) {
-    possible_response <- try(colnames(model.frame(model))[1], silent = TRUE)
-    if (class(possible_response) != "try-error") {
-      response <- possible_response
-    }
+    response <- try_get(response, deparse(boston.rf$terms[[2]]))
+  }
+  if (is.null(response)) {
+    response <- try_get(response, colnames(model.frame(model))[1])
   }
   if (is.null(response)) {
     stop("Data must be provided.")
@@ -28,11 +34,10 @@ get_model_response <- function(model, response) {
   response
 }
 
-get_formula_lhs <- function(formula, data) {
-  # (todo) should work on `y ~ .` formulas: extract_formula_var_names(formula, data)[1]
-  all.vars(formula)[1]
+get_formula_lhs <- function(formula) {
+  deparse(formula[[2]], width.cutoff = 500)
 }
 
 get_formula_rhs <- function(formula) {
-  paste(deparse(formula[[3]]), collapse = "")
+  gsub("\\s+", " ", trimws(paste0(deparse(formula[[3]]), collapse = "")))
 }
