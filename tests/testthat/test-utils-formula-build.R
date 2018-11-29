@@ -59,9 +59,9 @@ test_that("get_formula_details returns formula info in correct form", {
   formula_details <- get_formula_details(formula, variable_names)
 
   expect_equal(formula_details$formula, formula)
-  expect_equal(formula_details$raw_response_name, "y")
-  expect_equal(formula_details$raw_predictor_names, c("x", "z", "t", "w"))
-  expect_equal(formula_details$response, "log(y)")
+  expect_equal(formula_details$response, "y")
+  expect_equal(formula_details$predictors, c("x", "z", "t", "w"))
+  expect_equal(formula_details$lhs, "log(y)")
   expect_equal(formula_details$xs_variables, "x")
   expect_equal(formula_details$xf_variables, "t")
   expect_identical(
@@ -162,9 +162,9 @@ test_that("additive component details are extracted and stored correctly", {
 test_that("get_special_components_info properly identifies special components and extracts its details", {
   formula_details <- list(
     formula = log(y) ~ xs(x, method_opts = list(type = "type")) * z + xf(t) + log(a) + xs(d),
-    raw_response_name = "y", raw_predictor_names = c("x", "z", "t", "a", "d"),
-    response = "log(y)",
-    rhs_formula = "xs(x, method_opts = list(type = \"type\")) * z + xf(t) + log(a) + xs(d)",
+    response = "y", predictors = c("x", "z", "t", "a", "d"),
+    lhs = "log(y)",
+    rhs = "xs(x, method_opts = list(type = \"type\")) * z + xf(t) + log(a) + xs(d)",
     additive_components = c("xs(x, method_opts = list(type = \"type\"))", "z", "xf(t)", "log(a)", "xs(d)"),
     xs_variables = c("x", "d"), xf_variables = "t", xs_variables_idx = c(1, 5), xf_variables_idx = 3)
 
@@ -182,9 +182,9 @@ test_that("get_special_components_info properly identifies special components an
 test_that("formula last string form is correct", {
   formula_details <- list(
     formula = log(y) ~ xs(x, method_opts = list(type = "type")) * z + xf(t) + log(a),
-    raw_response_name = "log(y)", raw_predictor_names = c("x", "z", "t", "a"),
-    response = "log(y)",
-    rhs_formula = "xs(x, method_opts = list(type = \"type\")) * z + xf(t) + log(a)",
+    response = "y", predictors = c("x", "z", "t", "a"),
+    lhs = "log(y)",
+    rhs = "xs(x, method_opts = list(type = \"type\")) * z + xf(t) + log(a)",
     additive_components = c("xs(x, method_opts = list(type = \"type\"))", "z", "xf(t)", "log(a)"),
     xs_variables = "x", xf_variables = "t", xs_variables_idx = 1, xf_variables_idx = 3)
 

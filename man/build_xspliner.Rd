@@ -4,9 +4,9 @@
 \alias{build_xspliner}
 \title{Helper function for building GLM object with transformed variables.}
 \usage{
-build_xspliner(formula, model, data, env = parent.frame(),
-  alter = list(numeric = "always", factor = "never"),
-  compare_stat = r_squared)
+build_xspliner(formula, model, data, link = "identity",
+  family = "gaussian", env = parent.frame(), alter = list(numeric =
+  "always", factor = "never"), compare_stat = r_squared)
 }
 \arguments{
 \item{formula}{xspliner-specific formula object. Check vignette("xspliner") for more details.}
@@ -14,6 +14,12 @@ build_xspliner(formula, model, data, env = parent.frame(),
 \item{model}{Predictive model. Basic model used for extracting predictors transformation.}
 
 \item{data}{Training data of \code{model}.}
+
+\item{link}{Link function that should be used in final model. The passed is used when cannot be extracted from
+model. By default 'identity'. See \link{stats::family} for possibilities.}
+
+\item{family}{Family of response variable that should be used in final model. The passed is used when cannot
+be extracted from model. By default 'gaussian'. See \link{stats::family} for possibilities.}
 
 \item{env}{Environment in which optional variables passed into parameters are stored.}
 

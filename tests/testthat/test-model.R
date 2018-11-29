@@ -6,10 +6,10 @@ test_that("xspline return object with correct attributes and values", {
   blackbox <- randomForest::randomForest(y ~ ., data)
   model <- xspline(formula, blackbox, data)
 
-  expect_true("gam" %in% class(model))
+  expect_true("glm" %in% class(model))
   expect_equal(
     ls(environment(model$formula)),
-    c("response_name", "xf", "xf_call", "xf_env_list", "xs", "xs_call", "xs_env_list"))
+    c("response", "xf", "xf_call", "xf_env_list", "xs", "xs_call", "xs_env_list"))
   expect_equal(deparse(model$formula), "y ~ xs(x) * z")
 })
 
@@ -26,6 +26,6 @@ test_that("xspline correctly predicts values", {
   coeffs <- model$coefficients
 
   expect_length(predicted, 1)
-  expect_equal(predicted, coeffs[1] + coeffs[2] * xs(x) + coeffs[3] * z + coeffs[4] * xs(x) * z)
+  expect_equivalent(predicted, coeffs[1] + coeffs[2] * xs(x) + coeffs[3] * z + coeffs[4] * xs(x) * z)
 
 })

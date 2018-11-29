@@ -9,8 +9,8 @@
 \usage{
 xspline(object, ...)
 
-\method{xspline}{default}(model, response = NULL, predictors = NULL,
-  data = NULL, env = parent.frame(),
+\method{xspline}{default}(model, lhs = NULL, response = NULL,
+  predictors = NULL, data = NULL, env = parent.frame(),
   factor_opts = factor_opts_default,
   numeric_opts = numeric_opts_default, ...)
 
