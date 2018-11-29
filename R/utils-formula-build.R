@@ -46,20 +46,29 @@ get_formula_special <- function(variable_names, formula_terms, special, index = 
 #' @export
 get_formula_details <- function(formula, variable_names) {
 
+  if (!(length(formula) == 3)) {
+    stop("Not specified response in formula")
+  }
+
   formula_terms <- terms.formula(formula, specials = c("xs", "xf"))
 
-  list(
+  formula_details <- list(
     formula = formula,
-    raw_response_name = variable_names[1],
-    raw_predictor_names = variable_names[-1],
-    response = get_formula_lhs(formula),
-    rhs_formula = get_formula_rhs(formula),
+    response = variable_names[1],
+    predictors = variable_names[-1],
+    lhs = get_formula_lhs(formula),
+    rhs = get_formula_rhs(formula),
     additive_components = get_formula_raw_components(formula_terms),
     xs_variables = get_formula_special(variable_names, formula_terms, "xs"),
     xf_variables = get_formula_special(variable_names, formula_terms, "xf"),
     xs_variables_idx = get_formula_special(variable_names, formula_terms, "xs", TRUE),
     xf_variables_idx = get_formula_special(variable_names, formula_terms, "xf", TRUE)
   )
+  if (length(formula_details$predictors) != length(formula_details$additive_components)) {
+    stop("Number of predictors is different than additive components")
+  }
+
+  formula_details
 }
 
 #' @export
@@ -112,7 +121,7 @@ get_special_component_details <- function(raw_variable_name, additive_component_
 #' @export
 get_special_components_info <- function(formula_details) {
   special_predictor_indexes <- c(formula_details$xs_variables_idx, formula_details$xf_variables_idx)
-  special_predictor_names <- formula_details$raw_predictor_names[special_predictor_indexes]
+  special_predictor_names <- formula_details$predictors[special_predictor_indexes]
   special_predictor_additive_components <- formula_details$additive_components[special_predictor_indexes]
 
   special_component_details <- purrr::map2(
@@ -135,10 +144,10 @@ transform_formula_chr <- function(formula_details, special_components_details) {
   transformed_rhs <- purrr::reduce(
     special_components_details,
     replace_component_call,
-    .init = formula_details$rhs_formula
+    .init = formula_details$rhs
   )
 
-  sprintf("%s ~ %s", formula_details$response, transformed_rhs)
+  sprintf("%s ~ %s", formula_details$lhs, transformed_rhs)
 }
 
 #' @export
@@ -170,9 +179,9 @@ transformed_formula_object <- function(formula_details, blackbox, data, alter, c
   transformed_formula_env$xf_call <- xf_call
   transformed_formula_env$xs_env_list <- xs_env_list
   transformed_formula_env$xf_env_list <- xf_env_list
-  transformed_formula_env$response_name <- formula_details$raw_response_name
+  transformed_formula_env$response <- formula_details$response
   special_components_details <- correct_improved_components(
-    alter, compare_stat, xs, xf, special_components_details, data, formula_details$response)
+    alter, compare_stat, xs, xf, special_components_details, data, formula_details$lhs)
   transformed_formula_string <- transform_formula_chr(formula_details, special_components_details)
 
   as.formula(transformed_formula_string, env = transformed_formula_env)

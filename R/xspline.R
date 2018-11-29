@@ -22,18 +22,16 @@ xspline <- function(object, ...) {
 #'
 #' @rdname xspline
 #' @export
-xspline.default <- function(model, response = NULL, predictors = NULL, data = NULL, env = parent.frame(),
+xspline.default <- function(model, lhs = NULL, response = NULL, predictors = NULL, data = NULL, env = parent.frame(),
                             factor_opts = factor_opts_default, numeric_opts = numeric_opts_default, ...) {
-  data <- get_model_data(model, data) # (todo) when y is transformed it differs
-  response <- get_model_response(model, response)
-  if (is.null(predictors)) {
-    predictors <- setdiff(colnames(data), response)
-  }
-  classes <- get_df_classes(data[, predictors])
-  formula <- as.formula(
-    build_formula(response, predictors, classes, factor_opts, numeric_opts),
-    env = env)
+  data <- get_model_data(model, data, env)
+  lhs <- get_model_lhs(model, lhs)
+  predictors <- get_model_predictors(model, data, predictors, get_model_response(model, data, response))
+  classes <- get_predictors_classes(data[, predictors])
 
+  formula <- as.formula(
+    build_formula(lhs, predictors, classes, factor_opts, numeric_opts),
+    env = env)
   build_xspliner(formula, model, data, env = env, ...)
 }
 
@@ -42,18 +40,29 @@ xspline.default <- function(model, response = NULL, predictors = NULL, data = NU
 #' @rdname xspline
 #' @export
 xspline.formula <- function(formula, model, data = NULL, exact = TRUE, env = parent.frame(), ...) {
-  data <- get_model_data(model, data)
+  data <- get_model_data(model, data, env)
+
+  formula_lhs <- get_formula_lhs(formula)
+  model_lhs <- get_model_lhs(model, NULL)
+  if (model_lhs != formula_lhs) {
+    warning("Model and formula lhs's must be the same. Using lhs from model.")
+    formula[[2]] <- model$terms[[2]]
+  }
+
+  model_predictors <- get_model_predictors(model, data, NULL, get_model_response(model, data, NULL))
   if (get_formula_rhs(formula) == ".") {
-    response <- get_formula_lhs(formula)
-    predictors <- setdiff(all.vars(model$terms), response)
-    xspline.default(model, response, predictors, data, env = env, ...)
+    lhs <- get_formula_lhs(formula)
+    xspline.default(model, lhs, NULL, model_predictors, data, env = env, ...)
   } else {
+    formula_predictors <- get_formula_predictors(formula, data, NULL, get_formula_response(formula, data, NULL))
+    if (!(all(formula_predictors %in% model_predictors))) {
+      stop("Not all variables from formula are included in model.")
+    }
     if (exact) {
       build_xspliner(formula, model, data, env = env, ...)
     } else {
-      response <- get_formula_lhs(formula)
-      predictors <- setdiff(all.vars(formula), response)
-      xspline.default(model, response, predictors, data, env = env, ...)
+      lhs <- get_formula_lhs(formula)
+      xspline.default(model, lhs, NULL, formula_predictors, data, env = env, ...)
     }
   }
 }
@@ -62,7 +71,7 @@ xspline.formula <- function(formula, model, data = NULL, exact = TRUE, env = par
 #' @rdname xspline
 #' @export
 xspline.explainer <- function(explainer, env = parent.frame(), ...) {
-  xspline.default(explainer$model, explainer$y, NULL, explainer$data, env = env, ...)
+  xspline.default(explainer$model, NULL, NULL, NULL, env = env, ...)
 }
 
 #' Helper function for building GLM object with transformed variables.
@@ -70,6 +79,10 @@ xspline.explainer <- function(explainer, env = parent.frame(), ...) {
 #' @param formula xspliner-specific formula object. Check vignette("xspliner") for more details.
 #' @param model Predictive model. Basic model used for extracting predictors transformation.
 #' @param data Training data of \code{model}.
+#' @param link Link function that should be used in final model. The passed is used when cannot be extracted from
+#'   model. By default 'identity'. See \link{stats::family} for possibilities.
+#' @param family Family of response variable that should be used in final model. The passed is used when cannot
+#'   be extracted from model. By default 'gaussian'. See \link{stats::family} for possibilities.
 #' @param env Environment in which optional variables passed into parameters are stored.
 #' @param alter Specifies if each variable transformation should be compared with bare variable usage.
 #'   List of the form: list(numeric = type, factor = type), type one of c('always', 'auto', 'never).
@@ -77,17 +90,16 @@ xspline.explainer <- function(explainer, env = parent.frame(), ...) {
 #' @param compare_stat Function of linear model (lm function output). Statistic that measures if linear model is better that transformed one.
 #'   See \link{stats}.
 #'
-build_xspliner <- function(formula, model, data, env = parent.frame(),
+build_xspliner <- function(formula, model, data, link = "identity", family = "gaussian", env = parent.frame(),
                            alter = list(numeric = 'always', factor = 'never'), compare_stat = r_squared) {
   formula_environment <- new.env(parent = env)
   attr(formula, ".Environment") <- formula_environment
   formula_details <- get_formula_details(formula, extract_formula_var_names(formula, data))
   cleared_formula <- transformed_formula_object(formula_details, model, data, alter, compare_stat)
-  gam_model <- mgcv::gam(cleared_formula, data = data)
-  environment(gam_model$formula) <- environment(gam_model$pred.formula) <- environment(gam_model$terms) <-
-    environment(gam_model$pterms) <- environment(gam_model) <- environment(attr(gam_model$model, "terms")) <-
-    attr(cleared_formula, ".Environment")
-  class(gam_model) <- c("xspliner", class(gam_model))
+  type <- get_model_type(model, data)
+  model_family <- get_model_family(model, family, type)
+  model_link <- get_model_link(model, link, type)
+  gam_model <- glm(cleared_formula, data = data, family = model_family(link = model_link))
   gam_model
 }
 

@@ -85,11 +85,12 @@ prepare_spline_params_pdp <- function(formula_details, component_details, blackb
   method_params[["object"]] <- blackbox
   method_params[["pred.var"]] <- component_details$var
   method_params[["train"]] <- data
+  method_params[["which.class"]] <- 2 # for glm 1st level is failure
 
   blackbox_response_obj <- do.call(pdp::partial, method_params)
 
   spline_params <- component_details$transform_opts
-  spline_params[["bb_response_data"]] <- blackbox_response_obj # attr(blackbox_response_obj, "partial.data") do.call loses attributes
+  spline_params[["bb_response_data"]] <- blackbox_response_obj
   spline_params[["pred_var"]] <- component_details$var
   spline_params[["response_var"]] <- "yhat"
   spline_params[["env"]] <- attr(formula_details$formula, ".Environment")

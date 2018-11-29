@@ -12,11 +12,11 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Imports: dplyr,
+Imports: pdp,
+    dplyr,
     ggplot2,
     mgcv
-Suggests: 
-    pdp,
+Suggests:
     ALEPlot,
     factoMerger,
     testthat,

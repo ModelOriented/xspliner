@@ -12,7 +12,7 @@ plot.xspliner <- function(x, variable_name = NULL, plot_response = TRUE,
                            plot_approx = TRUE, data = NULL, plot_data = FALSE, ...) {
   # (todo) this needs to be rewritten, the code is really bad
   if (is.null(variable_name)) {
-    mgcv::plot.gam(x, ...)
+    stats:::plot.lm(x, ...)
   } else {
     if (plot_data && is.null(data)) {
       warning("You can plot data points only when data parameter is provided.")
@@ -24,7 +24,7 @@ plot.xspliner <- function(x, variable_name = NULL, plot_response = TRUE,
       stop("You must specify at least one plot.")
     }
 
-    response_var <- environment(x)$response_name
+    response_var <- environment(x)$response
     xp_call <- environment(x)$xs_call[[variable_name]]
 
     if (plot_data) {
