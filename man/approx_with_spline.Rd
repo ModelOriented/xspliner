@@ -4,15 +4,15 @@
 \alias{approx_with_spline}
 \title{Approximate spline on data}
 \usage{
-approx_with_spline(bb_response_data, response_var, pred_var,
+approx_with_spline(effect_data, response, predictor,
   env = parent.frame(), ...)
 }
 \arguments{
-\item{bb_response_data}{Blackbox response data, for example pdp curve.}
+\item{effect_data}{Blackbox response data, for example pdp curve.}
 
-\item{response_var}{Name of response value from bb_response_data.}
+\item{response}{Name of response value from effect_data.}
 
-\item{pred_var}{Name of predictor value from bb_response_data.}
+\item{predictor}{Name of predictor value from effect_data.}
 
 \item{env}{Formula environment that should be used for fitting gam model.}
 

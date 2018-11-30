@@ -2,13 +2,18 @@
 % Please edit documentation in R/xspline.R
 \name{stats}
 \alias{stats}
-\alias{r_squared}
+\alias{aic}
+\alias{hoslem}
 \title{Statistics used for better linear model selection}
 \usage{
-r_squared(lm_model)
+aic(glm_model)
+
+hoslem(glm_model)
 }
 \arguments{
-\item{lm_model}{Linear model - \code{lm} function output.}
+\item{glm_model}{Linear model - \code{glm} function output.}
+
+\item{family}{Family used for fitting the model.}
 }
 \description{
 Used as \code{compare_stat} parameter in \code{xspline} method.

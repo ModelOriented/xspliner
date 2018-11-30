@@ -43,7 +43,7 @@ In each case, we get a single variable function, which should explain the impact
 
 The following pictures show the `ptration` impact on `cmedv` in some randomForest model based on Boston Housing Data. Below curves are obtained by the approach of the pdp and ale methods.
 
-```{r include = FALSE}
+```{r include = FALSE, message = FALSE}
 data(boston)
 set.seed(123)
 
@@ -53,16 +53,16 @@ boston.rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
 # build xspline model with specified response method and approximation options
 model_pdp <- xspline(
   cmedv ~
-    xs(lstat, transform_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
-    xs(ptratio, transform_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
+    xs(lstat, transition = list(k = 6), effect = list(type = "pdp", grid.resolution = 60)) +
+    xs(ptratio, transition = list(k = 4), effect = list(type = "pdp", grid.resolution = 40)) +
     age,
   model = boston.rf
 )
 
 model_ale <- xspline(
   cmedv ~
-    xs(lstat, transform_opts = list(k = 6), method_opts = list(type = "ale", K = 60)) +
-    xs(ptratio, transform_opts = list(k = 4), method_opts = list(type = "ale", K = 40)) +
+    xs(lstat, transition = list(k = 6), effect = list(type = "ale", K = 60)) +
+    xs(ptratio, transition = list(k = 4), effect = list(type = "ale", K = 40)) +
     age,
   model = boston.rf
 )
@@ -136,7 +136,7 @@ As the algoritm goes threw creating response function and its approximation we n
 
 #### Specifying which method should we use to build response function
 ```
-method_opts = list(
+effect = list(
   type = <method_type> # "pdp" or "ale",
   ... # named list - other parameters passed for chosen method
 )
@@ -153,10 +153,10 @@ Response function is approximated with `mgcv::gam` package and `mgcv::s` smoothi
 `xspliner` allows using all smoothing methods provided by `mgcv::s`.
 You can pass corresponding parameters in
 ```
-transform_opts = <mgcv::s parameters> # named list
+transition = <mgcv::s parameters> # named list
 ```
 **Remark**
-One of special parameters passed for `transform_opts` is `increasing`. 
+One of special parameters passed for `transition` is `increasing`. 
 When the parameter occurs then:
 
 - for `TRUE` value, approximation will be increasing
@@ -171,7 +171,7 @@ Response function is presented as data.frame with two columns (in our case):
 
 As we want to store 100 values for response function data, we specify in formula:
 ```
-cmedv ~ rm + lstat + xs(nox, method_opts = list(type = "pdp", grid.resolution = 100))
+cmedv ~ rm + lstat + xs(nox, effect = list(type = "pdp", grid.resolution = 100))
 ```
 
 We also want to approximate response function with cubic splines and basis dimension equal to 10.
@@ -180,8 +180,8 @@ As we can see in `mgcv::s` documentation, we need to set: `k = 10` and `bs = "cr
 So we get the final formula:
 ```
 cmedv ~ rm + lstat + xs(nox, 
-  method_opts = list(type = "pdp", grid.resolution = 100),
-  transform_opts = list(k = 10, bs = "cr"))
+  effect = list(type = "pdp", grid.resolution = 100),
+  transition = list(k = 10, bs = "cr"))
 ```
 
 ### Building the model
@@ -202,8 +202,8 @@ As we already have the black box provided, we can use `xspline` function to buil
 xp_model <- xspline(
   cmedv ~ rm + lstat +
     xs(nox, 
-       method_opts = list(type = "pdp", grid.resolution = 100), 
-       transform_opts = list(k = 10, bs = "cr")),
+       effect = list(type = "pdp", grid.resolution = 100), 
+       transition = list(k = 10, bs = "cr")),
   model = boston_rf
 )
 ```
@@ -238,16 +238,16 @@ You may find two parameters responsible for that:
 - `compare_stat` - function of `lm` class object. Defines statistic that should be used in decision between spline model and linear one. The function should have attribute `higher`. When the attribute has `"better"` value then the model with higher statistic value is chosen.
 
 You can see the feature in above example:
-```{r}
+```{r message = FALSE}
 set.seed(123)
 boston_rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston) 
 model_pdp_auto <- xspline(
   cmedv ~
-    xs(lstat, transform_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
-    xs(ptratio, transform_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
+    xs(lstat, transition = list(k = 6), effect = list(type = "pdp", grid.resolution = 60)) +
+    xs(ptratio, transition = list(k = 4), effect = list(type = "pdp", grid.resolution = 40)) +
     age,
   model = boston_rf,
-  alter = list(numeric = 'auto', factor = 'never')
+  xs_opts = list(transition = list(alter = "auto"))
 )
 
 # r_squared statistic is used by default

@@ -10,11 +10,11 @@ boston.rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
 model_pdp <- xspline(
   cmedv ~
     xs(lstat,
-       transform_opts = list(k = 6, increasing = FALSE),
-       method_opts = list(type = "pdp", grid.resolution = 60)) +
+       transition = list(k = 6, increasing = FALSE),
+       effect = list(type = "pdp", grid.resolution = 60)) +
     xs(ptratio,
-       transform_opts = list(k = 4, increasing = FALSE),
-       method_opts = list(type = "pdp", grid.resolution = 40)) +
+       transition = list(k = 4, increasing = FALSE),
+       effect = list(type = "pdp", grid.resolution = 40)) +
     age,
   model = boston.rf,
   data = boston

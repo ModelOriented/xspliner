@@ -4,9 +4,9 @@
 \alias{build_xspliner}
 \title{Helper function for building GLM object with transformed variables.}
 \usage{
-build_xspliner(formula, model, data, link = "identity",
-  family = "gaussian", env = parent.frame(), alter = list(numeric =
-  "always", factor = "never"), compare_stat = r_squared)
+build_xspliner(formula, model, data, xf_opts = xf_opts_default,
+  xs_opts = xs_opts_default, link = "identity", family = "gaussian",
+  env = parent.frame(), compare_stat = aic)
 }
 \arguments{
 \item{formula}{xspliner-specific formula object. Check vignette("xspliner") for more details.}
@@ -15,6 +15,10 @@ build_xspliner(formula, model, data, link = "identity",
 
 \item{data}{Training data of \code{model}.}
 
+\item{xf_opts}{Formula parameters used for factor variable transformatoins inherited from factorMerger package.}
+
+\item{xs_opts}{Predictive model response method and approximation parameters used for quantitative.}
+
 \item{link}{Link function that should be used in final model. The passed is used when cannot be extracted from
 model. By default 'identity'. See \link{stats::family} for possibilities.}
 
@@ -22,10 +26,6 @@ model. By default 'identity'. See \link{stats::family} for possibilities.}
 be extracted from model. By default 'gaussian'. See \link{stats::family} for possibilities.}
 
 \item{env}{Environment in which optional variables passed into parameters are stored.}
-
-\item{alter}{Specifies if each variable transformation should be compared with bare variable usage.
-List of the form: list(numeric = type, factor = type), type one of c('always', 'auto', 'never).
-'auto' option available only for qualitative variable. The better model is specified by \code{compare_stat} parameter then.}
 
 \item{compare_stat}{Function of linear model (lm function output). Statistic that measures if linear model is better that transformed one.
 See \link{stats}.}

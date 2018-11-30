@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Helper function for building GLM object with transformed variables. — build_xspliner • xspliner</title>
+<title>Default parameters for transition methods — xf_opts_default • xspliner</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -48,7 +48,7 @@
 	  <a class = "navbar-mi2logo" href="http://mi2.mini.pw.edu.pl/">
         <img src = "https://github.com/mi2-warsaw/MI2template/blob/master/inst/pkgdown/assets/MI2logo.jpg?raw=true" alt = "MI2" height = 46 title = "MI2">
 	  </a>
-      <a class="navbar-brand navbar-mi2" href="../index.html">Helper function for building GLM object with transformed variables.</a>
+      <a class="navbar-brand navbar-mi2" href="../index.html">Default parameters for transition methods</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="navbar-mi2 nav navbar-nav">
@@ -82,68 +82,30 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Helper function for building GLM object with transformed variables.</h1>
+    <h1>Default parameters for transition methods</h1>
     </div>
 
     
-    <p>Helper function for building GLM object with transformed variables.</p>
+    <p>While constructing formula interpreted by xspliner package, some parameters may be specified within xs(..) or xf(..) symbols.
+Below are default parameters. See details in <code><a href='../articles/xspliner.html'>vignette("xspliner")</a></code></p>
     
 
-    <pre class="usage"><span class='fu'>build_xspliner</span>(<span class='no'>formula</span>, <span class='no'>model</span>, <span class='no'>data</span>, <span class='kw'>xf_opts</span> <span class='kw'>=</span> <span class='no'>xf_opts_default</span>,
-  <span class='kw'>xs_opts</span> <span class='kw'>=</span> <span class='no'>xs_opts_default</span>, <span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"gaussian"</span>,
-  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='kw'>compare_stat</span> <span class='kw'>=</span> <span class='no'>aic</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>formula</th>
-      <td><p>xspliner-specific formula object. Check vignette("xspliner") for more details.</p></td>
-    </tr>
-    <tr>
-      <th>model</th>
-      <td><p>Predictive model. Basic model used for extracting predictors transformation.</p></td>
-    </tr>
-    <tr>
-      <th>data</th>
-      <td><p>Training data of <code>model</code>.</p></td>
-    </tr>
-    <tr>
-      <th>xf_opts</th>
-      <td><p>Formula parameters used for factor variable transformatoins inherited from factorMerger package.</p></td>
-    </tr>
-    <tr>
-      <th>xs_opts</th>
-      <td><p>Predictive model response method and approximation parameters used for quantitative.</p></td>
-    </tr>
-    <tr>
-      <th>link</th>
-      <td><p>Link function that should be used in final model. The passed is used when cannot be extracted from
-model. By default 'identity'. See stats::family for possibilities.</p></td>
-    </tr>
-    <tr>
-      <th>family</th>
-      <td><p>Family of response variable that should be used in final model. The passed is used when cannot
-be extracted from model. By default 'gaussian'. See stats::family for possibilities.</p></td>
-    </tr>
-    <tr>
-      <th>env</th>
-      <td><p>Environment in which optional variables passed into parameters are stored.</p></td>
-    </tr>
-    <tr>
-      <th>compare_stat</th>
-      <td><p>Function of linear model (lm function output). Statistic that measures if linear model is better that transformed one.
-See <a href='stats.html'>stats</a>.</p></td>
-    </tr>
-    </table>
+    <pre class="usage"><span class='no'>xf_opts_default</span>
+
+<span class='no'>xs_opts_default</span></pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>An object of class <code>list</code> of length 2.</p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#format">Format</a></li>
+          </ul>
 
   </div>
 </div>

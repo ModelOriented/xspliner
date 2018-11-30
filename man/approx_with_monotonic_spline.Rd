@@ -4,21 +4,22 @@
 \alias{approx_with_monotonic_spline}
 \title{Approximate monotonic spline on data}
 \usage{
-approx_with_monotonic_spline(bb_response_data, response_var, pred_var,
-  env = parent.frame(), increasing, ...)
+approx_with_monotonic_spline(effect_data, response, predictor,
+  env = parent.frame(), monotonic, ...)
 }
 \arguments{
-\item{response_var}{Name of response value from bb_response_data.}
+\item{response}{Name of response value from effect_data.}
 
-\item{pred_var}{Name of predictor value from bb_response_data.}
+\item{predictor}{Name of predictor value from effect_data.}
 
 \item{env}{Formula environment that should be used for fitting gam model.}
 
-\item{increasing}{If TRUE, spline approximation is increasing, if FALSE decreasing.}
+\item{monotonic}{Possible options "up", "down" and "auto. If up the spline is incresing, when down decreasing.
+For auto the better one (based on r.squared statistic) is chosen.}
 
 \item{...}{Other arguments passed to \link{mgcv::s} function.}
 
-\item{bb_response_data.}{Blackbox response data, for example pdp curve.}
+\item{effect_data.}{Blackbox response data, for example pdp curve.}
 }
 \value{
 Object of class "gam". See \link{mgcv::gamObject}
@@ -30,5 +31,5 @@ It aproximates data with monotonic spline function by fitting GAM model.
 x <- sort(rnorm(20, 5, 5))
 y <- rnorm(20, 2, 2)
 env <- new.env()
-approx_with_monotonic_spline(data.frame(x = x, y = y), "y", "x", env, TRUE)
+approx_with_monotonic_spline(data.frame(x = x, y = y), "y", "x", env, "up")
 }
