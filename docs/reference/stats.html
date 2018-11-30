@@ -91,14 +91,20 @@ Each function has attribute "higher-better".
 If "higher-better" is TRUE then model with higher statistic value is treated as better one.</p>
     
 
-    <pre class="usage"><span class='fu'>r_squared</span>(<span class='no'>lm_model</span>)</pre>
+    <pre class="usage"><span class='fu'>aic</span>(<span class='no'>glm_model</span>)
+
+<span class='fu'>hoslem</span>(<span class='no'>glm_model</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>lm_model</th>
-      <td><p>Linear model - <code>lm</code> function output.</p></td>
+      <th>glm_model</th>
+      <td><p>Linear model - <code>glm</code> function output.</p></td>
+    </tr>
+    <tr>
+      <th>family</th>
+      <td><p>Family used for fitting the model.</p></td>
     </tr>
     </table>
     

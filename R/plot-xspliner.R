@@ -25,7 +25,7 @@ plot.xspliner <- function(x, variable_name = NULL, plot_response = TRUE,
     }
 
     response_var <- environment(x)$response
-    xp_call <- environment(x)$xs_call[[variable_name]]
+    xp_call <- environment(x)$xs_functions[[variable_name]]
 
     if (plot_data) {
       plot_range <- range(data[, variable_name])
@@ -35,7 +35,7 @@ plot.xspliner <- function(x, variable_name = NULL, plot_response = TRUE,
 
     plot_data_data <- data
 
-    plot_response_data <- environment(x)$xs_env_list[[variable_name]]$blackbox_response_obj
+    plot_response_data <- environment(x)$quantitative_transitions[[variable_name]]$effect_outcome
     colnames(plot_response_data) <- c(variable_name, response_var)
 
     x_approx <- seq(plot_range[1], plot_range[2], length.out = nrow(plot_response_data))

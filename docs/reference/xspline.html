@@ -92,13 +92,13 @@
     <pre class="usage"><span class='fu'>xspline</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>xspline</span>(<span class='no'>model</span>, <span class='kw'>response</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='kw'>factor_opts</span> <span class='kw'>=</span> <span class='no'>factor_opts_default</span>,
-  <span class='kw'>numeric_opts</span> <span class='kw'>=</span> <span class='no'>numeric_opts_default</span>, <span class='no'>...</span>)
+<span class='fu'>xspline</span>(<span class='no'>model</span>, <span class='kw'>lhs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>response</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>predictors</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>form</span> <span class='kw'>=</span> <span class='st'>"additive"</span>,
+  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)
 
 <span class='co'># S3 method for formula</span>
 <span class='fu'>xspline</span>(<span class='no'>formula</span>, <span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)
+  <span class='kw'>consider</span> <span class='kw'>=</span> <span class='st'>"specials"</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)
 
 <span class='co'># S3 method for explainer</span>
 <span class='fu'>xspline</span>(<span class='no'>explainer</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)</pre>
@@ -119,29 +119,38 @@
       <td><p>Predictive model. Basic model used for extracting predictors transformation.</p></td>
     </tr>
     <tr>
+      <th>lhs</th>
+      <td><p>Left-hand side of model formula. Can be transformed response.</p></td>
+    </tr>
+    <tr>
       <th>response</th>
       <td><p>Name of response variable of <code>model</code>.</p></td>
+    </tr>
+    <tr>
+      <th>predictors</th>
+      <td><p>Predictor values that should be used in final model.</p></td>
     </tr>
     <tr>
       <th>data</th>
       <td><p>Training data of <code>model</code>.</p></td>
     </tr>
     <tr>
+      <th>form</th>
+      <td><p>Can be 'additive' (default) or 'multiplicative'. Specifies formula form in final model.</p></td>
+    </tr>
+    <tr>
       <th>env</th>
-      <td><p>Environment in which optional variables passed into parameters are stored.</p></td>
-    </tr>
-    <tr>
-      <th>factor_opts</th>
-      <td><p>Formula parameters used for factor variable transformatoins inherited from factorMerger package.</p></td>
-    </tr>
-    <tr>
-      <th>numeric_opts</th>
-      <td><p>Predictive model response method and approximation parameters used for numeric
+      <td><p>Environment in which optional variables passed into parameters are stored.
 variables transformation. See vignette("xspliner") for details.</p></td>
     </tr>
     <tr>
       <th>formula</th>
       <td><p>xspliner-specific formula object. Check vignette("xspliner") for more details.</p></td>
+    </tr>
+    <tr>
+      <th>consider</th>
+      <td><p>One of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("specials", "all")</a></code>. If "specials", only components with xs or xf
+call are considered in transition.</p></td>
     </tr>
     <tr>
       <th>explainer</th>

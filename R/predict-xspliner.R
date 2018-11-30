@@ -5,5 +5,5 @@
 #'
 #' @export
 predict.xspliner <- function(xspliner, newdata) {
-  mgcv::predict.gam(xspliner, newdata = newdata)
+  stats::predict.glm(xspliner, newdata = newdata)
 }

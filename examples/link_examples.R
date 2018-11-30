@@ -45,8 +45,8 @@ plot(model, "crim")
 
 # and bare formula
 model <- xspline(
-  log(ptratio) ~ xs(cmedv, method_opts = list(type = "pdp"), spline_opts = list(k = 10)) +
-    xs(crim, method_opts = list(type = "pdp"), spline_opts = list(k = 10)),
+  log(ptratio) ~ xs(cmedv, effect = list(type = "pdp"), spline_opts = list(k = 10)) +
+    xs(crim, effect = list(type = "pdp"), spline_opts = list(k = 10)),
   model = model_rf,
   data = boston)
 plot(model, "cmedv")
@@ -78,7 +78,7 @@ glm(chas ~ cmedv + crim, data = boston, family = binomial()) %>% summary
 glm(chas ~ cmedv + crim, data = boston, family = binomial()) %>% summary
 
 model_xs <- xspline(model_rf)
-environment(model_xs)$xs_env_list[["cmedv"]]
+environment(model_xs)$quantitative_transitions[["cmedv"]]
 plot(model_xs, "cmedv")
 plot(model_xs, "crim")
 

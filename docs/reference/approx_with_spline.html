@@ -89,23 +89,23 @@
     <p>It aproximates data with spline function by fitting GAM model.</p>
     
 
-    <pre class="usage"><span class='fu'>approx_with_spline</span>(<span class='no'>bb_response_data</span>, <span class='no'>response_var</span>, <span class='no'>pred_var</span>,
+    <pre class="usage"><span class='fu'>approx_with_spline</span>(<span class='no'>effect_data</span>, <span class='no'>response</span>, <span class='no'>predictor</span>,
   <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>bb_response_data</th>
+      <th>effect_data</th>
       <td><p>Blackbox response data, for example pdp curve.</p></td>
     </tr>
     <tr>
-      <th>response_var</th>
-      <td><p>Name of response value from bb_response_data.</p></td>
+      <th>response</th>
+      <td><p>Name of response value from effect_data.</p></td>
     </tr>
     <tr>
-      <th>pred_var</th>
-      <td><p>Name of predictor value from bb_response_data.</p></td>
+      <th>predictor</th>
+      <td><p>Name of predictor value from effect_data.</p></td>
     </tr>
     <tr>
       <th>env</th>

@@ -11,8 +11,20 @@ boston.rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
 
 model <- xspline(
   cmedv ~
-    xs(lstat, transform_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
-    xs(ptratio, transform_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
+    xs(lstat, transition = list(k = 6), effect = list(type = "pdp", grid.resolution = 60)) +
+    xs(ptratio, transition = list(k = 4), effect = list(type = "pdp", grid.resolution = 40)) +
+    age,
+  model = boston.rf,
+  data = boston
+)
+summary(model)
+
+# when xs has no parameters default one are taken
+
+model <- xspline(
+  cmedv ~
+    xs(lstat) +
+    xs(ptratio, transition = list(k = 4), effect = list(type = "pdp", grid.resolution = 40)) +
     age,
   model = boston.rf,
   data = boston
@@ -25,7 +37,17 @@ model <- xspline(
   cmedv ~ lstat + age,
   model = boston.rf,
   data = boston,
-  exact = FALSE
+  consider = "all"
+)
+summary(model)
+
+# we can consider whereter to use linear or xs transformation automatically
+model <- xspline(
+  cmedv ~ lstat + ptratio + age,
+  model = boston.rf,
+  data = boston,
+  consider = "all",
+  xs_opts = list(transition = list(alter = "auto"))
 )
 summary(model)
 
@@ -40,8 +62,18 @@ summary(model)
 model <- xspline(
   cmedv ~ .,
   model = boston.rf,
-  numeric_opts = list(method_opts = list(type = "pdp", grid.resolution = 40), transform_opts = list(k = 4)),
-  alter = list(numeric = 'auto')
+  xs_opts = list(
+    effect = list(type = "pdp", grid.resolution = 40),
+    transition = list(k = 4, alter = "auto"))
+)
+summary(model)
+
+model <- xspline(
+  cmedv ~ .,
+  model = boston.rf,
+  xs_opts = list(
+    effect = list(type = "pdp"),
+    transition = list(alter = "auto"))
 )
 summary(model)
 

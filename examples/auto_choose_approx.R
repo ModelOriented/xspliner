@@ -8,8 +8,8 @@ boston.rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
 
 model_pdp <- xspline(
   cmedv ~
-    xs(lstat, transform_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
-    xs(ptratio, transform_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
+    xs(lstat, transition = list(k = 6), effect = list(type = "pdp", grid.resolution = 60)) +
+    xs(ptratio, transition = list(k = 4), effect = list(type = "pdp", grid.resolution = 40)) +
     age,
   model = boston.rf,
   data = boston
@@ -19,12 +19,12 @@ model_pdp <- xspline(
 # also choose automaticaly whether use bare or approximation
 model_pdp_auto <- xspline(
   cmedv ~
-    xs(lstat, transform_opts = list(k = 6), method_opts = list(type = "pdp", grid.resolution = 60)) +
-    xs(ptratio, transform_opts = list(k = 4), method_opts = list(type = "pdp", grid.resolution = 40)) +
+    xs(lstat, transition = list(k = 6), effect = list(type = "pdp", grid.resolution = 60)) +
+    xs(ptratio, transition = list(k = 4), effect = list(type = "pdp", grid.resolution = 40)) +
     age,
   model = boston.rf,
   data = boston,
-  alter = list(numeric = 'auto', factor = 'never')
+  alter = list(quantitative = 'consider_lm', quantitative = 'never')
 )
 
 summary(model_pdp)

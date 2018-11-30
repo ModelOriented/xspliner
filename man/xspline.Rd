@@ -10,12 +10,11 @@
 xspline(object, ...)
 
 \method{xspline}{default}(model, lhs = NULL, response = NULL,
-  predictors = NULL, data = NULL, env = parent.frame(),
-  factor_opts = factor_opts_default,
-  numeric_opts = numeric_opts_default, ...)
-
-\method{xspline}{formula}(formula, model, data = NULL, exact = TRUE,
+  predictors = NULL, data = NULL, form = "additive",
   env = parent.frame(), ...)
+
+\method{xspline}{formula}(formula, model, data = NULL,
+  consider = "specials", env = parent.frame(), ...)
 
 \method{xspline}{explainer}(explainer, env = parent.frame(), ...)
 }
@@ -26,22 +25,23 @@ xspline(object, ...)
 
 \item{model}{Predictive model. Basic model used for extracting predictors transformation.}
 
+\item{lhs}{Left-hand side of model formula. Can be transformed response.}
+
 \item{response}{Name of response variable of \code{model}.}
 
 \item{predictors}{Predictor values that should be used in final model.}
 
 \item{data}{Training data of \code{model}.}
 
-\item{env}{Environment in which optional variables passed into parameters are stored.}
+\item{form}{Can be 'additive' (default) or 'multiplicative'. Specifies formula form in final model.}
 
-\item{factor_opts}{Formula parameters used for factor variable transformatoins inherited from factorMerger package.}
-
-\item{numeric_opts}{Predictive model response method and approximation parameters used for numeric
+\item{env}{Environment in which optional variables passed into parameters are stored.
 variables transformation. See vignette("xspliner") for details.}
 
 \item{formula}{xspliner-specific formula object. Check vignette("xspliner") for more details.}
 
-\item{exact}{If TRUE, exact formula call is used. If not all formula variables are altered.}
+\item{consider}{One of \code{c("specials", "all")}. If "specials", only components with xs or xf
+call are considered in transition.}
 
 \item{explainer}{Object of class 'explainer' (see \link{DALEX} package).}
 }
