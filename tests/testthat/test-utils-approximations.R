@@ -15,22 +15,26 @@ test_that("spline approximation is made correctly with mgcv::gam and mgcv::s", {
   data <- data.frame(x = 1:10, y = 11:20)
 
   with_mock(
-    build_approximation_formula = function(response, predictor, env, ...) as.formula("y ~ s(x)", env = env),
+    "xspliner:::build_approximation_formula" = function(response, predictor, env, ...)
+      as.formula("y ~ s(x)", env = env),
     expect_true("gam" %in% class(approx_with_spline(data, "y", "x", env)))
   )
 
   with_mock(
-    build_approximation_formula = function(response, predictor, env, ...) as.formula("y ~ s(x)", env = env),
+    "xspliner:::build_approximation_formula" = function(response, predictor, env, ...)
+      as.formula("y ~ s(x)", env = env),
     expect_equal(approx_with_spline(data, "y", "x", env)$formula, as.formula("y ~ s(x)", env = env))
   )
 
   with_mock(
-    build_approximation_formula = function(response, predictor, env, ...) as.formula("y ~ s(x, k = 6)", env = env),
+    "xspliner:::build_approximation_formula" = function(response, predictor, env, ...)
+      as.formula("y ~ s(x, k = 6)", env = env),
     expect_equal(approx_with_spline(data, "y", "x", env, k = 6)$smooth[[1]]$bs.dim, 6)
   )
 
   with_mock(
-    build_approximation_formula = function(response, predictor, env, ...) as.formula("y ~ s(x, k = 6)", env = env),
+    "xspliner:::build_approximation_formula" = function(response, predictor, env, ...)
+      as.formula("y ~ s(x, k = 6)", env = env),
     expect_equal(approx_with_spline(data, "y", "x", env, k = 6)$formula, as.formula("y ~ s(x, k = 6)", env = env))
   )
 })
@@ -40,30 +44,30 @@ test_that("monotonic spline approximation is made correctly with mgcv::gam and m
   data <- data.frame(x = 1:10, y = sort(rnorm(10)))
   suppressWarnings({
     with_mock(
-      build_approximation_formula = function(response, predictor, env, ...)
+      "xspliner:::build_approximation_formula" = function(response, predictor, env, ...)
         as.formula("y ~ s(x)", env = env),
-      expect_true("gam" %in% class(approx_with_monotonic_spline(data, "y", "x", env, TRUE)))
+      expect_true("gam" %in% class(approx_with_monotonic_spline(data, "y", "x", env, "up")))
     )
 
     with_mock(
-      build_approximation_formula = function(response, predictor, env, ...)
+      "xspliner:::build_approximation_formula" = function(response, predictor, env, ...)
         as.formula("y ~ s(x)", env = env),
       expect_equal(
-        approx_with_monotonic_spline(data, "y", "x", env, TRUE)$formula,
+        approx_with_monotonic_spline(data, "y", "x", env, "up")$formula,
         as.formula("y ~ s(x)", env = env))
     )
 
     with_mock(
-      build_approximation_formula = function(response, predictor, env, ...)
+      "xspliner:::build_approximation_formula" = function(response, predictor, env, ...)
         as.formula("y ~ s(x, k = 6)", env = env),
-      expect_equal(approx_with_monotonic_spline(data, "y", "x", env, TRUE, k = 6)$smooth[[1]]$bs.dim, 6)
+      expect_equal(approx_with_monotonic_spline(data, "y", "x", env, "up", k = 6)$smooth[[1]]$bs.dim, 6)
     )
 
     with_mock(
-      build_approximation_formula = function(response, predictor, env, ...)
+      "xspliner:::build_approximation_formula" = function(response, predictor, env, ...)
         as.formula("y ~ s(x, k = 6)", env = env),
       expect_equal(
-        approx_with_monotonic_spline(data, "y", "x", env, TRUE, k = 6)$formula,
+        approx_with_monotonic_spline(data, "y", "x", env, "up", k = 6)$formula,
         as.formula("y ~ s(x, k = 6)", env = env))
     )
   })

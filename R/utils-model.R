@@ -1,10 +1,11 @@
-#' @export
-transition <- function(object, ...) {
-  UseMethod("transition", object)
-}
-
-#' @export
-transition.xspliner <- function(model, predictor, type = "function") {
+#' Extract variable transformation from xspliner
+#'
+#' @param model xspliner model
+#' @param predictor variable name for which transformation should be extracted
+#' @param type If 'function' then transformation function is extracted. For 'base' there is sourced
+#'   object on which transformation was built - in case of quantitative variable GAM model, for qualitative
+#'   factorMerger.
+transition <- function(model, predictor, type = "function") {
   if (type == "function") {
     quantity_transition_function <- environment(model)$xs_functions[[predictor]]
     quality_transition_function <- environment(model)$xf_functions[[predictor]]
@@ -30,7 +31,7 @@ transition.xspliner <- function(model, predictor, type = "function") {
   }
 }
 
-specials <- function(xspliner, type = "all") {
+specials <- function(model, type = "all") {
   predictors_quant <- names(environment(model)$quantitative_transitions)
   predictors_qual <- names(environment(model)$qualitative_transitions)
   if (type == "quantitative") {

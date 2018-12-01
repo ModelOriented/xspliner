@@ -6,13 +6,15 @@
 #' @param plot_approx If TRUE blackbox model response approcimation is drawn.
 #' @param plot_data If TRUE raw data is drawn.
 #' @param data Training data used for building \code{x} model. Required for plot_data option.
+#' @param ... Another arguments passed into model specific method.
 #'
 #' @export
 plot.xspliner <- function(x, variable_name = NULL, plot_response = TRUE,
                           plot_approx = TRUE, data = NULL, plot_data = FALSE, ...) {
   # (todo) this needs to be rewritten, the code is really bad
   if (is.null(variable_name)) {
-    stats:::plot.lm(x, ...)
+    class(x) <- "lm"
+    plot(x, ...)
   } else {
     if (plot_data && is.null(data)) {
       warning("You can plot data points only when data parameter is provided.")
@@ -103,43 +105,46 @@ plot.xspliner <- function(x, variable_name = NULL, plot_response = TRUE,
 
 #' Summary method for xspliner object
 #'
-#' @param xspliner xspliner object
-#' @param predictor precitor for xsplner model formula
+#' @param object xspliner object
+#' @param predictor precitor for xspliner model formula
+#' @param ... Another arguments passed into model specific method.
 #' @export
-summary.xspliner <- function(xspliner, predictor) {
+summary.xspliner <- function(object, predictor, ...) {
   if (missing(predictor)) {
-    return(summary.glm(xspliner))
+    return(summary.glm(object, ...))
   }
-  if (predictor %in% specials(xspliner, "quantitative")) {
-    return(mgcv::summary.gam(transition(xspliner, predictor, "base")))
+  if (predictor %in% specials(object, "quantitative")) {
+    return(mgcv::summary.gam(transition(object, predictor, "base"), ...))
   }
-  if (predictor %in% specials(xspliner, "qualitative")) {
-    return(attributes(transition(xspliner, predictor, "base"))$partition) # (todo) write own method
+  if (predictor %in% specials(object, "qualitative")) {
+    return(attributes(transition(object, predictor, "base"))$partition) # (todo) write own method
   }
-  if (!(predictor %in% specials(xspliner, "qualitative"))) {
+  if (!(predictor %in% specials(object, "qualitative"))) {
     message("Variable was not transformed.")
-    return(summary.glm(xspliner))
+    return(summary.glm(object, ...))
   }
 }
 
 #' Print method for xspliner object
 #'
-#'
-#' @param xspliner xspliner object
+#' @param x xspliner object
 #' @param predictor precitor for xsplner model formula
+#' @param ... Another arguments passed into model specific print method.
 #' @export
-print.xspliner <- function(xspliner, predictor) {
+print.xspliner <- function(x, predictor, ...) {
   if (missing(predictor)) {
-    return(stats:::print.glm(xspliner))
+    class(x) <- "glm"
+    return(print(x, ...))
   }
-  if (predictor %in% specials(xspliner, "quantitative")) {
-    return(mgcv::print.gam(transition(xspliner, predictor, "base")))
+  if (predictor %in% specials(x, "quantitative")) {
+    return(mgcv::print.gam(transition(x, predictor, "base"), ...))
   }
-  if (predictor %in% specials(xspliner, "qualitative")) {
-    return(print(transition(xspliner, predictor, "base")))
+  if (predictor %in% specials(x, "qualitative")) {
+    return(print(transition(x, predictor, "base"), ...))
   }
-  if (!(predictor %in% specials(xspliner, "qualitative"))) {
+  if (!(predictor %in% specials(x, "qualitative"))) {
     message("Variable was not transformed.")
-    return(stats:::print.glm(xspliner))
+    class(x) <- "glm"
+    return(print(x, ...))
   }
 }

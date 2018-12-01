@@ -17,5 +17,5 @@ plot(expl_rf)
 # some helperf to get optimal split
 factorMerger:::optimalNumberOfMerges(expl_rf)
 oko <- factorMerger::getOptimalPartitionDf(expl_rf, "GIC", 2)
-factorMerger:::plot.factorMerger(expl_rf, showSplit = TRUE)
+plot(expl_rf, showSplit = TRUE)
 

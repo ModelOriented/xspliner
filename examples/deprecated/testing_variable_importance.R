@@ -8,7 +8,7 @@ data$left <- factor(data$left)
 HR_rf_model <- randomForest(left~., data = data, ntree = 100)
 importance(HR_rf_model)
 table(predict(HR_rf_model, data))
-explainer_rf  <- explain(HR_rf_model, data = data, y = data$left, predict_function = stats::predict)
+explainer_rf  <- explain(HR_rf_model, data = data, y = data$left, predict_function = predict)
 vd_rf <- variable_importance(explainer_rf, type = "raw",
                              loss_function = function(observed, predicted)
                                sum((observed != predicted)) / length(observed),
@@ -49,7 +49,7 @@ plot(expl_rf_pdp)
 
 HR_glm_model <- glm(left~., data = data, family = "binomial")
 explainer_glm <- explain(HR_glm_model, data = data, y = data$left,
-                         predict_function = function(model, newdata, ...) logit(stats::predict(model, newdata, ...)))
+                         predict_function = function(model, newdata, ...) logit(predict(model, newdata, ...)))
 vd_glm <- variable_importance(explainer_glm, type = "difference",
                               loss_function = function(observed, predicted)
                                 sum((observed != round(2 * predicted))),

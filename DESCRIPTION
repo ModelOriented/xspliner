@@ -1,5 +1,5 @@
 Package: xspliner
-Title: Approximate data and function by splines.
+Title: Approximate data and function by splines
 Version: 0.0.0.9000
 Authors@R: c(
   person("Krystian", "Igras", email = "krystian8270@gmail.com", role = c("aut", "cre")),
@@ -7,20 +7,24 @@ Authors@R: c(
 Description: Builds generalised linear model with automatic data transformation. 
   The 'xspliner' helps to build simple, interpretable models that inherits informations provided by more complicated ones.
   The resulting model may be treated as explanation of provided black box, that was supplied prior to the algoritm.
-Depends: R (>= 3.4.3)
-License: What license is it under?
+Depends: R (>= 3.0)
+License: GPL
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Imports: pdp,
+Imports: stats,
+    pdp,
     dplyr,
     ggplot2,
-    mgcv
+    mgcv,
+    magrittr,
+    purrr
 Suggests:
     ALEPlot,
-    factoMerger,
+    factorMerger,
     testthat,
     knitr,
     rmarkdown,
-    ResourceSelection
+    ResourceSelection,
+    randomForest
 VignetteBuilder: knitr

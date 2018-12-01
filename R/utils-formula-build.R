@@ -1,3 +1,6 @@
+#' To avoid CRAN check problems
+utils::globalVariables(".")
+
 extract_formula_var_names <- function(formula, data) {
   formula_variables <- all.vars(formula)
 
@@ -32,7 +35,6 @@ get_formula_single_components <- function(formula_terms) {
   as.character(attr(formula_terms,"variables"))[-c(1, 2)]
 }
 
-#' @export
 get_special_predictors <- function(variable_names, formula_terms, special, index = FALSE) {
   if (index) {
     attr(formula_terms, "specials")[[special]] - 1
@@ -207,7 +209,7 @@ try_get <- function(possible) {
 
 get_model_data <- function(model, data, env = parent.frame()) {
   if (is.null(data)) {
-    data <- try_get(eval(stats::getCall(model)$data, envir = env))
+    data <- try_get(eval(getCall(model)$data, envir = env))
   }
   if (is.null(data)) {
     stop("Data must be provided.")
@@ -276,7 +278,7 @@ get_model_type <- function(model, data) {
 get_model_family <- function(model, family, type) {
 
   model_family <- try_get(
-    match.fun(eval(stats::getCall(model)$family)$family)
+    match.fun(eval(getCall(model)$family)$family)
   )
 
   if (is.null(model_family)) {
@@ -299,7 +301,7 @@ get_model_family <- function(model, family, type) {
 
 get_model_link <- function(model, link, type) {
   model_link <- try_get(
-    eval(stats::getCall(model)$family)$link
+    eval(getCall(model)$family)$link
   )
 
   if (is.null(model_link)) {

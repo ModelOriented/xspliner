@@ -4,12 +4,14 @@
 \alias{print.xspliner}
 \title{Print method for xspliner object}
 \usage{
-\method{print}{xspliner}(xspliner, predictor)
+\method{print}{xspliner}(x, predictor, ...)
 }
 \arguments{
-\item{xspliner}{xspliner object}
+\item{x}{xspliner object}
 
 \item{predictor}{precitor for xsplner model formula}
+
+\item{...}{Another arguments passed into model specific print method.}
 }
 \description{
 Print method for xspliner object

@@ -14,37 +14,27 @@ build_approximation_formula <- function(response, predictor, env, ...) {
 #' @param response Name of response value from effect_data.
 #' @param predictor Name of predictor value from effect_data.
 #' @param env Formula environment that should be used for fitting gam model.
-#' @param ... Other arguments passed to \link{mgcv::s} function.
+#' @param monotonic Possible options "up", "down" and "auto. If up the spline is incresing, when down decreasing.
+#' @param ... Other arguments passed to \link[mgcv]{s} function.
 #' @return
-#' Object of class "gam". See \link{mgcv::gamObject}
+#' Object of class "gam". See \link[mgcv]{gamObject}
 #' @examples
 #' x <- sort(rnorm(20, 5, 5))
 #' y <- rnorm(20, 2, 2)
 #' env <- new.env()
 #' approx_with_spline(data.frame(x = x, y = y), "y", "x", env)
+#'
+#' approx_with_monotonic_spline(data.frame(x = x, y = y), "y", "x", env, "up")
+#' @export
 approx_with_spline <- function(effect_data, response, predictor, env = parent.frame(), ...) {
+    log_msg(cat(sprintf("Estimating %s variable..  \n", predictor)))
   s <- mgcv::s
   formula <- build_approximation_formula(response, predictor, env, ...)
   mgcv::gam(formula, data = effect_data)
 }
 
-#' Approximate monotonic spline on data
-#'
-#' It aproximates data with monotonic spline function by fitting GAM model.
-#' @param effect_data. Blackbox response data, for example pdp curve.
-#' @param response Name of response value from effect_data.
-#' @param predictor Name of predictor value from effect_data.
-#' @param env Formula environment that should be used for fitting gam model.
-#' @param monotonic Possible options "up", "down" and "auto. If up the spline is incresing, when down decreasing.
-#'   For auto the better one (based on r.squared statistic) is chosen.
-#' @param ... Other arguments passed to \link{mgcv::s} function.
-#' @return
-#' Object of class "gam". See \link{mgcv::gamObject}
-#' @examples
-#' x <- sort(rnorm(20, 5, 5))
-#' y <- rnorm(20, 2, 2)
-#' env <- new.env()
-#' approx_with_monotonic_spline(data.frame(x = x, y = y), "y", "x", env, "up")
+#' @rdname approx_with_spline
+#' @export
 approx_with_monotonic_spline <- function(effect_data, response,
                                          predictor, env = parent.frame(), monotonic, ...) {
   if (monotonic == "auto") {
@@ -70,8 +60,8 @@ approx_with_monotonic_spline <- function(effect_data, response,
   diff_grid_0 <- diff_grid_1 <- data.frame(x = seq(x_range[1], x_range[2], length.out = 100))
   colnames(diff_grid_0) <- colnames(diff_grid_1) <- predictor
   diff_grid_1$x <- diff_grid_1[[predictor]] + eps
-  spline_vals_on_interv_start <- predict(gam_init, newdata = diff_grid_0, type = "lpmatrix")
-  spline_vals_on_interv_end <- predict(gam_init, newdata = diff_grid_1, type = "lpmatrix")
+  spline_vals_on_interv_start <- mgcv::predict.gam(gam_init, newdata = diff_grid_0, type = "lpmatrix")
+  spline_vals_on_interv_end <- mgcv::predict.gam(gam_init, newdata = diff_grid_1, type = "lpmatrix")
   x_var_constraints <- contraint_sign * (spline_vals_on_interv_end - spline_vals_on_interv_start) / eps ## Xx %*% coef(b) must be positive
   G$Ain <- x_var_constraints # inequality constraint matrix
   G$bin <- rep(0, nrow(G$Ain)) # rhs vecctor for constraints
@@ -115,9 +105,9 @@ prepare_transition_params_ale <- function(formula_metadata, component_details, b
   effect[["NA.plot"]] <- FALSE
 
   plot_container <- tempfile()
-  pdf(plot_container)
+  grDevices::pdf(plot_container)
   effect_outcome <- do.call(ALEPlot::ALEPlot, effect)
-  dev.off()
+  grDevices::dev.off()
   unlink(plot_container)
 
   effect_outcome <- data.frame(effect_outcome$x.values, effect_outcome$f.values)
@@ -210,7 +200,7 @@ get_quantitative_transition <- function(formula_metadata, component_details, bla
   } else {
     if (monotonic == "not") {
       transition_outcome <- do.call(approx_with_spline, transition)
-    } else { # (todo) add auto option
+    } else {
       transition_outcome <- do.call(approx_with_monotonic_spline, transition)
     }
 
@@ -283,48 +273,6 @@ get_transitions_outcome <- function(formula_metadata, special_components_details
   )
 }
 
-#" Extract fitted spline function.
-#'
-#' It extracts fitted spline function by \link{xspline_approx_gam}.
-#' @param fitted_gam Fitted gam model approximating data.
-#' @param ... Other arguments passed to \link{mgcv::predict.gam} method.
-#' @return
-#' Function of one variable.
-#' @examples
-#' set.seed(123)
-#' x <- rnorm(20, 5, 5)
-#' z <- rnorm(20, 0, 10)
-#' y <- - sin(x) + z ^ 3 + rnorm(20, 0, 0.1)
-#' data <- data.frame(x, y, z)
-#' blackbox <- randomForest::randomForest(y ~ ., data)
-#'
-#' z_var_response <- pdp::partial(blackbox, "z")
-#' z_var_response_approx <- approx_with_spline(z_var_response, "yhat", "z")
-#' z_env <- list(
-#'   effect_outcome = z_var_response,
-#'   transition_outcome = z_var_response_approx
-#' )
-#' z_var_spline <- build_xs_function(z_env, "z")
-#' z_range <- attr(z_var_spline, "variable_range")
-#' z_axis <- seq(z_range[1], z_range[2], length.out = 50)
-#'
-#' plot(z, y)
-#' lines(z_var_response)
-#' lines(z_axis, z_var_spline(z_axis))
-#'
-#' x_var_response <- pdp::partial(blackbox, "x")
-#' x_var_response_approx <- approx_with_spline(x_var_response, "yhat", "x")
-#' x_env <- list(
-#'   effect_outcome = x_var_response,
-#'   transition_outcome = x_var_response_approx
-#' )
-#' x_var_spline <- build_xs_function(x_env, "x")
-#' x_range <- attr(x_var_spline, "variable_range")
-#' x_axis <- seq(x_range[1], x_range[2], length.out = 50)
-#'
-#' plot(x, y)
-#' lines(x_var_response)
-#' lines(x_axis, x_var_spline(x_axis))
 build_xs_function <- function(quantitative_transition, predictor_name) {
   xs_approximation <- function(predictor) {
     data <- data.frame(predictor)

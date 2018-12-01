@@ -2,7 +2,17 @@
 #'
 #' See details in \code{vignette("xspliner")}.
 #'
-#' @param object Predictive model, formula or explainer (see \link{DALEX}) object.
+#' @param object Predictive model, formula or explainer (see DALEX) object.
+#' @param model When \code{object} is formula - predictive model. Basic model used for extracting predictors transformation.
+#' @param lhs Left-hand side of model formula. Can be transformed response.
+#' @param response Name of response variable of \code{model}.
+#' @param predictors Predictor values that should be used in final model.
+#' @param data Training data of \code{model}.
+#' @param form Can be 'additive' (default) or 'multiplicative'. Specifies formula form in final model.
+#' @param env Environment in which optional variables passed into parameters are stored.
+#'  variables transformation. See vignette("xspliner") for details.
+#' @param consider One of \code{c("specials", "all")}. If "specials", only components with xs or xf
+#'   call are considered in transition.
 #' @param ... Other arguments passed to \code{xspline} methods or \link{build_xspliner}.
 #'
 #' @return GLM object of class 'xspliner'.
@@ -11,67 +21,54 @@ xspline <- function(object, ...) {
   UseMethod("xspline", object)
 }
 
-#' @param model Predictive model. Basic model used for extracting predictors transformation.
-#' @param lhs Left-hand side of model formula. Can be transformed response.
-#' @param response Name of response variable of \code{model}.
-#' @param predictors Predictor values that should be used in final model.
-#' @param data Training data of \code{model}.
-#' @param form Can be 'additive' (default) or 'multiplicative'. Specifies formula form in final model.
-#' @param env Environment in which optional variables passed into parameters are stored.
-#'  variables transformation. See vignette("xspliner") for details.
-#'
 #' @rdname xspline
 #' @export
-xspline.default <- function(model, lhs = NULL, response = NULL, predictors = NULL, data = NULL,
+xspline.default <- function(object, lhs = NULL, response = NULL, predictors = NULL, data = NULL,
                             form = "additive", env = parent.frame(), ...) {
-  data <- get_model_data(model, data, env)
-  lhs <- get_model_lhs(model, lhs)
-  predictors <- get_model_predictors(model, data, predictors, get_model_response(model, data, response))
+  data <- get_model_data(object, data, env)
+  lhs <- get_model_lhs(object, lhs)
+  predictors <- get_model_predictors(object, data, predictors, get_model_response(object, data, response))
   classes <- get_predictors_classes(data[, predictors])
 
   formula <- as.formula(
     build_predictor_based_formula(lhs, predictors, classes, form),
     env = env)
-  build_xspliner(formula, model, data, env = env, ...)
+  build_xspliner(formula, object, data, env = env, ...)
 }
 
-#' @param formula xspliner-specific formula object. Check vignette("xspliner") for more details.
-#' @param consider One of \code{c("specials", "all")}. If "specials", only components with xs or xf
-#'   call are considered in transition.
 #' @rdname xspline
 #' @export
-xspline.formula <- function(formula, model, data = NULL, consider = "specials", env = parent.frame(), ...) {
+xspline.formula <- function(object, model, data = NULL, consider = "specials", env = parent.frame(), ...) {
   data <- get_model_data(model, data, env)
-  formula_lhs <- get_formula_lhs(formula)
+  formula_lhs <- get_formula_lhs(object)
   model_lhs <- get_model_lhs(model, NULL)
   if (model_lhs != formula_lhs) {
     message("Model and formula lhs's must be the same. Using lhs from model.")
-    formula[[2]] <- model$terms[[2]]
+    object[[2]] <- model$terms[[2]]
   }
 
   model_predictors <- get_model_predictors(model, data, NULL, get_model_response(model, data, NULL))
-  if (get_formula_rhs(formula) == ".") {
-    lhs <- get_formula_lhs(formula)
+  if (get_formula_rhs(object) == ".") {
+    lhs <- get_formula_lhs(object)
     xspline.default(model, lhs, NULL, model_predictors, data, env = env, ...)
   } else {
-    formula_predictors <- get_formula_predictors(formula, data, NULL, get_formula_response(formula, data, NULL))
+    formula_predictors <- get_formula_predictors(object, data, NULL, get_formula_response(object, data, NULL))
     if (!(all(formula_predictors %in% model_predictors))) {
       stop("Not all variables from formula are included in model.")
     }
     if (consider == "specials") {
-      build_xspliner(formula, model, data, env = env, ...)
+      build_xspliner(object, model, data, env = env, ...)
     } else {
-      formula[[3]] <- add_specials_to_formula(formula[[3]], data)
-      xspline.formula(formula, model, data = NULL, consider = "specials", env = env, ...)
+      object[[3]] <- add_specials_to_formula(object[[3]], data)
+      xspline.formula(object, model, data = NULL, consider = "specials", env = env, ...)
     }
   }
 }
 
-#' @param explainer Object of class 'explainer' (see \link{DALEX} package).
 #' @rdname xspline
 #' @export
-xspline.explainer <- function(explainer, env = parent.frame(), ...) {
-  xspline.default(explainer$model, NULL, NULL, NULL, env = env, ...)
+xspline.explainer <- function(object, env = parent.frame(), ...) {
+  xspline.default(object$model, NULL, NULL, NULL, env = env, ...)
 }
 
 #' Helper function for building GLM object with transformed variables.
@@ -82,15 +79,15 @@ xspline.explainer <- function(explainer, env = parent.frame(), ...) {
 #' @param xf_opts Formula parameters used for factor variable transformatoins inherited from factorMerger package.
 #' @param xs_opts Predictive model response method and approximation parameters used for quantitative.
 #' @param link Link function that should be used in final model. The passed is used when cannot be extracted from
-#'   model. By default 'identity'. See \link{stats::family} for possibilities.
+#'   model. By default 'identity'. See \link[stats]{family} for possibilities.
 #' @param family Family of response variable that should be used in final model. The passed is used when cannot
-#'   be extracted from model. By default 'gaussian'. See \link{stats::family} for possibilities.
+#'   be extracted from model. By default 'gaussian'. See \link[stats]{family} for possibilities.
 #' @param env Environment in which optional variables passed into parameters are stored.
-#' @param compare_stat Function of linear model (lm function output). Statistic that measures if linear model is better that transformed one.
-#'   See \link{stats}.
+#' @param compare_stat Function of linear model (lm function output). Statistic that measures if linear model is better
+#'   that transformed one. See \link{stats}.
 #'
-build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_opts = xs_opts_default,
-                           link = "identity", family = "gaussian", env = parent.frame(), compare_stat = aic) {
+build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_opts = xs_opts_default, link = "identity",
+                           family = "gaussian", env = parent.frame(), compare_stat = aic) {
   formula_environment <- new.env(parent = env)
   attr(formula, ".Environment") <- formula_environment
   formula_metadata <- get_formula_metadata(formula, extract_formula_var_names(formula, data))
@@ -126,12 +123,12 @@ xs_opts_default = list(
 
 #' Predict xspliner method
 #'
-#' @param xspliner Object of class 'xspliner'.
+#' @param object Object of class 'xspliner'.
 #' @param newdata Data that should be prediciton based on.
-#'
+#' @param ... Another arguments passed into \link[stats]{predict.glm} method.
 #' @export
-predict.xspliner <- function(xspliner, newdata, ...) {
-  stats::predict.glm(xspliner, newdata = newdata, ...)
+predict.xspliner <- function(object, newdata, ...) {
+  predict.glm(object, newdata = newdata, ...)
 }
 
 #' Statistics used for better linear model selection
@@ -141,7 +138,6 @@ predict.xspliner <- function(xspliner, newdata, ...) {
 #' If "higher-better" is TRUE then model with higher statistic value is treated as better one.
 #'
 #' @param glm_model Linear model - \code{glm} function output.
-#' @param family Family used for fitting the model.
 #' @name stats
 NULL
 
