@@ -95,7 +95,7 @@ test_that("formula component parameters are extracted correctly", {
   additive_component_4 <- "xs(x, effect = list(type = type), transition = list(k = a))"
   xs_opts <- list(effect = list(type = "pdp"),
                   transition = list(alter = "always", monotonic = "not"))
-  xf_opts <- list(effect = list(type = "fM"),
+  xf_opts <- list(effect = list(type = "ice"),
                   transition = list(alter = "never", stat = "GIC", value = 3))
 
   expect_identical(
@@ -139,7 +139,7 @@ test_that("additive component details are extracted and stored correctly", {
   additive_component_4 <- "xs(x, effect = list(type = type), transition = list(k = a))"
   xs_opts <- list(effect = list(type = "pdp"),
                   transition = list(alter = "always", monotonic = "not"))
-  xf_opts <- list(effect = list(type = "fM"),
+  xf_opts <- list(effect = list(type = "ice"),
                   transition = list(alter = "newer", stat = "GIC", value = 3))
 
   expect_equal(
@@ -177,7 +177,7 @@ test_that("collect_specials_metadata properly identifies special components and 
     xs_variables = c("x", "d"), xf_variables = "t", xs_variables_idx = c(1, 5), xf_variables_idx = 3)
   xs_opts <- list(effect = list(type = "pdp"),
                   transition = list(alter = "always", monotonic = "not"))
-  xf_opts <- list(effect = list(type = "fM"),
+  xf_opts <- list(effect = list(type = "ice"),
                   transition = list(stat = "GIC", value = 3))
 
   special_components_info <- collect_specials_metadata(formula_metadata, xs_opts, xf_opts)
@@ -204,7 +204,7 @@ test_that("formula last string form is correct", {
     x = list(var = "x", call = "xs(x, effect = list(type = \"type\"))",
              new_call = "xs(x)", transition = list(alter = "auto"), effect = list(type = "type")),
     t = list(var = "t", call = "xf(t)",
-             new_call = "xf(t)", transition = list(stat = "GIC"), effect = list(type = "fM")))
+             new_call = "xf(t)", transition = list(stat = "GIC"), effect = list(type = "ice")))
 
   expect_equal(transform_formula_chr(formula_metadata, special_component_info), "log(y) ~ xs(x) * z + xf(t) + log(a)")
 
@@ -212,7 +212,7 @@ test_that("formula last string form is correct", {
 
 test_that("transformed_formula_object returns correct formula form and environment", {
   formula <- log(y) ~ xs(x, effect = list(type = "pdp"), transition = list(alter = "auto")) * z +
-    xf(t, effect = list(type = "fM")) + log(a)
+    xf(t, effect = list(type = "ice")) + log(a)
   formula_metadata <- get_formula_metadata(formula, c("y" ,"x", "z", "t", "a"))
   set.seed(123)
   data <- data.frame(y = rnorm(10, 2), x = rnorm(10), z = rnorm(10, 10),
@@ -220,7 +220,7 @@ test_that("transformed_formula_object returns correct formula form and environme
   blackbox <- randomForest::randomForest(y ~ ., data)
   xs_opts <- list(effect = list(type = "pdp"),
                   transition = list(alter = "always", monotonic = "not"))
-  xf_opts <- list(effect = list(type = "fM"),
+  xf_opts <- list(effect = list(type = "ice"),
                   transition = list(alter = "never", stat = "GIC", value = 3))
 
   transformed_formula <- transformed_formula_object(formula_metadata, blackbox, data, gaussian(), xs_opts, xf_opts, aic)

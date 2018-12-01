@@ -132,7 +132,7 @@ prepare_transition_params_ale <- function(formula_metadata, component_details, b
   transition
 }
 
-prepare_transition_params_fM <- function(formula_metadata, component_details, blackbox, data) {
+prepare_transition_params_ice <- function(formula_metadata, component_details, blackbox, data) {
   effect <- component_details$effect
   effect[["type"]] <- NULL
   effect[["object"]] <- blackbox
@@ -145,7 +145,7 @@ prepare_transition_params_fM <- function(formula_metadata, component_details, bl
   transition <- component_details$transition
   transition[["response"]] <- effect_outcome[, "yhat"]
   transition[["factor"]] <- effect_outcome[, component_details$var]
-  transition[["factorMerger"]] <- effect_outcome
+  transition[["effect_data"]] <- effect_outcome
 
   transition
 }
@@ -154,9 +154,8 @@ get_qualitative_transition <- function(formula_metadata, component_details, blac
   if (is.null(component_details$effect$type)) {
     stop("No specified type for method!")
   }
-
   transition <- switch(component_details$effect$type,
-    fM = prepare_transition_params_fM(formula_metadata, component_details, blackbox, data)
+    ice = prepare_transition_params_ice(formula_metadata, component_details, blackbox, data)
   )
   alter <- transition[["alter"]]
   transition[["alter"]] <- NULL
@@ -172,10 +171,11 @@ get_qualitative_transition <- function(formula_metadata, component_details, blac
     transition[c("stat", "value")] <- NULL
     transition$abbreviate <-  FALSE
 
-    effect_outcome <- do.call(factorMerger::mergeFactors, transition)
+    transition_outcome <- do.call(factorMerger::mergeFactors, transition)
 
-    partition_params$factorMerger <- effect_outcome
-    transition_outcome <- do.call(factorMerger::getOptimalPartitionDf, partition_params)
+    partition_params$factorMerger <- transition_outcome
+    partition <- do.call(factorMerger::getOptimalPartitionDf, partition_params)
+    attr(transition_outcome, "partition") <- partition
 
     quantitative_transition <- list(
       effect_outcome = transition[["effect_data"]],
@@ -336,14 +336,14 @@ build_xs_function <- function(quantitative_transition, predictor_name) {
 }
 
 build_xf_function <- function(qualitative_transition, predictor_name) {
-  matched_factors <- qualitative_transition$transition_outcome
+  matched_factors <- attr(qualitative_transition$transition_outcome, "partition")
   if (length(unique(matched_factors$pred)) < 2) {
     return(function(predictor) predictor)
   } else {
     function(predictor) {
       predictor_values <- data.frame(orig = predictor)
-      transformed_predictor <- dplyr::left_join(predictor_values, matched_factors)
-      factor(transformed_predictor, levels = unique(matched_factors$pred))
+      suppressMessages(transformed_predictor <- dplyr::left_join(predictor_values, matched_factors, by = "orig"))
+      factor(transformed_predictor$pred, levels = unique(matched_factors$pred))
     }
   }
 }
