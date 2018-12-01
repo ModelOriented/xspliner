@@ -91,3 +91,20 @@ model <- xspline(
   explainer
 )
 summary(model)
+
+# factor predictor
+set.seed(101)
+
+boston.rf <- randomForest(cmedv ~ lstat + ptratio + chas + age, data = boston)
+
+model <- xspline(
+  cmedv ~
+    xs(lstat, transition = list(k = 6), effect = list(type = "pdp", grid.resolution = 60)) +
+    xs(ptratio, transition = list(k = 4), effect = list(type = "pdp", grid.resolution = 40)) +
+    xf(chas) +
+    age,
+  model = boston.rf,
+  data = boston,
+  xf_opts = list(transition = list(alter = "always"))
+)
+summary(model)

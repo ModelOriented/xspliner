@@ -9,7 +9,7 @@
 #'
 #' @export
 plot.xspliner <- function(x, variable_name = NULL, plot_response = TRUE,
-                           plot_approx = TRUE, data = NULL, plot_data = FALSE, ...) {
+                          plot_approx = TRUE, data = NULL, plot_data = FALSE, ...) {
   # (todo) this needs to be rewritten, the code is really bad
   if (is.null(variable_name)) {
     stats:::plot.lm(x, ...)
@@ -25,7 +25,7 @@ plot.xspliner <- function(x, variable_name = NULL, plot_response = TRUE,
     }
 
     response_var <- environment(x)$response
-    xp_call <- environment(x)$xs_functions[[variable_name]]
+    xp_call <- transition(x, variable_name)
 
     if (plot_data) {
       plot_range <- range(data[, variable_name])
@@ -101,3 +101,45 @@ plot.xspliner <- function(x, variable_name = NULL, plot_response = TRUE,
   }
 }
 
+#' Summary method for xspliner object
+#'
+#' @param xspliner xspliner object
+#' @param predictor precitor for xsplner model formula
+#' @export
+summary.xspliner <- function(xspliner, predictor) {
+  if (missing(predictor)) {
+    return(summary.glm(xspliner))
+  }
+  if (predictor %in% specials(xspliner, "quantitative")) {
+    return(mgcv::summary.gam(transition(xspliner, predictor, "base")))
+  }
+  if (predictor %in% specials(xspliner, "qualitative")) {
+    return(attributes(transition(xspliner, predictor, "base"))$partition) # (todo) write own method
+  }
+  if (!(predictor %in% specials(xspliner, "qualitative"))) {
+    message("Variable was not transformed.")
+    return(summary.glm(xspliner))
+  }
+}
+
+#' Print method for xspliner object
+#'
+#'
+#' @param xspliner xspliner object
+#' @param predictor precitor for xsplner model formula
+#' @export
+print.xspliner <- function(xspliner, predictor) {
+  if (missing(predictor)) {
+    return(stats:::print.glm(xspliner))
+  }
+  if (predictor %in% specials(xspliner, "quantitative")) {
+    return(mgcv::print.gam(transition(xspliner, predictor, "base")))
+  }
+  if (predictor %in% specials(xspliner, "qualitative")) {
+    return(print(transition(xspliner, predictor, "base")))
+  }
+  if (!(predictor %in% specials(xspliner, "qualitative"))) {
+    message("Variable was not transformed.")
+    return(stats:::print.glm(xspliner))
+  }
+}

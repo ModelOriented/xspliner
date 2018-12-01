@@ -77,7 +77,7 @@ test_that("prepare_transition_params_pdp correctly gets pdp response and its app
   blackbox <- randomForest::randomForest(y ~ ., data)
   xs_opts <- list(effect = list(type = "pdp"),
                   transition = list(alter = "always", monotonic = "not"))
-  xf_opts <- list(effect = list(type = "fM"),
+  xf_opts <- list(effect = list(type = "ice"),
                   transition = list(stat = "GIC", value = 3))
   special_components_details <- collect_specials_metadata(formula_metadata, xs_opts, xf_opts)
 
@@ -96,7 +96,7 @@ test_that("prepare_transition_params_ale correctly gets ale response and its app
   blackbox <- randomForest::randomForest(y ~ ., data)
   xs_opts <- list(effect = list(type = "pdp"),
                   transition = list(alter = "always", monotonic = "not"))
-  xf_opts <- list(effect = list(type = "fM"),
+  xf_opts <- list(effect = list(type = "ice"),
                   transition = list(stat = "GIC", value = 3))
   special_components_details <- collect_specials_metadata(formula_metadata, xs_opts, xf_opts)
 
@@ -115,7 +115,7 @@ test_that("get_quantitative_transition correctly gets response and its approxima
   blackbox <- randomForest::randomForest(y ~ ., data)
   xs_opts <- list(effect = list(type = "pdp"),
                   transition = list(alter = "always", monotonic = "not"))
-  xf_opts <- list(effect = list(type = "fM"),
+  xf_opts <- list(effect = list(type = "ice"),
                   transition = list(stat = "GIC", value = 3))
   special_components_details <- collect_specials_metadata(formula_metadata, xs_opts, xf_opts)
 
@@ -138,7 +138,7 @@ test_that("get_transitions_outcome correctly gets response and its approximation
   blackbox <- randomForest::randomForest(y ~ ., data)
   xs_opts <- list(effect = list(type = "pdp"),
                   transition = list(alter = "always", monotonic = "not"))
-  xf_opts <- list(effect = list(type = "fM"),
+  xf_opts <- list(effect = list(type = "ice"),
                   transition = list(stat = "GIC", value = 3))
   special_components_details <- collect_specials_metadata(formula_metadata, xs_opts, xf_opts)
 
@@ -193,7 +193,7 @@ test_that("correct_improved_components changes calls", {
   data <- data.frame(y = 2 * x + rnorm(10, 0, 0.1), x, a = rexp(10))
   xs_opts <- list(effect = list(type = "pdp"),
                   transition = list(alter = "always", monotonic = "not"))
-  xf_opts <- list(effect = list(type = "fM"),
+  xf_opts <- list(effect = list(type = "ice"),
                   transition = list(stat = "GIC", value = 3))
   special_components_details <- collect_specials_metadata(formula_metadata, xs_opts, xf_opts)
 

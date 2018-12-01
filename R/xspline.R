@@ -102,6 +102,7 @@ build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_o
   glm_model <- glm(cleared_formula, data = data, family = family)
   environment(glm_model) <- attr(cleared_formula, ".Environment")
   class(glm_model) <- c("xspliner", class(glm_model))
+  glm_model$call[[2]] <- cleared_formula
   glm_model
 }
 
@@ -112,7 +113,7 @@ build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_o
 #'
 #' @export
 xf_opts_default = list(
-  effect = list(type = "fM"),
+  effect = list(type = "ice"),
   transition = list(alter = "newer", stat = "GIC", value = 3)
 )
 
@@ -122,6 +123,16 @@ xs_opts_default = list(
   effect = list(type = "pdp"),
   transition = list(alter = "always", monotonic = "not")
 )
+
+#' Predict xspliner method
+#'
+#' @param xspliner Object of class 'xspliner'.
+#' @param newdata Data that should be prediciton based on.
+#'
+#' @export
+predict.xspliner <- function(xspliner, newdata, ...) {
+  stats::predict.glm(xspliner, newdata = newdata, ...)
+}
 
 #' Statistics used for better linear model selection
 #'
