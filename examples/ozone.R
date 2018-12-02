@@ -26,14 +26,14 @@ data <- data.frame(gamm, glmm, rf, xs) %>%
 ggplot(data, aes(number, type)) +
   geom_tile(aes(fill = result))
 
-tss <- function(model, data, var) {
-  fitted <- predict(model, newdata = data, type = "response")
+rmse <- function(model, data, var, type = "response") {
+  fitted <- predict(model, newdata = data, type = type)
   mean((fitted - data[[var]])^2)
 }
-tss(model_rf, ozone, "Ozone")
-tss(model_xs, ozone, "Ozone")
-tss(model_glm, ozone, "Ozone")
-tss(model_gam, ozone, "Ozone")
+rmse(model_rf, ozone, "Ozone")
+rmse(model_xs, ozone, "Ozone")
+rmse(model_glm, ozone, "Ozone")
+rmse(model_gam, ozone, "Ozone")
 
 coef(model_xs)
 summary(model_xs)

@@ -140,7 +140,7 @@ test_that("additive component details are extracted and stored correctly", {
   xs_opts <- list(effect = list(type = "pdp"),
                   transition = list(alter = "always", monotonic = "not"))
   xf_opts <- list(effect = list(type = "ice"),
-                  transition = list(alter = "newer", stat = "GIC", value = 3))
+                  transition = list(alter = "never", stat = "GIC", value = 3))
 
   expect_equal(
     get_special_component_metadata("x", additive_component_1, xs_opts, xf_opts, env_0),

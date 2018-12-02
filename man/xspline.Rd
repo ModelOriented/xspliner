@@ -33,6 +33,8 @@ xspline(object, ...)
 
 \item{form}{Can be 'additive' (default) or 'multiplicative'. Specifies formula form in final model.}
 
+\item{bare}{Variable names that mustn't be transformed in final model.}
+
 \item{env}{Environment in which optional variables passed into parameters are stored.
 variables transformation. See vignette("xspliner") for details.}
 

@@ -92,7 +92,7 @@ build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_o
   formula_environment <- new.env(parent = env)
   attr(formula, ".Environment") <- formula_environment
   formula_metadata <- get_formula_metadata(formula, extract_formula_var_names(formula, data))
-  type <- get_model_type(model, data)
+  type <- get_model_type(model, data, formula_metadata$response)
   model_family <- get_model_family(model, family, type)
   model_link <- get_model_link(model, link, type)
   family <- model_family(link = model_link)
@@ -112,7 +112,7 @@ build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_o
 #' @export
 xf_opts_default = list(
   effect = list(type = "ice"),
-  transition = list(alter = "newer", stat = "GIC", value = 3)
+  transition = list(alter = "never", stat = "GIC", value = 3)
 )
 
 #' @rdname xf_opts_default

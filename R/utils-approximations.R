@@ -81,12 +81,19 @@ prepare_transition_params_pdp <- function(formula_metadata, component_details, b
   effect[["type"]] <- NULL
   effect[["object"]] <- blackbox
   effect[["pred.var"]] <- component_details$var
-  effect[["train"]] <- data
+  if (is.null(effect[["train"]])) {
+    effect[["train"]] <- data
+  }
   effect[["which.class"]] <- 2 # for glm 1st level is failure
+
+  transition <- component_details$transition
+  if (transition[["alter"]] == "never") {
+    transition[["effect_data"]] <- NULL
+    return(transition)
+  }
 
   effect_outcome <- do.call(pdp::partial, effect)
 
-  transition <- component_details$transition
   transition[["effect_data"]] <- effect_outcome
   transition[["predictor"]] <- component_details$var
   transition[["response"]] <- "yhat"
@@ -127,12 +134,19 @@ prepare_transition_params_ice <- function(formula_metadata, component_details, b
   effect[["type"]] <- NULL
   effect[["object"]] <- blackbox
   effect[["pred.var"]] <- component_details$var
-  effect[["train"]] <- data
+  if (is.null(effect[["train"]])) {
+    effect[["train"]] <- data
+  }
   effect[["ice"]] <- TRUE
 
-  effect_outcome <- do.call(pdp::partial, effect)
-
   transition <- component_details$transition
+
+  if (transition[["alter"]] == "never") {
+    transition[["effect_data"]] <- NULL
+    return(transition)
+  }
+
+  effect_outcome <- do.call(pdp::partial, effect)
   transition[["response"]] <- effect_outcome[, "yhat"]
   transition[["factor"]] <- effect_outcome[, component_details$var]
   transition[["effect_data"]] <- effect_outcome

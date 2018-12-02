@@ -174,7 +174,7 @@ add_special_to_predictor <- function(predictor, class, bare) {
   if (!(class %in% c("numeric", "integer", "factor"))) {
     stop("Wrong class passed.")
   }
-  if (predictor %in% skip) {
+  if (predictor %in% bare) {
     return(predictor)
   }
   if (class == "factor") {
@@ -265,8 +265,8 @@ get_model_predictors <- function(model, data, predictors, response) {
   predictors
 }
 
-get_model_type <- function(model, data) {
-  response <- get_model_response(model, data, NULL)
+get_model_type <- function(model, data, response = NULL) {
+  response <- get_model_response(model, data, response)
 
   if (inherits(data[[response]], "factor")) {
     type <- "classification"
