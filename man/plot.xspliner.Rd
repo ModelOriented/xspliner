@@ -19,6 +19,8 @@
 \item{data}{Training data used for building \code{x} model. Required for plot_data option.}
 
 \item{plot_data}{If TRUE raw data is drawn.}
+
+\item{...}{Another arguments passed into model specific method.}
 }
 \description{
 Plot method for 'xspliner' model

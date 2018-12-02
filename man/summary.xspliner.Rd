@@ -4,12 +4,14 @@
 \alias{summary.xspliner}
 \title{Summary method for xspliner object}
 \usage{
-\method{summary}{xspliner}(xspliner, predictor)
+\method{summary}{xspliner}(object, predictor, ...)
 }
 \arguments{
-\item{xspliner}{xspliner object}
+\item{object}{xspliner object}
 
-\item{predictor}{precitor for xsplner model formula}
+\item{predictor}{precitor for xspliner model formula}
+
+\item{...}{Another arguments passed into model specific method.}
 }
 \description{
 Summary method for xspliner object

@@ -20,15 +20,15 @@ build_xspliner(formula, model, data, xf_opts = xf_opts_default,
 \item{xs_opts}{Predictive model response method and approximation parameters used for quantitative.}
 
 \item{link}{Link function that should be used in final model. The passed is used when cannot be extracted from
-model. By default 'identity'. See \link{stats::family} for possibilities.}
+model. By default 'identity'. See \link[stats]{family} for possibilities.}
 
 \item{family}{Family of response variable that should be used in final model. The passed is used when cannot
-be extracted from model. By default 'gaussian'. See \link{stats::family} for possibilities.}
+be extracted from model. By default 'gaussian'. See \link[stats]{family} for possibilities.}
 
 \item{env}{Environment in which optional variables passed into parameters are stored.}
 
-\item{compare_stat}{Function of linear model (lm function output). Statistic that measures if linear model is better that transformed one.
-See \link{stats}.}
+\item{compare_stat}{Function of linear model (lm function output). Statistic that measures if linear model is better
+that transformed one. See \link{stats}.}
 }
 \description{
 Helper function for building GLM object with transformed variables.

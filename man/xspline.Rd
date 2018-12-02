@@ -9,21 +9,19 @@
 \usage{
 xspline(object, ...)
 
-\method{xspline}{default}(model, lhs = NULL, response = NULL,
-  predictors = NULL, data = NULL, form = "additive",
+\method{xspline}{default}(object, lhs = NULL, response = NULL,
+  predictors = NULL, data = NULL, form = "additive", bare = NULL,
   env = parent.frame(), ...)
 
-\method{xspline}{formula}(formula, model, data = NULL,
+\method{xspline}{formula}(object, model, data = NULL,
   consider = "specials", env = parent.frame(), ...)
 
-\method{xspline}{explainer}(explainer, env = parent.frame(), ...)
+\method{xspline}{explainer}(object, env = parent.frame(), ...)
 }
 \arguments{
-\item{object}{Predictive model, formula or explainer (see \link{DALEX}) object.}
+\item{object}{Predictive model, formula or explainer (see DALEX) object.}
 
 \item{...}{Other arguments passed to \code{xspline} methods or \link{build_xspliner}.}
-
-\item{model}{Predictive model. Basic model used for extracting predictors transformation.}
 
 \item{lhs}{Left-hand side of model formula. Can be transformed response.}
 
@@ -35,15 +33,15 @@ xspline(object, ...)
 
 \item{form}{Can be 'additive' (default) or 'multiplicative'. Specifies formula form in final model.}
 
+\item{bare}{Variable names that mustn't be transformed in final model.}
+
 \item{env}{Environment in which optional variables passed into parameters are stored.
 variables transformation. See vignette("xspliner") for details.}
 
-\item{formula}{xspliner-specific formula object. Check vignette("xspliner") for more details.}
+\item{model}{When \code{object} is formula - predictive model. Basic model used for extracting predictors transformation.}
 
 \item{consider}{One of \code{c("specials", "all")}. If "specials", only components with xs or xf
 call are considered in transition.}
-
-\item{explainer}{Object of class 'explainer' (see \link{DALEX} package).}
 }
 \value{
 GLM object of class 'xspliner'.

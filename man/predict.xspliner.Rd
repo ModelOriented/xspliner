@@ -4,12 +4,14 @@
 \alias{predict.xspliner}
 \title{Predict xspliner method}
 \usage{
-\method{predict}{xspliner}(xspliner, newdata, ...)
+\method{predict}{xspliner}(object, newdata, ...)
 }
 \arguments{
-\item{xspliner}{Object of class 'xspliner'.}
+\item{object}{Object of class 'xspliner'.}
 
 \item{newdata}{Data that should be prediciton based on.}
+
+\item{...}{Another arguments passed into \link[stats]{predict.glm} method.}
 }
 \description{
 Predict xspliner method

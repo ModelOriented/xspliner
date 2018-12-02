@@ -2,10 +2,14 @@
 % Please edit documentation in R/utils-approximations.R
 \name{approx_with_spline}
 \alias{approx_with_spline}
+\alias{approx_with_monotonic_spline}
 \title{Approximate spline on data}
 \usage{
 approx_with_spline(effect_data, response, predictor,
   env = parent.frame(), ...)
+
+approx_with_monotonic_spline(effect_data, response, predictor,
+  env = parent.frame(), monotonic, ...)
 }
 \arguments{
 \item{effect_data}{Blackbox response data, for example pdp curve.}
@@ -16,10 +20,12 @@ approx_with_spline(effect_data, response, predictor,
 
 \item{env}{Formula environment that should be used for fitting gam model.}
 
-\item{...}{Other arguments passed to \link{mgcv::s} function.}
+\item{...}{Other arguments passed to \link[mgcv]{s} function.}
+
+\item{monotonic}{Possible options "up", "down" and "auto. If up the spline is incresing, when down decreasing.}
 }
 \value{
-Object of class "gam". See \link{mgcv::gamObject}
+Object of class "gam". See \link[mgcv]{gamObject}
 }
 \description{
 It aproximates data with spline function by fitting GAM model.
@@ -29,4 +35,6 @@ x <- sort(rnorm(20, 5, 5))
 y <- rnorm(20, 2, 2)
 env <- new.env()
 approx_with_spline(data.frame(x = x, y = y), "y", "x", env)
+
+approx_with_monotonic_spline(data.frame(x = x, y = y), "y", "x", env, "up")
 }

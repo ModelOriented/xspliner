@@ -12,8 +12,6 @@ hoslem(glm_model)
 }
 \arguments{
 \item{glm_model}{Linear model - \code{glm} function output.}
-
-\item{family}{Family used for fitting the model.}
 }
 \description{
 Used as \code{compare_stat} parameter in \code{xspline} method.
