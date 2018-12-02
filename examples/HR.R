@@ -7,10 +7,10 @@ library(ggplot2)
 # randomForest
 HR <- breakDown::HR_data
 HR$left <- as.factor(HR$left)
-model_rf <- randomForest(left ~ satisfaction_level + last_evaluation + average_montly_hours + sales,
+model_rf <- randomForest(left ~ .,
                          data = HR, ntree = 100)
-model_xs <- xspline(left ~ satisfaction_level + last_evaluation + average_montly_hours + sales,
-                    model_rf, link = "logit", family = binomial(), consider = "all")
+model_xs <- xspline(left ~ ., model_rf, link = "logit", family = binomial(),
+                    bare = c("number_project", "time_spend_company", "Work_accident", "promotion_last_5years"))
 
 model_xs
 summary(model_xs, "sales")

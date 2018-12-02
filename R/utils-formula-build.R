@@ -170,9 +170,12 @@ correct_improved_components <- function(special_components_details, transformed_
 
 }
 
-add_special_to_predictor <- function(predictor, class) {
+add_special_to_predictor <- function(predictor, class, bare) {
   if (!(class %in% c("numeric", "integer", "factor"))) {
     stop("Wrong class passed.")
+  }
+  if (predictor %in% skip) {
+    return(predictor)
   }
   if (class == "factor") {
     sprintf("xf(%s)", predictor)
@@ -181,14 +184,14 @@ add_special_to_predictor <- function(predictor, class) {
   }
 }
 
-build_predictor_based_formula <- function(response, predictors, classes, form = "additive") {
+build_predictor_based_formula <- function(response, predictors, classes, bare, form = "additive") {
   if (form == "additive") {
     collapse = " + "
   } else {
     collapse = " * "
   }
   rhs <- purrr::map2_chr(
-    predictors, classes, add_special_to_predictor) %>%
+    predictors, classes, add_special_to_predictor, bare = bare) %>%
     paste(collapse = collapse)
 
   sprintf("%s ~ %s", response, rhs)

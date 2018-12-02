@@ -19,7 +19,7 @@ model <- xspline(
 )
 summary(model)
 
-# when xs has no parameters default one are taken
+# when xs has no parameters default ones are taken
 
 model <- xspline(
   cmedv ~

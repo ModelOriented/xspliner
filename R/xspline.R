@@ -9,6 +9,7 @@
 #' @param predictors Predictor values that should be used in final model.
 #' @param data Training data of \code{model}.
 #' @param form Can be 'additive' (default) or 'multiplicative'. Specifies formula form in final model.
+#' @param bare Variable names that mustn't be transformed in final model.
 #' @param env Environment in which optional variables passed into parameters are stored.
 #'  variables transformation. See vignette("xspliner") for details.
 #' @param consider One of \code{c("specials", "all")}. If "specials", only components with xs or xf
@@ -24,14 +25,14 @@ xspline <- function(object, ...) {
 #' @rdname xspline
 #' @export
 xspline.default <- function(object, lhs = NULL, response = NULL, predictors = NULL, data = NULL,
-                            form = "additive", env = parent.frame(), ...) {
+                            form = "additive", bare = NULL, env = parent.frame(), ...) {
   data <- get_model_data(object, data, env)
   lhs <- get_model_lhs(object, lhs)
   predictors <- get_model_predictors(object, data, predictors, get_model_response(object, data, response))
   classes <- get_predictors_classes(data[, predictors])
 
   formula <- as.formula(
-    build_predictor_based_formula(lhs, predictors, classes, form),
+    build_predictor_based_formula(lhs, predictors, classes, bare, form),
     env = env)
   build_xspliner(formula, object, data, env = env, ...)
 }

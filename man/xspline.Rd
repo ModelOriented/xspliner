@@ -10,7 +10,7 @@
 xspline(object, ...)
 
 \method{xspline}{default}(object, lhs = NULL, response = NULL,
-  predictors = NULL, data = NULL, form = "additive",
+  predictors = NULL, data = NULL, form = "additive", bare = NULL,
   env = parent.frame(), ...)
 
 \method{xspline}{formula}(object, model, data = NULL,
