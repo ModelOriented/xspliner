@@ -5,7 +5,8 @@
 \title{Plot method for 'xspliner' model}
 \usage{
 \method{plot}{xspliner}(x, variable_name = NULL, plot_response = TRUE,
-  plot_approx = TRUE, data = NULL, plot_data = FALSE, ...)
+  plot_approx = TRUE, data = NULL, plot_data = FALSE,
+  plot_deriv = TRUE, ...)
 }
 \arguments{
 \item{x}{Object of class 'xspliner'}

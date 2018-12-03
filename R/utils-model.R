@@ -25,7 +25,18 @@ transition <- function(model, predictor, type = "function") {
     } else if (!is.null(quality_transition_object)) {
       return(quality_transition_object)
     } else {
-      message("Variable is not transformed. Use identity.")
+      message("Variable is not transformed. NULL returned.")
+      NULL
+    }
+  } else if (type == "data") {
+    quantity_transition_object <- environment(model)$quantitative_transitions[[predictor]]$effect_outcome
+    quality_transition_object <- environment(model)$qualitative_transitions[[predictor]]$effect_outcome
+    if (!is.null(quantity_transition_object)) {
+      return(quantity_transition_object)
+    } else if (!is.null(quality_transition_object)) {
+      return(quality_transition_object)
+    } else {
+      message("Variable is not transformed. NULL returned.")
       NULL
     }
   }
