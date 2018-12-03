@@ -2,104 +2,35 @@
 #'
 #' @param x Object of class 'xspliner'
 #' @param variable_name Name of predictor that should be plotted.
+#' @param model Base model that xspliner is based on.
 #' @param plot_response If TRUE blackbox model response is drawn.
 #' @param plot_approx If TRUE blackbox model response approcimation is drawn.
 #' @param plot_data If TRUE raw data is drawn.
-#' @param data Training data used for building \code{x} model. Required for plot_data option.
+#' @param data Training data used for building \code{x} model. Required for plot_data option and model comparing.
+#' @param compare_with Named list. Other models that should be compared with xspliner and \code{model}.
+#' @param prediction_funs Prediction functions that should be used in model comparison.
 #' @param ... Another arguments passed into model specific method.
 #'
 #' @export
-plot.xspliner <- function(x, variable_name = NULL, plot_response = TRUE,
-                          plot_approx = TRUE, data = NULL, plot_data = FALSE, ...) {
-  # (todo) this needs to be rewritten, the code is really bad
-  if (is.null(variable_name)) {
+plot.xspliner <- function(x, variable_name = NULL, model = NULL, plot_response = TRUE, plot_approx = TRUE,
+                    data = NULL, plot_data = FALSE, plot_deriv = TRUE, compare_with = list(),
+                    prediction_funs = list(function(object, newdata) predict(object, newdata)),
+                    ...) {
+
+  if (is.null(variable_name) && is.null(model)) {
     class(x) <- "lm"
     plot(x, ...)
+  } else if (is.null(variable_name) && !is.null(model)) {
+    if (is.null(data)) {
+      stop("Data must be provided.")
+    }
+    plot_model_comparison(x, model, data, compare_with, prediction_funs)
+  } else if (!(variable_name %in% specials(x, "all"))) {
+    stop("Variable wasn't transformed.")
+  } else if (variable_name %in% specials(x, "qualitative")) {
+    plot(transition(x, variable_name, "base"))
   } else {
-    if (plot_data && is.null(data)) {
-      warning("You can plot data points only when data parameter is provided.")
-      plot_data <- FALSE
-    }
-
-    plots <- c("data", "response", "approx")[c(plot_data, plot_response, plot_approx)]
-    if (length(plots) == 0) {
-      stop("You must specify at least one plot.")
-    }
-
-    response_var <- environment(x)$response
-    xp_call <- transition(x, variable_name)
-
-    if (plot_data) {
-      plot_range <- range(data[, variable_name])
-    } else {
-      plot_range <- attr(xp_call, "variable_range")
-    }
-
-    plot_data_data <- data
-
-    plot_response_data <- environment(x)$quantitative_transitions[[variable_name]]$effect_outcome
-    colnames(plot_response_data) <- c(variable_name, response_var)
-
-    x_approx <- seq(plot_range[1], plot_range[2], length.out = nrow(plot_response_data))
-    y_approx <- xp_call(x_approx)
-    plot_approx_data <- data.frame(x_approx, y_approx)
-    colnames(plot_approx_data) <- c(variable_name, response_var)
-
-    if (plots[1] == "data") {
-      base_plot <- ggplot2::ggplot(data = plot_data_data, ggplot2::aes_string(x = variable_name, y = response_var)) +
-        ggplot2::geom_point()
-      if (length(plots) == 1) {
-        return(base_plot + ggplot2::theme_minimal())
-      }
-      if (length(plots) == 2) {
-        second_data <- switch(
-          plots[2],
-          response = plot_response_data,
-          approx = plot_approx_data
-        )
-        plot_color <- switch(
-          plots[2],
-          response = "red",
-          approx = "blue"
-        )
-        return(
-          base_plot +
-            ggplot2::geom_line(
-              data = second_data, ggplot2::aes_string(x = variable_name, y = response_var), color = plot_color) +
-            ggplot2::theme_minimal()
-        )
-      }
-      if (length(plots) == 3) {
-        return(
-          base_plot +
-            ggplot2::geom_line(
-              data = plot_response_data, ggplot2::aes_string(x = variable_name, y = response_var), color = "red") +
-            ggplot2::geom_line(
-              data = plot_approx_data, ggplot2::aes_string(x = variable_name, y = response_var), color = "blue") +
-            ggplot2::theme_minimal()
-        )
-      }
-    } else if (plots[1] == "response") {
-      base_plot <- ggplot2::ggplot(data = plot_response_data, ggplot2::aes_string(x = variable_name, y = response_var)) +
-        ggplot2::geom_line(color = "red")
-      if (length(plots) == 1) {
-        return(base_plot + ggplot2::theme_minimal())
-      }
-      if (length(plots) == 2) {
-        return(
-          base_plot +
-            ggplot2::geom_line(
-              data = plot_approx_data, ggplot2::aes_string(x = variable_name, y = response_var), color = "blue") +
-            ggplot2::theme_minimal()
-        )
-      }
-    } else {
-      return(
-        ggplot2::ggplot(
-          data = plot_approx_data, ggplot2::aes_string(x = variable_name, y = response_var), color = "blue") +
-          ggplot2::geom_line()
-      )
-    }
+    plot_quantitative(x, variable_name, plot_response, plot_approx, data, plot_data, plot_deriv)
   }
 }
 

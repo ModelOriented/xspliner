@@ -93,6 +93,7 @@ prepare_transition_params_pdp <- function(formula_metadata, component_details, b
   }
 
   effect_outcome <- do.call(pdp::partial, effect)
+  attr(effect_outcome, "type") <- "pdp"
 
   transition[["effect_data"]] <- effect_outcome
   transition[["predictor"]] <- component_details$var
@@ -118,6 +119,7 @@ prepare_transition_params_ale <- function(formula_metadata, component_details, b
   unlink(plot_container)
 
   effect_outcome <- data.frame(effect_outcome$x.values, effect_outcome$f.values)
+  attr(effect_outcome, "type") <- "ale"
   names(effect_outcome) <- c(component_details$var, "yhat")
 
   transition <- component_details$transition
@@ -147,6 +149,7 @@ prepare_transition_params_ice <- function(formula_metadata, component_details, b
   }
 
   effect_outcome <- do.call(pdp::partial, effect)
+  attr(effect_outcome, "type") <- "ice"
   transition[["response"]] <- effect_outcome[, "yhat"]
   transition[["factor"]] <- effect_outcome[, component_details$var]
   transition[["effect_data"]] <- effect_outcome
