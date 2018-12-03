@@ -90,7 +90,10 @@
     
 
     <pre class="usage"><span class='fu'>approx_with_spline</span>(<span class='no'>effect_data</span>, <span class='no'>response</span>, <span class='no'>predictor</span>,
-  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)</pre>
+  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)
+
+<span class='fu'>approx_with_monotonic_spline</span>(<span class='no'>effect_data</span>, <span class='no'>response</span>, <span class='no'>predictor</span>,
+  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>monotonic</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -113,20 +116,45 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other arguments passed to mgcv::s function.</p></td>
+      <td><p>Other arguments passed to <a href='https://www.rdocumentation.org/packages/mgcv/topics/s'>s</a> function.</p></td>
+    </tr>
+    <tr>
+      <th>monotonic</th>
+      <td><p>Possible options "up", "down" and "auto. If up the spline is incresing, when down decreasing.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Object of class "gam". See mgcv::gamObject</p>
+    <p>Object of class "gam". See <a href='https://www.rdocumentation.org/packages/mgcv/topics/gamObject'>gamObject</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>20</span>, <span class='fl'>5</span>, <span class='fl'>5</span>))
 <span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>20</span>, <span class='fl'>2</span>, <span class='fl'>2</span>)
 <span class='no'>env</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/environment'>new.env</a></span>()
-<span class='fu'>approx_with_spline</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>), <span class='st'>"y"</span>, <span class='st'>"x"</span>, <span class='no'>env</span>)</div><div class='output co'>#&gt; <span class='error'>Error in approx_with_spline(data.frame(x = x, y = y), "y", "x", env): could not find function "approx_with_spline"</span></div></pre>
+<span class='fu'>approx_with_spline</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>), <span class='st'>"y"</span>, <span class='st'>"x"</span>, <span class='no'>env</span>)</div><div class='output co'>#&gt; 
+#&gt; Family: gaussian 
+#&gt; Link function: identity 
+#&gt; 
+#&gt; Formula:
+#&gt; y ~ s(x)
+#&gt; 
+#&gt; Estimated degrees of freedom:
+#&gt; 1  total = 2 
+#&gt; 
+#&gt; GCV score: 4.577151     </div><div class='input'>
+<span class='fu'>approx_with_monotonic_spline</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>), <span class='st'>"y"</span>, <span class='st'>"x"</span>, <span class='no'>env</span>, <span class='st'>"up"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: initial point very close to some inequality constraints</span></div><div class='output co'>#&gt; <span class='warning'>Warning: initial parameters very close to inequality constraints</span></div><div class='output co'>#&gt; 
+#&gt; Family: gaussian 
+#&gt; Link function: identity 
+#&gt; 
+#&gt; Formula:
+#&gt; y ~ s(x)
+#&gt; 
+#&gt; Estimated degrees of freedom:
+#&gt; 1  total = 2 
+#&gt; 
+#&gt; GCV score: 4.577151     </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
