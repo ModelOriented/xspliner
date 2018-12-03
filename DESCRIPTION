@@ -18,7 +18,8 @@ Imports: stats,
     ggplot2,
     mgcv,
     magrittr,
-    purrr
+    purrr,
+    tidyr
 Suggests:
     ALEPlot,
     factorMerger,

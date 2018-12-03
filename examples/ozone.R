@@ -16,15 +16,7 @@ xs <- predict.glm(model_xs, newdata = ozone, type = "response")
 glmm <- predict.glm(model_glm, newdata = ozone, type = "response")
 gamm <- as.numeric(mgcv::predict.gam(model_gam, newdata = ozone, type = "response"))
 
-library(tidyr)
-library(dplyr)
-data <- data.frame(gamm, glmm, rf, xs) %>%
-  arrange(rf) %>%
-  mutate(number = 1:nrow(.)) %>%
-  gather(key = "type", value = "result", -number)
-
-ggplot(data, aes(number, type)) +
-  geom_tile(aes(fill = result))
+plot(model_xs, model = model_rf, data = ozone, compare_with = list(glm = model_glm, gam = model_gam))
 
 rmse <- function(model, data, var, type = "response") {
   fitted <- predict(model, newdata = data, type = type)
@@ -35,6 +27,3 @@ rmse(model_xs, ozone, "Ozone")
 rmse(model_glm, ozone, "Ozone")
 rmse(model_gam, ozone, "Ozone")
 
-coef(model_xs)
-summary(model_xs)
-summary(model_glm)

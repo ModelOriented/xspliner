@@ -4,22 +4,30 @@
 \alias{plot.xspliner}
 \title{Plot method for 'xspliner' model}
 \usage{
-\method{plot}{xspliner}(x, variable_name = NULL, plot_response = TRUE,
-  plot_approx = TRUE, data = NULL, plot_data = FALSE,
-  plot_deriv = TRUE, ...)
+\method{plot}{xspliner}(x, variable_name = NULL, model = NULL,
+  plot_response = TRUE, plot_approx = TRUE, data = NULL,
+  plot_data = FALSE, plot_deriv = TRUE, compare_with = list(),
+  prediction_funs = list(function(object, newdata) predict(object,
+  newdata)), ...)
 }
 \arguments{
 \item{x}{Object of class 'xspliner'}
 
 \item{variable_name}{Name of predictor that should be plotted.}
 
+\item{model}{Base model that xspliner is based on.}
+
 \item{plot_response}{If TRUE blackbox model response is drawn.}
 
 \item{plot_approx}{If TRUE blackbox model response approcimation is drawn.}
 
-\item{data}{Training data used for building \code{x} model. Required for plot_data option.}
+\item{data}{Training data used for building \code{x} model. Required for plot_data option and model comparing.}
 
 \item{plot_data}{If TRUE raw data is drawn.}
+
+\item{compare_with}{Named list. Other models that should be compared with xspliner and \code{model}.}
+
+\item{prediction_funs}{Prediction functions that should be used in model comparison.}
 
 \item{...}{Another arguments passed into model specific method.}
 }
