@@ -90,8 +90,11 @@
     
 
     <pre class="usage"><span class='co'># S3 method for xspliner</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>variable_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot_response</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>plot_approx</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot_data</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>variable_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>plot_response</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot_approx</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>plot_data</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>plot_deriv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>compare_with</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(),
+  <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>,
+  <span class='no'>newdata</span>)), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -105,6 +108,10 @@
       <td><p>Name of predictor that should be plotted.</p></td>
     </tr>
     <tr>
+      <th>model</th>
+      <td><p>Base model that xspliner is based on.</p></td>
+    </tr>
+    <tr>
       <th>plot_response</th>
       <td><p>If TRUE blackbox model response is drawn.</p></td>
     </tr>
@@ -114,11 +121,23 @@
     </tr>
     <tr>
       <th>data</th>
-      <td><p>Training data used for building <code>x</code> model. Required for plot_data option.</p></td>
+      <td><p>Training data used for building <code>x</code> model. Required for plot_data option and model comparing.</p></td>
     </tr>
     <tr>
       <th>plot_data</th>
       <td><p>If TRUE raw data is drawn.</p></td>
+    </tr>
+    <tr>
+      <th>compare_with</th>
+      <td><p>Named list. Other models that should be compared with xspliner and <code>model</code>.</p></td>
+    </tr>
+    <tr>
+      <th>prediction_funs</th>
+      <td><p>Prediction functions that should be used in model comparison.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Another arguments passed into model specific method.</p></td>
     </tr>
     </table>
     

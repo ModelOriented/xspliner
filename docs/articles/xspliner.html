@@ -61,7 +61,7 @@
       <h1>xspliner package - basic theory and usage</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2018-11-30</h4>
+            <h4 class="date">2018-12-03</h4>
       
       
       <div class="hidden name"><code>xspliner.Rmd</code></div>
@@ -214,28 +214,29 @@
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(xp_model)</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; Call:</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; glm(formula = cleared_formula, family = family, data = data)</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; Deviance Residuals: </span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;      Min        1Q    Median        3Q       Max  </span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt; -13.3754   -3.3141   -0.9339    2.0499   27.1722  </span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; Coefficients:</span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt; (Intercept) -32.40688    4.84433  -6.690 5.98e-11 ***</span></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt; rm            5.26616    0.41581  12.665  &lt; 2e-16 ***</span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; lstat        -0.51954    0.04371 -11.886  &lt; 2e-16 ***</span></a>
-<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; xs(nox)       1.22869    0.15052   8.163 2.66e-15 ***</span></a>
-<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt; ---</span></a>
-<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></a>
-<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt; (Dispersion parameter for gaussian family taken to be 26.77072)</span></a>
-<a class="sourceLine" id="cb10-20" data-line-number="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-21" data-line-number="21"><span class="co">#&gt;     Null deviance: 42578  on 505  degrees of freedom</span></a>
-<a class="sourceLine" id="cb10-22" data-line-number="22"><span class="co">#&gt; Residual deviance: 13439  on 502  degrees of freedom</span></a>
-<a class="sourceLine" id="cb10-23" data-line-number="23"><span class="co">#&gt; AIC: 3105.3</span></a>
-<a class="sourceLine" id="cb10-24" data-line-number="24"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-25" data-line-number="25"><span class="co">#&gt; Number of Fisher Scoring iterations: 2</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; glm(formula = cmedv ~ rm + lstat + xs(nox), family = family, </span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;     data = data)</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt; Deviance Residuals: </span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;      Min        1Q    Median        3Q       Max  </span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; -13.3754   -3.3141   -0.9339    2.0499   27.1722  </span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; Coefficients:</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt; (Intercept) -32.40688    4.84433  -6.690 5.98e-11 ***</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; rm            5.26616    0.41581  12.665  &lt; 2e-16 ***</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; lstat        -0.51954    0.04371 -11.886  &lt; 2e-16 ***</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt; xs(nox)       1.22869    0.15052   8.163 2.66e-15 ***</span></a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt; ---</span></a>
+<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></a>
+<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-20" data-line-number="20"><span class="co">#&gt; (Dispersion parameter for gaussian family taken to be 26.77072)</span></a>
+<a class="sourceLine" id="cb10-21" data-line-number="21"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-22" data-line-number="22"><span class="co">#&gt;     Null deviance: 42578  on 505  degrees of freedom</span></a>
+<a class="sourceLine" id="cb10-23" data-line-number="23"><span class="co">#&gt; Residual deviance: 13439  on 502  degrees of freedom</span></a>
+<a class="sourceLine" id="cb10-24" data-line-number="24"><span class="co">#&gt; AIC: 3105.3</span></a>
+<a class="sourceLine" id="cb10-25" data-line-number="25"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-26" data-line-number="26"><span class="co">#&gt; Number of Fisher Scoring iterations: 2</span></a></code></pre></div>
 <p>As you can see in the summary, the final formula is simplified version of input one. All the information about the response functions are stored in <code>xp_model</code> environment.</p>
 </div>
 <div id="plotting-the-result" class="section level3">
@@ -270,28 +271,29 @@
 <a class="sourceLine" id="cb12-14" data-line-number="14"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_pdp_auto)</a>
 <a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; Call:</span></a>
-<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; glm(formula = cleared_formula, family = family, data = data)</span></a>
-<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-19" data-line-number="19"><span class="co">#&gt; Deviance Residuals: </span></a>
-<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt;      Min        1Q    Median        3Q       Max  </span></a>
-<a class="sourceLine" id="cb12-21" data-line-number="21"><span class="co">#&gt; -12.7619   -3.2031   -0.6366    2.8787   26.9953  </span></a>
-<a class="sourceLine" id="cb12-22" data-line-number="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-23" data-line-number="23"><span class="co">#&gt; Coefficients:</span></a>
-<a class="sourceLine" id="cb12-24" data-line-number="24"><span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span></a>
-<a class="sourceLine" id="cb12-25" data-line-number="25"><span class="co">#&gt; (Intercept)  4.638819   2.952287   1.571    0.117    </span></a>
-<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="co">#&gt; xs(lstat)    1.248040   0.048545  25.709  &lt; 2e-16 ***</span></a>
-<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#&gt; ptratio     -0.858557   0.113027  -7.596 1.51e-13 ***</span></a>
-<a class="sourceLine" id="cb12-28" data-line-number="28"><span class="co">#&gt; age          0.054359   0.009827   5.532 5.11e-08 ***</span></a>
-<a class="sourceLine" id="cb12-29" data-line-number="29"><span class="co">#&gt; ---</span></a>
-<a class="sourceLine" id="cb12-30" data-line-number="30"><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></a>
-<a class="sourceLine" id="cb12-31" data-line-number="31"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-32" data-line-number="32"><span class="co">#&gt; (Dispersion parameter for gaussian family taken to be 24.87722)</span></a>
-<a class="sourceLine" id="cb12-33" data-line-number="33"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-34" data-line-number="34"><span class="co">#&gt;     Null deviance: 42578  on 505  degrees of freedom</span></a>
-<a class="sourceLine" id="cb12-35" data-line-number="35"><span class="co">#&gt; Residual deviance: 12488  on 502  degrees of freedom</span></a>
-<a class="sourceLine" id="cb12-36" data-line-number="36"><span class="co">#&gt; AIC: 3068.2</span></a>
-<a class="sourceLine" id="cb12-37" data-line-number="37"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-38" data-line-number="38"><span class="co">#&gt; Number of Fisher Scoring iterations: 2</span></a></code></pre></div>
+<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; glm(formula = cmedv ~ xs(lstat) + ptratio + age, family = family, </span></a>
+<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt;     data = data)</span></a>
+<a class="sourceLine" id="cb12-19" data-line-number="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt; Deviance Residuals: </span></a>
+<a class="sourceLine" id="cb12-21" data-line-number="21"><span class="co">#&gt;      Min        1Q    Median        3Q       Max  </span></a>
+<a class="sourceLine" id="cb12-22" data-line-number="22"><span class="co">#&gt; -12.7619   -3.2031   -0.6366    2.8787   26.9953  </span></a>
+<a class="sourceLine" id="cb12-23" data-line-number="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-24" data-line-number="24"><span class="co">#&gt; Coefficients:</span></a>
+<a class="sourceLine" id="cb12-25" data-line-number="25"><span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span></a>
+<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="co">#&gt; (Intercept)  4.638819   2.952287   1.571    0.117    </span></a>
+<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#&gt; xs(lstat)    1.248040   0.048545  25.709  &lt; 2e-16 ***</span></a>
+<a class="sourceLine" id="cb12-28" data-line-number="28"><span class="co">#&gt; ptratio     -0.858557   0.113027  -7.596 1.51e-13 ***</span></a>
+<a class="sourceLine" id="cb12-29" data-line-number="29"><span class="co">#&gt; age          0.054359   0.009827   5.532 5.11e-08 ***</span></a>
+<a class="sourceLine" id="cb12-30" data-line-number="30"><span class="co">#&gt; ---</span></a>
+<a class="sourceLine" id="cb12-31" data-line-number="31"><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></a>
+<a class="sourceLine" id="cb12-32" data-line-number="32"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-33" data-line-number="33"><span class="co">#&gt; (Dispersion parameter for gaussian family taken to be 24.87722)</span></a>
+<a class="sourceLine" id="cb12-34" data-line-number="34"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-35" data-line-number="35"><span class="co">#&gt;     Null deviance: 42578  on 505  degrees of freedom</span></a>
+<a class="sourceLine" id="cb12-36" data-line-number="36"><span class="co">#&gt; Residual deviance: 12488  on 502  degrees of freedom</span></a>
+<a class="sourceLine" id="cb12-37" data-line-number="37"><span class="co">#&gt; AIC: 3068.2</span></a>
+<a class="sourceLine" id="cb12-38" data-line-number="38"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-39" data-line-number="39"><span class="co">#&gt; Number of Fisher Scoring iterations: 2</span></a></code></pre></div>
 <p>Linear approximation was better for <code>ptratio</code> response function.</p>
 </div>
 </div>
