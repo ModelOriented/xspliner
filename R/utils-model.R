@@ -74,7 +74,7 @@ plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data
 
   response_var <- environment(x)$response
   base_data <- data.frame(x = numeric(), y = numeric(), type = character())
-  colnames(base_data) <- c(variable_name, response_var)
+  colnames(base_data)[1:2] <- c(variable_name, response_var)
   color_values <- c("data" = "black", "response" = "red", "approximation" = "blue", "derivative" = "skyblue")
 
   if (plot_data) {
@@ -109,26 +109,41 @@ plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data
         ggplot2::geom_line() +
         ggplot2::labs(y = "Transformation derivative") +
         ggplot2::theme_minimal()
+      return(base_plot)
     } else {
       scaled <- data_linear_scaling(base_data[[response_var]], data[[response_var]])
       data[[response_var]] <- scaled$data
       data$type <- "derivative"
       base_data <- rbind(base_data, data)
-      base_plot <- ggplot2::ggplot(data = base_data,
-                                   ggplot2::aes_string(x = variable_name, y = response_var, colour = "type")) +
-        ggplot2::geom_point(data = base_data[base_data$type == "data", ]) +
-        ggplot2::geom_line(data = base_data[base_data$type != "data", ]) +
-        ggplot2::scale_y_continuous(
-          sec.axis = ggplot2::sec_axis(~ scaled$scaling * . + scaled$translation,
-                                       name = "Transformation derivative")) +
-        ggplot2::scale_color_manual(
-          values = color_values) +
-        ggplot2::labs(colour = "Plot type") +
-        ggplot2::theme_minimal()
     }
+
   }
-  base_plot
+
+  base_plot <- ggplot2::ggplot(data = base_data,
+                               ggplot2::aes_string(x = variable_name, y = response_var, colour = "type")) +
+    ggplot2::geom_point(data = base_data[base_data$type == "data", ]) +
+    ggplot2::geom_line(data = base_data[base_data$type != "data", ])
+
+  if (plot_deriv) {
+    base_plot + ggplot2::scale_y_continuous(
+      sec.axis = ggplot2::sec_axis(~ scaled$scaling * . + scaled$translation,
+                                   name = "Transformation derivative")) +
+      ggplot2::scale_color_manual(
+        values = color_values) +
+      ggplot2::labs(colour = "Plot type") +
+      ggplot2::theme_minimal()
+  } else {
+    base_plot +
+      ggplot2::scale_color_manual(
+        values = color_values) +
+      ggplot2::labs(colour = "Plot type") +
+      ggplot2::theme_minimal()
+  }
+
 }
+
+#' To avoid CRAN check problems
+utils::globalVariables(c("Observation", "Model", "Value"))
 
 plot_model_comparison <- function(x, model, data, compare_with, prediction_functions) {
   model_name <- rev(as.character(model$call[[1]]))[1]
