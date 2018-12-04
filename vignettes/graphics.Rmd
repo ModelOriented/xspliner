@@ -1,0 +1,21 @@
+---
+title: "xspliner package - basic theory and usage"
+author: "Krystian Igras"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## TODO
+
+<!-- Below is part from old vignette (will be change) -->
+
+<!-- You may plot simple graphics for resulting model with `plot` function. -->
+
+<!-- ```{r fig.width=3, fig.height=3, fig.show='hold'} -->
+<!-- plot(xp_model, "nox", data = boston, plot_data = TRUE) -->
+<!-- plot(xp_model, "nox") -->
+<!-- ``` -->

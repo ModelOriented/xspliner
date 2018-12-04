@@ -1,0 +1,262 @@
+---
+title: "xspliner package - basic theory and usage"
+author: "Krystian Igras"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+library(randomForest)
+library(pdp)
+library(xspliner)
+```
+
+## Motivation
+
+In regression or classification problem, the main issue is choosing the model that should meet our requirements as much as possible. On the one hand, we want the chosen solution to have the best statistical properties such as accuracy, RMSE or R Squared - on the other hand, we focus on the interpretability of the model.
+
+In the first case, black box models, such as randomForest or XGBoost, perform better than others, while the second case is dominated by linear models. The xspliner package aims to combine both methods: use the knowledge gathered from black box models in order to build an interpretable linear one.
+
+## General idea
+
+Below graphics show general idea used in xspliner model
+*(todo)*
+
+### Black box variable response
+
+When black box model is already built, you may want to check how each predictor variable affects the final response.
+This is quite easy when you use a linear model or have low dimensional data (up to 2, 3 dimensions). 
+One of ideas for testing the predictor impact in more complicated model is to check an average model response of the selected variable.
+
+One of such approaches called Partial Dependence Plots is implemented in the [pdp](https://github.com/bgreenwell/pdp) package (Brandon M. Greenwell (2017). Pdp: The R Journal, 9 (1), 421-436.), or the [ALEPlot](https://CRAN.R-project.org/package=ALEPlot) package (Dan Apley (2017). ALEPlot: Accumulated Local Effects Plots and Partial Dependence Plots.) using Accumulated Local Effects Plots.
+
+In each case, we get a single variable function, which should explain the impact of the predictor on the response variable.
+
+The following pictures show the `ptratio` impact on `cmedv` in some random forest model based on Boston Housing Data. Below curves are obtained by the approach of the pdp and ale methods respectively.
+
+```{r include = FALSE, message = FALSE}
+library(ggplot2)
+data(boston)
+set.seed(123)
+
+# build random forest model:
+boston.rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
+
+# build xspline model with specified response method and approximation options
+model_pdp <- xspline(
+  cmedv ~
+    xs(lstat, transition = list(k = 10), effect = list(type = "pdp", grid.resolution = 60)) +
+    xs(ptratio, transition = list(k = 10), effect = list(type = "pdp", grid.resolution = 60)) +
+    age,
+  model = boston.rf
+)
+
+model_ale <- xspline(
+  cmedv ~
+    xs(lstat, transition = list(k = 10), effect = list(type = "ale", K = 60)) +
+    xs(ptratio, transition = list(k = 10), effect = list(type = "ale", K = 60)) +
+    age,
+  model = boston.rf
+)
+```
+
+```{r fig.width=3, fig.height=3, echo = FALSE, fig.show='hold'}
+plot(model_pdp, "ptratio", plot_approx = FALSE, plot_deriv = FALSE) + guides(colour = FALSE) + labs(title = "Partial Dependence Plot")
+plot(model_ale, "ptratio", plot_approx = FALSE, plot_deriv = FALSE) + guides(colour = FALSE) + labs(title = "Accumulated Local Effects Plot")
+```
+
+As we can see, above functions are irregular, making it difficult to interpret explained effect.
+
+If above functions had linear character, one would be tempted to approximate them with linear function. As a result it could easy to interpret how it affects the variable explained in the black box model. 
+What if the function is irregular, as above? Could we approximate it with polynomials?
+
+### Splines
+
+Due to the large errors that occurs with approximation of functions with polynomials, the approach using spline approximation is most common solution. Splines (functions that are piecewise polynomials) have good approximating properties, in addition their form is overt so we can thus interpret the resulting function.
+
+The following graphics show spline approximations of pdp and ale curves:
+
+```{r fig.width=3, fig.height=3, echo = FALSE, fig.show='hold'}
+plot(model_pdp, "ptratio", plot_deriv = FALSE) + guides(colour = FALSE) + labs(title = "Partial Dependence Plot")
+plot(model_ale, "ptratio", plot_deriv = FALSE) + guides(colour = FALSE) + labs(title = "Accumulated Local Effects Plot")
+```
+
+But even with approximated PDP, how could we use it to interpret black box model?
+
+### Linear models based on response function and splines
+
+The general idea of how to use the response function and splines to build an interpretable model that could be used as black box expliner is as follows.
+
+- For each variable used in the black box model, create a response function based on one of the known methods, let's mark it $f_{x}$
+- Approximate $f_{x}$ using spline - the result is $\widetilde{f}_{x}$
+- Build linear model, in which each predictior $x_{i}$ is transformed with approximated response function: $\widetilde{f}_{x_{i}}(x_{i})$
+
+Shortly, using black box formula
+$$y \sim x_{1} + \cdots + x_{n}$$
+use
+$$y \sim \widetilde{f}_{x_{1}}(x_{1}) + \cdots + \widetilde{f}_{x_{n}}(x_{n})$$
+in linear one.
+
+The resulting model uses part of the information that was extracted while building black box model.
+If linear model performance is similiar to black box one, it could be used as it's good interpretation.
+
+## How to do it with xspliner?
+
+### Defining formula
+
+This sections shows, how to build formula interpretable by xspliner package using Boston Housing Data from `pdp` package.
+
+Read the data
+```{r}
+data(boston)
+str(boston)
+```
+
+We're going to build model based on formula 
+```
+cmedv ~ rm + lstat + nox
+```
+
+So let's build random forest black box model, that we use as a base for further steps:
+```{r}
+boston_rf <- randomForest(cmedv ~ rm + lstat + nox, data = boston)
+```
+
+Now specify which variables should be transformed.
+In this example only `nox` variable will use random forest effect (PDP or ALEPlot).
+
+To indicate transformation use `xs(nos)` symbol.
+
+So we have:
+```
+cmedv ~ rm + lstat + xs(nox)
+```
+
+This formula is enough to build GLM model (with using default parameters and xspliner glm generating function). Nevertheless to understand deeply the approach let's go further with theory.
+
+As the algoritm goes through creating black box based response function and its approximation we need to specify desirable parameters.
+
+#### Specifying which method should we use to build response function
+
+Let's name one dimensional model response (such PD or ALE) as **effect**.
+
+As remarked in first section, currently implemented effects for quantitative predictors are Partial Dependence Plots (**pdp** package) and Accumulated Local Effects Plots (**ALEPlot** package).
+
+In order to configure one of this methods, we need to specify `effect` parameter inside `xs` symbol used in formula:
+```
+effect = list(
+  type = <method_type> # "pdp" or "ale",
+  ... # named list - other parameters passed for chosen method
+)
+```
+
+So to use PDP effect for the predictor just specify `xs(nox, effect = list(type = "pdp"))`, for ALE `xs(nox, effect = list(type = "ale"))`.
+
+How to find out what other parameters can be used? Just check:
+- `pdp::partial` in case of `type = "pdp"`
+- `ALEPlot::ALEPlot` in case of `type = "ale"`
+the functions responsible for effect response.
+
+Below we will use PDP random forest effect, that returns 40 response points for `nox` variable.
+By checking `?pdp::partial` we can see that `grid.resolution` parameter specifies predictor grid.
+
+Now we should just specify: `xs(nox, effect = list(type = "pdp", grid.resolution = 40))`. 
+
+Let's verify correctness of this parameters with bare usage of `pdp::partial`:
+
+```{r}
+rf_effect <- pdp::partial(boston_rf, "nox", grid.resolution = 40)
+head(rf_effect)
+nrow(rf_effect)
+```
+
+We got data.frame with predictor and response values containing 40 rows. So parameter should correctly specify our expectations.
+
+*Remark*
+Here we ca see that response function is presented as data.frame with two columns:
+- `nox` - $n$ evenly spaced points across range of `nox` variable. Specified by `grid.resolution` parameter (51 by default)
+- `yhat` - response function values on points specified in the first column
+
+Let's learn now how to specify approximation approach.
+
+#### Specifying spline approximation parameters
+Response function is approximated with `mgcv::gam` package and `mgcv::s` smoothing function.
+
+`xspliner` allows using all smoothing methods provided by `mgcv::s`.
+
+How can we do that?
+
+Let's name approximation result as **transition**. To specify it's parameters such as spline base we can use `transition` parameter inside `xs` symbol. Similiarily to `effect`, `transition` is specified as parameters list. Possible options can be found by `??mgcv::s` (few extra options can be found in [extras](https://krystian8207.github.io/xspliner/articles/extras.html)).
+
+Shortly:
+```
+transition = <mgcv::s parameters> # named list
+```
+
+Let's assume we want to approximate response function with cubic splines and basis dimension equal to 10.
+As we can see in `mgcv::s` documentation, we need to set: `k = 10` and `bs = "cr"`.
+
+We just need to use:
+```
+cmedv ~ rm + lstat + xs(nox, transition = list(k = 10, bs = "cr"))
+```
+
+Finally using both, we get the formula:
+```
+cmedv ~ rm + lstat + xs(nox, 
+  effect = list(type = "pdp", grid.resolution = 40),
+  transition = list(k = 10, bs = "cr"))
+```
+
+To sum up, we specified formula for building GLM model, in which we transform `nox` variable with some function contructed on the following steps:
+- we extract impact of `nox` variable on `cmedv` in already build black box model (actually not specified yet in formula)
+- we get that impact as PDP in form of 40 evenly spaced (over `nox` range) points
+- we estimate PDP with use of `cubic` splines with 10 dimensional base
+The estimation is our final function used for `nox` transformation in final GLM.
+
+### Building the model
+
+Having the formula defined, we almost have all the required data provided to build GLM.
+The only one left, that the approach requires is the black box model that is the basis of our resulting model.
+
+We will use here `model_rf` random forest model that was built before.
+
+The final step is to use `xspline` function (from `xspliner` package) to build the desired model.
+
+```{r results = FALSE}
+xp_model <- xspline(
+  cmedv ~ rm + lstat +
+    xs(nox, 
+       effect = list(type = "pdp", grid.resolution = 40), 
+       transition = list(k = 10, bs = "cr")),
+  model = boston_rf
+)
+```
+
+Lets check the model summary:
+```{r}
+summary(xp_model)
+```
+
+As the final model is just the GLM, the summary is also standard. One difference that we can see here is formula call.
+It has missing `xs` parameters, and `xs` is treated as standard R function (previously it was just the symbol used in formula).
+More details about can be found in following sections:
+- [Discrete response or predictor](https://krystian8207.github.io/xspliner/articles/discrete_response_or_predictor.html) - learn how model works when black box is classificator or what effect and transition is used when predictor is dicrete variable
+- Automation - learn how to automate building xspliners without specifying your own formula and/or using global parameters
+- Graphics - learn how to plot the results, or compare compare xplsiner with base black box.
+- Methods - learn about other xspliner methods and its environment
+- Use cases - see `xspliner` in action with examples
+
+Here we shortly show how plot random forest effect and transition for `nox` variable:
+```{r}
+plot(xp_model, "nox")
+```

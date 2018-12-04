@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Approximate data and function by splines • xspliner</title>
+<title>Build generalized linear models basing on black boxes • xspliner</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
@@ -37,10 +37,31 @@
   </a>
 </li>
 <li>
-  <a href="articles/xspliner.html">Get started</a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/automation.html">xspliner package - automate you work</a>
+    </li>
+    <li>
+      <a href="articles/discrete_response_or_predictor.html">xspliner package - classification and discrete predictors</a>
+    </li>
+    <li>
+      <a href="articles/graphics.html">xspliner package - basic theory and usage</a>
+    </li>
+    <li>
+      <a href="articles/introduction.html">xspliner package - basic theory and usage</a>
+    </li>
+    <li>
+      <a href="articles/methods.html">xspliner package - methods and xspliner environment</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
@@ -57,9 +78,58 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-    <div id="xspliner" class="section level1">
+    <div id="the-xspliner-package---build-generalized-linear-models-basing-on-black-boxes" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#xspliner" class="anchor"></a>xspliner</h1></div>
+<a href="#the-xspliner-package---build-generalized-linear-models-basing-on-black-boxes" class="anchor"></a>The xspliner package - build generalized linear models basing on black boxes</h1></div>
+<div id="xspliners-pipeline-model-xspline-and-analyze" class="section level2">
+<h2 class="hasAnchor">
+<a href="#xspliners-pipeline-model-xspline-and-analyze" class="anchor"></a>xspliner’s pipeline: <em>model %&gt;% xspline(…)</em> and analyze</h2>
+</div>
+<div id="installation-from-cran" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation-from-cran" class="anchor"></a>Installation from CRAN</h2>
+<pre><code><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">devtools::install_github("krystian8207/xspliner")</a></code></pre>
+</div>
+<div id="news" class="section level2">
+<h2 class="hasAnchor">
+<a href="#news" class="anchor"></a><a href="NEWS.html">News</a>
+</h2>
+</div>
+<div id="reference-manual" class="section level2">
+<h2 class="hasAnchor">
+<a href="#reference-manual" class="anchor"></a><a href="https://krystian8207.github.io/xspliner/">Reference Manual</a>
+</h2>
+</div>
+<div id="demo" class="section level2">
+<h2 class="hasAnchor">
+<a href="#demo" class="anchor"></a>DEMO</h2>
+<pre><code><a href="https://www.rdocumentation.org/packages/base/topics/library">library(xspliner)
+library(randomForest)
+library(pdp)
+data(boston)
+set.seed(123)
+# fitting random forest model
+model_rf &lt;- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
+
+# building GLM (with standard black box response - Partial Dependence)
+xspliner &lt;- xspline(model_rf)
+
+# see standard glm results
+summary(xspliner)
+
+# see ptratio variable transformation
+plot(xspliner, "ptratio")
+
+# compare xspliner and base model responses
+plot(xspliner, model = model_rf, data = boston)
+</a></code></pre>
+<p>For more info check project <a href="https://krystian8207.github.io/xspliner/articles/">vignettes</a> or <a href="https://github.com/krystian8207/xspliner/tree/master/examples">examples</a>.</p>
+</div>
+<div id="further-work" class="section level2">
+<h2 class="hasAnchor">
+<a href="#further-work" class="anchor"></a>Further work</h2>
+<p>See <a href="https://github.com/krystian8207/xspliner/issues">github issues</a></p>
+</div>
 </div>
   </div>
 

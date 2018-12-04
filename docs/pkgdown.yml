@@ -2,5 +2,9 @@ pandoc: 2.2.1
 pkgdown: 1.2.0
 pkgdown_sha: ~
 articles:
-  xspliner: xspliner.html
+  automation: automation.html
+  discrete_response_or_predictor: discrete_response_or_predictor.html
+  graphics: graphics.html
+  introduction: introduction.html
+  methods: methods.html
 

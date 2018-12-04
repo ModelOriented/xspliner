@@ -5,15 +5,16 @@
 #' @param model Base model that xspliner is based on.
 #' @param plot_response If TRUE blackbox model response is drawn.
 #' @param plot_approx If TRUE blackbox model response approcimation is drawn.
-#' @param plot_data If TRUE raw data is drawn.
 #' @param data Training data used for building \code{x} model. Required for plot_data option and model comparing.
+#' @param plot_data If TRUE raw data is drawn.
+#' @param plot_deriv If TRUE derivative of approximation is showed on plot.
 #' @param compare_with Named list. Other models that should be compared with xspliner and \code{model}.
 #' @param prediction_funs Prediction functions that should be used in model comparison.
 #' @param ... Another arguments passed into model specific method.
 #'
 #' @export
 plot.xspliner <- function(x, variable_name = NULL, model = NULL, plot_response = TRUE, plot_approx = TRUE,
-                    data = NULL, plot_data = FALSE, plot_deriv = TRUE, compare_with = list(),
+                    data = NULL, plot_data = FALSE, plot_deriv = FALSE, compare_with = list(),
                     prediction_funs = list(function(object, newdata) predict(object, newdata)),
                     ...) {
 
