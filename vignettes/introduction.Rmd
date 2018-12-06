@@ -252,7 +252,7 @@ It has missing `xs` parameters, and `xs` is treated as standard R function (prev
 More details about can be found in following sections:
 - [Discrete response or predictor](https://krystian8207.github.io/xspliner/articles/discrete_response_or_predictor.html) - learn how model works when black box is classificator or what effect and transition is used when predictor is dicrete variable
 - Automation - learn how to automate building xspliners without specifying your own formula and/or using global parameters
-- Graphics - learn how to plot the results, or compare compare xplsiner with base black box.
+- Graphics - learn how to plot the results, or compare compare xspliner with base black box.
 - Methods - learn about other xspliner methods and its environment
 - Use cases - see `xspliner` in action with examples
 

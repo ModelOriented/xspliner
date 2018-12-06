@@ -53,7 +53,7 @@
       <a href="../articles/discrete_response_or_predictor.html">xspliner package - classification and discrete predictors</a>
     </li>
     <li>
-      <a href="../articles/graphics.html">xspliner package - basic theory and usage</a>
+      <a href="../articles/graphics.html">xspliner package - graphics</a>
     </li>
     <li>
       <a href="../articles/introduction.html">xspliner package - basic theory and usage</a>
@@ -82,7 +82,7 @@
       <h1>xspliner package - classification and discrete predictors</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2018-12-05</h4>
+            <h4 class="date">2018-12-06</h4>
       
       
       <div class="hidden name"><code>discrete_response_or_predictor.Rmd</code></div>
@@ -91,9 +91,153 @@
 
     
     
-<div id="todo" class="section level2">
+<p>This section describes how to xspliner works when some predictors are discrete, or when we deal with classification model.</p>
+<div id="qualitative-predictors" class="section level1">
+<h1 class="hasAnchor">
+<a href="#qualitative-predictors" class="anchor"></a>Qualitative predictors</h1>
+<p>As before let’s explain the approach basing on random forest model. For this case we use HR_data from breakDown package.</p>
+<p>Let’s load the data</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">HR_data &lt;-<span class="st"> </span>breakDown<span class="op">::</span>HR_data</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(HR_data)</a></code></pre></div>
+<pre><code>## 'data.frame':    14999 obs. of  10 variables:
+##  $ satisfaction_level   : num  0.38 0.8 0.11 0.72 0.37 0.41 0.1 0.92 0.89 0.42 ...
+##  $ last_evaluation      : num  0.53 0.86 0.88 0.87 0.52 0.5 0.77 0.85 1 0.53 ...
+##  $ number_project       : int  2 5 7 5 2 2 6 5 5 2 ...
+##  $ average_montly_hours : int  157 262 272 223 159 153 247 259 224 142 ...
+##  $ time_spend_company   : int  3 6 4 5 3 3 4 5 5 3 ...
+##  $ Work_accident        : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ left                 : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ promotion_last_5years: int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ sales                : Factor w/ 10 levels "accounting","hr",..: 8 8 8 8 8 8 8 8 8 8 ...
+##  $ salary               : Factor w/ 3 levels "high","low","medium": 2 3 3 2 2 2 2 2 2 2 ...</code></pre>
+<p>and build regression tree, when we predict average_montly_hours based on last_evaluation, salary and satisfaction_level predictors.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</a></code></pre></div>
+<pre><code>## randomForest 4.6-14</code></pre>
+<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(average_montly_hours <span class="op">~</span><span class="st"> </span>last_evaluation <span class="op">+</span><span class="st"> </span>salary <span class="op">+</span><span class="st"> </span>satisfaction_level, <span class="dt">data =</span> HR_data)</a></code></pre></div>
+<p>We’re going to make some transformation/simplification on <code>salary</code> variable. To do so, we need to transform formula passed into <code>xspline</code> function.</p>
+<p>Similiarily to continuous variable it is enough to use <code>xf</code> symbol on <code>salary</code> variable, ie. use formula:</p>
+<pre><code>average_montly_hours ~ last_evaluation + xf(salary) + satisfaction_level</code></pre>
+<p>We could use the formula for our final GLM model (the we will use basic parameters for xs), but first let’s learn what changes it does.</p>
+<div id="individual-conditional-expectation-for-black-box-model" class="section level2">
 <h2 class="hasAnchor">
-<a href="#todo" class="anchor"></a>TODO</h2>
+<a href="#individual-conditional-expectation-for-black-box-model" class="anchor"></a>Individual Conditional Expectation for black box model</h2>
+<p>Similiarily for continuous variables the first thing we do is to get black box model response on signle variable, call <code>effect</code>.</p>
+<p>For continuous variable we used PD or ALE plots, which was average model response on prodictor value. In discrete case we use Individual Conditional Expectation (ICE). The construction is simple: In training data we replace all values for selected predictor with one of the factor levels and then we perform predictions on resulting dataset. The action is repeated for all factor levels. As a result we get <span class="math inline">\(n * m\)</span> predicted values, where <span class="math inline">\(n\)</span> is number of observations in original training dataset and <span class="math inline">\(m\)</span> is number of selected factor levels.</p>
+<p>For above example (and <code>salary</code> variable), we will get <code>nrow(HR_data) * 3</code> predicted values, as <code>salary</code> has 3 levels.</p>
+<p>In xspliner, we get result with <code><a href="https://www.rdocumentation.org/packages/pdp/topics/partial">pdp::partial(ice = TRUE)</a></code> function. To specify additional options for the response, we may customize effect parameter for <code>xf</code>, just like it was using xs:</p>
+<pre><code>average_montly_hours ~ last_evaluation + xf(salary, effect = list(...)) + satisfaction_level</code></pre>
+<p>Possible parameters are inherited from <code><a href="https://www.rdocumentation.org/packages/pdp/topics/partial">pdp::partial</a></code> function (except <code>ice</code> that is always TRUE).</p>
+<p>How can we use info gathered from above data?</p>
+</div>
+<div id="merging-similiar-groups-with-factormerger" class="section level2">
+<h2 class="hasAnchor">
+<a href="#merging-similiar-groups-with-factormerger" class="anchor"></a>Merging similiar groups with factorMerger</h2>
+<p>In countinuous case, we simplified the effect with spline approximation. The main idea for discrete case is to find out which groups gives similiar black box model response and merge them into common groups. The final model is build on simpler variables that store some information sourced from black box. As a result the GLM is much easier to interpret (for example we reduce 10-level factor into 3-level one).</p>
+<p>How is that implemented in xspliner?</p>
+<p>The transformation is based on factorMerger package that “Support Adaptive Post-Hoc Fusing of Groups”.</p>
+<p>Merging the groups uses just two functions from the package: - <code>mergeFactors</code> - <code>getOptimalPartitionDf</code></p>
+<p>In order to customize variable transition, just specified (inherited from above functions) parameters inside <code>transition</code> parameter of <code>xf</code> formula symbol. For example to use “fast-adaptive” method for groups merging with optimal partition at GIC statistics value of 4, we set:</p>
+<pre><code>xf(salary, transition = list(method = "fast-adaptive", value = 4))</code></pre>
+<p>In below example, we will transform <code>salary</code> predictor with cutting of GIC statistics at value = 2. As in countinuous case we need to use the formula withing <code>xspline</code> function:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a></code></pre></div>
+<pre><code>## 
+## Attaching package: 'xspliner'</code></pre>
+<pre><code>## The following object is masked from 'package:graphics':
+## 
+##     xspline</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">  average_montly_hours <span class="op">~</span><span class="st"> </span>last_evaluation <span class="op">+</span><span class="st"> </span><span class="kw">xf</span>(salary, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">value =</span> <span class="dv">2</span>)) <span class="op">+</span><span class="st"> </span>satisfaction_level,</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">  <span class="dt">model =</span> model_rf</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">)</a></code></pre></div>
+<pre><code>## Cannot extract model family. Use gaussian.</code></pre>
+<pre><code>## Cannot extract model link. Use identity.</code></pre>
+<pre><code>## Warning: Column `orig` joining factors with different levels, coercing to
+## character vector</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = average_montly_hours ~ last_evaluation + xf(salary) + 
+##     satisfaction_level, family = family, data = data)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -137.197   -37.956    -1.425    37.728   129.925  
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         136.0467     2.2213  61.248  &lt; 2e-16 ***
+## last_evaluation     100.8673     2.2501  44.828  &lt; 2e-16 ***
+## xf(salary)lowmedium  -0.3096     1.3929  -0.222    0.824    
+## satisfaction_level  -11.3302     1.5494  -7.312 2.76e-13 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 2199.008)
+## 
+##     Null deviance: 37409709  on 14998  degrees of freedom
+## Residual deviance: 32974127  on 14995  degrees of freedom
+## AIC: 158000
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<p>Checking out the model summary, we can realize that “low” and “medium” values were merged into single level (generating “lowmedium” level).</p>
+<p>It can be also found by:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs, <span class="st">"salary"</span>)</a></code></pre></div>
+<pre><code>##     orig      pred
+## 1   high      high
+## 2    low lowmedium
+## 3 medium lowmedium</code></pre>
+<p>The graphical result if fully sourced from factorMerger. It is enough to run:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"salary"</span>)</a></code></pre></div>
+<p><img src="discrete_response_or_predictor_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+</div>
+</div>
+<div id="quantitative-predictors" class="section level1">
+<h1 class="hasAnchor">
+<a href="#quantitative-predictors" class="anchor"></a>Quantitative predictors</h1>
+<p>xspliner can work with classification problems as well. As the final GLM model can work only with binary classification, the only limit here is the number of levels for predicted value (equal to 2).</p>
+<p>Let’s check below example based on SVM algorithm (<code><a href="https://www.rdocumentation.org/packages/e1071/topics/svm">e1071::svm</a></code>), and modified iris data.</p>
+<p>Preparing data (we drop “setosa” level on Species value):</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">iris_data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/droplevels">droplevels</a></span>(iris[iris<span class="op">$</span>Species <span class="op">!=</span><span class="st"> "setosa"</span>, ])</a></code></pre></div>
+<p>Building SVM:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(e1071) </a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">model_svm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/e1071/topics/svm">svm</a></span>(Species <span class="op">~</span><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Petal.Width, </a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">                 <span class="dt">data =</span> iris_data, <span class="dt">probability =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>When base model response variable is of class factor (or integer with two unique values) then xspliner automatically detects classification problem. To force specific model response distribution you can set family and link parameters. In this case we can use xspliner in standard way.</p>
+<p>As each predictor is continuous variable, let’s transform it with <code>xs</code> usage on standard parameters, and build the model:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Species <span class="op">~</span><span class="st">  </span><span class="kw">xs</span>(Sepal.Length) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Sepal.Width) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Petal.Length) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Petal.Width),</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">                    <span class="dt">model =</span> model_svm)</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Species ~ xs(Sepal.Length) + xs(Sepal.Width) + 
+##     xs(Petal.Length) + xs(Petal.Width), family = family, data = data)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -2.28620  -0.05596  -0.00260   0.05195   1.72605  
+## 
+## Coefficients:
+##                  Estimate Std. Error z value Pr(&gt;|z|)   
+## (Intercept)       -1.2781     0.8324  -1.535  0.12471   
+## xs(Sepal.Length)  13.8676    20.0222   0.693  0.48855   
+## xs(Sepal.Width)    9.3660     5.7613   1.626  0.10402   
+## xs(Petal.Length)   3.5946     1.4638   2.456  0.01406 * 
+## xs(Petal.Width)    4.0838     1.5570   2.623  0.00872 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 138.629  on 99  degrees of freedom
+## Residual deviance:  16.424  on 95  degrees of freedom
+## AIC: 26.424
+## 
+## Number of Fisher Scoring iterations: 8</code></pre>
+<p>Simple plot for Petal.Width shows that approximation almost fully covers the PDP.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"Petal.Width"</span>)</a></code></pre></div>
+<p><img src="discrete_response_or_predictor_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
   </div>
 
@@ -102,7 +246,13 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#todo">TODO</a></li>
+<li>
+<a href="#qualitative-predictors">Qualitative predictors</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#individual-conditional-expectation-for-black-box-model">Individual Conditional Expectation for black box model</a></li>
+      <li><a href="#merging-similiar-groups-with-factormerger">Merging similiar groups with factorMerger</a></li>
+      </ul>
+</li>
+      <li><a href="#quantitative-predictors">Quantitative predictors</a></li>
       </ul>
 </div>
       </div>

@@ -53,7 +53,7 @@
       <a href="../articles/discrete_response_or_predictor.html">xspliner package - classification and discrete predictors</a>
     </li>
     <li>
-      <a href="../articles/graphics.html">xspliner package - basic theory and usage</a>
+      <a href="../articles/graphics.html">xspliner package - graphics</a>
     </li>
     <li>
       <a href="../articles/introduction.html">xspliner package - basic theory and usage</a>
@@ -82,7 +82,7 @@
       <h1>xspliner package - basic theory and usage</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2018-12-05</h4>
+            <h4 class="date">2018-12-06</h4>
       
       
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -264,7 +264,7 @@
 <a class="sourceLine" id="cb11-24" data-line-number="24"><span class="co">#&gt; AIC: 3106.2</span></a>
 <a class="sourceLine" id="cb11-25" data-line-number="25"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb11-26" data-line-number="26"><span class="co">#&gt; Number of Fisher Scoring iterations: 2</span></a></code></pre></div>
-<p>As the final model is just the GLM, the summary is also standard. One difference that we can see here is formula call. It has missing <code>xs</code> parameters, and <code>xs</code> is treated as standard R function (previously it was just the symbol used in formula). More details about can be found in following sections: - <a href="https://krystian8207.github.io/xspliner/articles/discrete_response_or_predictor.html">Discrete response or predictor</a> - learn how model works when black box is classificator or what effect and transition is used when predictor is dicrete variable - Automation - learn how to automate building xspliners without specifying your own formula and/or using global parameters - Graphics - learn how to plot the results, or compare compare xplsiner with base black box. - Methods - learn about other xspliner methods and its environment - Use cases - see <code>xspliner</code> in action with examples</p>
+<p>As the final model is just the GLM, the summary is also standard. One difference that we can see here is formula call. It has missing <code>xs</code> parameters, and <code>xs</code> is treated as standard R function (previously it was just the symbol used in formula). More details about can be found in following sections: - <a href="https://krystian8207.github.io/xspliner/articles/discrete_response_or_predictor.html">Discrete response or predictor</a> - learn how model works when black box is classificator or what effect and transition is used when predictor is dicrete variable - Automation - learn how to automate building xspliners without specifying your own formula and/or using global parameters - Graphics - learn how to plot the results, or compare compare xspliner with base black box. - Methods - learn about other xspliner methods and its environment - Use cases - see <code>xspliner</code> in action with examples</p>
 <p>Here we shortly show how plot random forest effect and transition for <code>nox</code> variable:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(xp_model, <span class="st">"nox"</span>)</a></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>

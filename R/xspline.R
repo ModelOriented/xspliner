@@ -112,7 +112,7 @@ build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_o
 #' @export
 xf_opts_default = list(
   effect = list(type = "ice"),
-  transition = list(alter = "never", stat = "GIC", value = 3)
+  transition = list(alter = "always", stat = "GIC", value = 3)
 )
 
 #' @rdname xf_opts_default
