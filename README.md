@@ -2,7 +2,7 @@
 
 ## xspliner's pipeline: *model %>% xspline(...)* and analyze
 
-## Installation from CRAN
+## Installation from Github
 ```
 devtools::install_github("krystian8207/xspliner")
 ```

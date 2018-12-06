@@ -1,0 +1,96 @@
+---
+title: "Extra information about the package"
+author: "Krystian Igras"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This sections provides some additional information and features that xspliner provides.
+
+# Monotonic splines approximation
+
+*For qualitative variables only*
+
+In some cases you may want to transform variables with monotonic function. xspliner provides option for monotonic spline approximation. You just need to specify `monotonic` parameter for local, or global `xs` transition. It actually can have 4 values:
+
+- "not" the default one. Monotonicity is not required
+- "up" approximation is increasing function
+- "down" approximation is decreasing function
+- "auto" compare increasing and decreasing approximation and chooses better one (basing on $R^2$ statistic)
+
+Let's see below example:
+
+```{r message = FALSE, warning = FALSE}
+library(randomForest)
+library(pdp)
+library(xspliner)
+data(boston)
+set.seed(123)
+boston_rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
+model_xs <- xspline(
+  cmedv ~
+    xs(lstat, transition = list(k = 6), effect = list(type = "pdp", grid.resolution = 100)) +
+    xs(ptratio, transition = list(k = 5), effect = list(type = "pdp", grid.resolution = 100)) +
+    age,
+  model = boston_rf,
+  xs_opts = list(transition = list(monotonic = "auto"))
+)
+
+plot(model_xs, "ptratio", plot_deriv = TRUE)
+plot(model_xs, "lstat", plot_deriv = TRUE)
+```
+
+# Choose if approximation is better
+
+*For qualitative variables only*
+
+When the response function has linear form, approximating it with splines may make the result worse.
+`xspline` function offers automatical check if spline approximation is better than linear one, and use it in final model.
+
+You may find two parameters responsible for that:
+
+- `alter` - The subparameter of `transition`. We already know how this parameter works for "always" and "never" values.
+There is also the third option, "auto". In this case xspline automatically choose whther variable should be transformed with splines
+- `compare_stat` - function of `lm` class object. Defines statistic that should be used in decision between spline model and linear one. The function should have attribute `higher`. When the attribute has `"better"` value then the model with higher statistic value is chosen.
+
+You can see the feature in above example:
+```{r message = FALSE}
+set.seed(123)
+boston_rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
+model_pdp_auto <- xspline(
+  cmedv ~
+    xs(lstat, transition = list(k = 6), effect = list(type = "pdp", grid.resolution = 60)) +
+    xs(ptratio, transition = list(k = 4), effect = list(type = "pdp", grid.resolution = 40)) +
+    age,
+  model = boston_rf,
+  xs_opts = list(transition = list(alter = "auto"))
+)
+
+# aic statistic is used by default
+
+summary(model_pdp_auto)
+```
+
+Linear approximation was better for `ptratio` response function.
+
+(todo below sections)
+
+# Specifying model family and link
+
+(When type is classification)
+
+# Transformed response
+
+(log(y) ~ .)
+
+# Multiplicative form
+
+(form = "multiplicative")
+
+# Subset formula
+
+(y ~ x1 + x2 and model uses x3 as well)

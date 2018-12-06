@@ -1,5 +1,5 @@
 ---
-title: "xspliner package - graphics"
+title: "Graphics"
 author: "Krystian Igras"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -9,17 +9,17 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This documents presents possible options how the final model can be described through plots and graphics
+This document presents possible options how the final model can be described through plots and graphics
 
 # Single variable results
 
-As you we actually saw in previous sections, the model tranformation can be presented on simple graphics.
+As you actually saw in previous sections, the model tranformation can be presented on simple graphics.
 In continuous predictor case, the transformation is plotted as estimated spline - in case of discrete predictor, factorMerget plot is used.
 
 For quantitative predictors some additional options are offered. Let'd check them in below examples.
 
 Let's use already known Boston Housing Data, and random forest model.
-```{r}
+```{r message = FALSE}
 library(pdp)
 data(boston)
 str(boston)
@@ -31,7 +31,7 @@ boston.rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
 ```
 
 Also let's build xspliner model with lstat and ptratio transformation.
-```{r}
+```{r message = FALSE}
 library(xspliner)
 model_xs <- xspline(cmedv ~ xs(lstat) + xs(ptratio) + age, model = boston.rf)
 ```
@@ -50,7 +50,7 @@ Just add two parameters: `data = <training data>` and flag `plot_data = TRUE`.
 plot(model_xs, "lstat", data = boston, plot_data = TRUE)
 ```
 
-***Plotting approximation derivative**
+**Plotting approximation derivative**
 
 The derivative is plotted on scale of the second axis. To display it just add: `plot_deriv = TRUE`.
 ```{r}
@@ -75,12 +75,12 @@ plot(model_xs, model = boston.rf, data = boston)
 
 The resulting graphics compares predicted values for both GLM and black box model.
 
-To predict the values the standard method is used: `function(object, newdata) predict(object, newdata)`.
+For predicting values standard predict method is used: `function(object, newdata) predict(object, newdata)`.
 So for regression models the results are on the same scale.
 
 The notable difference occurs in classification models. GLM models by default return "link" function values, so for classification it can be any real number. Contrary to that, randomForest function returns predicted levels.
 
-To avoid the problem, `predictor_funs` parameter was introduced. This is the list of prediction functions for each model (in order: black box, xspliner). Let's see it on SVM example:
+To avoid the problem, `predictor_funs` parameter was added. This is the list of prediction functions for each model (in order: black box, xspliner). Let's see it on SVM example:
 
 ```{r}
 iris_data <- droplevels(iris[iris$Species != "setosa", ])
@@ -114,7 +114,7 @@ Following above approach it's easy to generate similiar graphics for higher amou
 Just include additional models inside `compare_with` parameter (named list), and add corresponsing predict functions to them to `predictor_funs` parameter (if ommitted, the default one is used).
 
 See below example on airquality data
-```{r}
+```{r message = FALSE}
 library(mgcv)
 
 data(airquality)
@@ -123,7 +123,7 @@ ozone <- subset(na.omit(airquality),
 set.seed(123)
 
 model_rf <- randomForest(Ozone ~ ., data = ozone)
-model_xs <- xspline(Ozone ~ xs(Solar.R) + xs(Wind) * xs(Temp), model_rf, data = ozone)
+model_xs <- xspline(Ozone ~ xs(Solar.R) + xs(Wind) + xs(Temp), model_rf, data = ozone)
 model_glm <- glm(Ozone ~ ., data = ozone)
 model_gam <- mgcv::gam(Ozone ~ s(Solar.R) + s(Wind) + s(Temp), data = ozone)
 

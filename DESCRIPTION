@@ -1,6 +1,6 @@
 Package: xspliner
 Title: Build generalized linear models basing on black boxes
-Version: 0.0.0.9000
+Version: 0.0.1.9000
 Authors@R: c(
   person("Krystian", "Igras", email = "krystian8270@gmail.com", role = c("aut", "cre")),
   person("Przemyslaw", "Biecek", role =  c("aut", "ths")))
@@ -27,5 +27,8 @@ Suggests:
     knitr,
     rmarkdown,
     ResourceSelection,
-    randomForest
+    randomForest,
+    e1071
 VignetteBuilder: knitr
+URL: https://krystian8207.github.io/xspliner/
+BugReports: https://github.com/krystian8207/xspliner/issues
