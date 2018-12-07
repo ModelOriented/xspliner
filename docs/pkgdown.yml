@@ -2,11 +2,11 @@ pandoc: 2.2.1
 pkgdown: 1.2.0
 pkgdown_sha: ~
 articles:
-  1_introduction: 1_introduction.html
-  2_discrete_response_or_predictor: 2_discrete_response_or_predictor.html
-  3_graphics: 3_graphics.html
-  4_automation: 4_automation.html
-  5_methods: 5_methods.html
-  6_extras: 6_extras.html
-  7_use_cases: 7_use_cases.html
+  art_a_introduction: art_a_introduction.html
+  art_b_discrete_response_or_predictor: art_b_discrete_response_or_predictor.html
+  art_c_graphics: art_c_graphics.html
+  art_d_automation: art_d_automation.html
+  art_e_methods: art_e_methods.html
+  art_f_extras: art_f_extras.html
+  art_g_use_cases: art_g_use_cases.html
 

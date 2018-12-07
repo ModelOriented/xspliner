@@ -1,6 +1,5 @@
 library(DALEX)
 library(caret)
-library(gam)
 library(xspliner)
 data(apartments)
 
