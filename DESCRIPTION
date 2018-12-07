@@ -28,7 +28,11 @@ Suggests:
     rmarkdown,
     ResourceSelection,
     randomForest,
-    e1071
+    e1071,
+    caret,
+    breakDown,
+    DALEX,
+    xgboost
 VignetteBuilder: knitr
 URL: https://krystian8207.github.io/xspliner/
 BugReports: https://github.com/krystian8207/xspliner/issues
