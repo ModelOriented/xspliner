@@ -51,14 +51,17 @@ xspline.formula <- function(object, model, data = NULL, consider = "specials", e
   model_predictors <- get_model_predictors(model, data, NULL, get_model_response(model, data, NULL))
   if (get_formula_rhs(object) == ".") {
     lhs <- get_formula_lhs(object)
-    xspline.default(model, lhs, NULL, model_predictors, data, env = env, ...)
+    xspline.default(model, lhs, data = data, env = env, ...)
   } else {
     formula_predictors <- get_formula_predictors(object, data, NULL, get_formula_response(object, data, NULL))
     if (!(all(formula_predictors %in% model_predictors))) {
       stop("Not all variables from formula are included in model.")
     }
     if (consider == "specials") {
-      build_xspliner(object, model, data, env = env, ...)
+      local_build_xspliner <- function(object, model, data, env, ..., bare) {
+        build_xspliner(object, model, data, env = env, ...)
+      }
+      local_build_xspliner(object, model, data, env = env, ...)
     } else {
       object[[3]] <- add_specials_to_formula(object[[3]], data)
       xspline.formula(object, model, data = NULL, consider = "specials", env = env, ...)

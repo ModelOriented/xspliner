@@ -1,5 +1,5 @@
 ---
-title: "xspliner package - basic theory and usage"
+title: "Basic theory and usage"
 author: "Krystian Igras"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -162,6 +162,7 @@ effect = list(
 So to use PDP effect for the predictor just specify `xs(nox, effect = list(type = "pdp"))`, for ALE `xs(nox, effect = list(type = "ale"))`.
 
 How to find out what other parameters can be used? Just check:
+
 - `pdp::partial` in case of `type = "pdp"`
 - `ALEPlot::ALEPlot` in case of `type = "ale"`
 the functions responsible for effect response.
@@ -182,7 +183,9 @@ nrow(rf_effect)
 We got data.frame with predictor and response values containing 40 rows. So parameter should correctly specify our expectations.
 
 *Remark*
-Here we ca see that response function is presented as data.frame with two columns:
+
+Here we can see that response function is presented as data.frame with two columns:
+
 - `nox` - $n$ evenly spaced points across range of `nox` variable. Specified by `grid.resolution` parameter (51 by default)
 - `yhat` - response function values on points specified in the first column
 
@@ -195,7 +198,7 @@ Response function is approximated with `mgcv::gam` package and `mgcv::s` smoothi
 
 How can we do that?
 
-Let's name approximation result as **transition**. To specify it's parameters such as spline base we can use `transition` parameter inside `xs` symbol. Similiarily to `effect`, `transition` is specified as parameters list. Possible options can be found by `??mgcv::s` (few extra options can be found in [extras](https://krystian8207.github.io/xspliner/articles/extras.html)).
+Let's name approximation result as **transition**. To specify it's parameters such as spline base we can use `transition` parameter inside `xs` symbol. Similiarily to `effect`, `transition` is specified as parameters list. Possible options can be found by `??mgcv::s` (few extra options can be found in next articles.
 
 Shortly:
 ```
@@ -218,6 +221,7 @@ cmedv ~ rm + lstat + xs(nox,
 ```
 
 To sum up, we specified formula for building GLM model, in which we transform `nox` variable with some function contructed on the following steps:
+
 - we extract impact of `nox` variable on `cmedv` in already build black box model (actually not specified yet in formula)
 - we get that impact as PDP in form of 40 evenly spaced (over `nox` range) points
 - we estimate PDP with use of `cubic` splines with 10 dimensional base
@@ -230,9 +234,9 @@ The only one left, that the approach requires is the black box model that is the
 
 We will use here `model_rf` random forest model that was built before.
 
-The final step is to use `xspline` function (from `xspliner` package) to build the desired model.
+The final step is to use `xspliner::xspline` to build the desired model.
 
-```{r results = FALSE}
+```{r message = FALSE}
 xp_model <- xspline(
   cmedv ~ rm + lstat +
     xs(nox, 
@@ -249,12 +253,15 @@ summary(xp_model)
 
 As the final model is just the GLM, the summary is also standard. One difference that we can see here is formula call.
 It has missing `xs` parameters, and `xs` is treated as standard R function (previously it was just the symbol used in formula).
+
 More details about can be found in following sections:
-- [Discrete response or predictor](https://krystian8207.github.io/xspliner/articles/discrete_response_or_predictor.html) - learn how model works when black box is classificator or what effect and transition is used when predictor is dicrete variable
-- Automation - learn how to automate building xspliners without specifying your own formula and/or using global parameters
-- Graphics - learn how to plot the results, or compare compare xspliner with base black box.
-- Methods - learn about other xspliner methods and its environment
-- Use cases - see `xspliner` in action with examples
+
+- [Discrete response or predictor](https://krystian8207.github.io/xspliner/articles/2_discrete_response_or_predictor.html) - learn how model works when black box is classificator or what effect and transition is used when predictor is dicrete variable
+- [Graphics](https://krystian8207.github.io/xspliner/articles/3_graphics.html) - learn how to plot the results, or compare compare xspliner with base black box.
+- [Automation](https://krystian8207.github.io/xspliner/articles/4_automation.html) - learn how to automate building xspliners without specifying your own formula and/or using global parameters
+- [Methods](https://krystian8207.github.io/xspliner/articles/5_methods.html) - learn about other xspliner methods and its environment
+- [Extras](https://krystian8207.github.io/xspliner/articles/6_extras.html) - what additional features are provided by xspliner
+- [Use cases](https://krystian8207.github.io/xspliner/articles/7_use_cases.html) - see `xspliner` in action with examples
 
 Here we shortly show how plot random forest effect and transition for `nox` variable:
 ```{r}

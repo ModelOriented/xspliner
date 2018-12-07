@@ -205,7 +205,6 @@ get_quantitative_transition <- function(formula_metadata, component_details, bla
   )
 
   monotonic <- transition[["monotonic"]]
-  transition[["monotonic"]] <- NULL
   alter <- transition[["alter"]]
   transition[["alter"]] <- NULL
 
@@ -216,6 +215,7 @@ get_quantitative_transition <- function(formula_metadata, component_details, bla
     )
   } else {
     if (monotonic == "not") {
+      transition[["monotonic"]] <- NULL
       transition_outcome <- do.call(approx_with_spline, transition)
     } else {
       transition_outcome <- do.call(approx_with_monotonic_spline, transition)

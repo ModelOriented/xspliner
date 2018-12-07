@@ -1,5 +1,5 @@
 ---
-title: "xspliner package - classification and discrete predictors"
+title: "Classification and discrete predictors"
 author: "Krystian Igras"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -22,9 +22,9 @@ HR_data <- breakDown::HR_data
 str(HR_data)
 ```
 
-and build regression tree, when we predict average_montly_hours based on last_evaluation, salary and satisfaction_level predictors.
+and build random forest in which we predict `average_montly_hours` based on `last_evaluation`, `salary` and `satisfaction_level` predictors.
 
-```{r}
+```{r message = FALSE}
 library(randomForest)
 model_rf <- randomForest(average_montly_hours ~ last_evaluation + salary + satisfaction_level, data = HR_data)
 ```
@@ -37,19 +37,20 @@ Similiarily to continuous variable it is enough to use `xf` symbol on `salary` v
 average_montly_hours ~ last_evaluation + xf(salary) + satisfaction_level
 ```
 
-We could use the formula for our final GLM model (the we will use basic parameters for xs), but first let's learn what changes it does.
+We could use the formula for our final GLM model (then we will use basic parameters for xf), but first let's learn what changes it does.
 
 ## Individual Conditional Expectation for black box model
 
-Similiarily for continuous variables the first thing we do is to get black box model response on signle variable, call `effect`.
+Similiarily to continuous variables the first thing we do is to get black box model response on signle variable, called **effect**.
 
 For continuous variable we used PD or ALE plots, which was average model response on prodictor value.
 In discrete case we use Individual Conditional Expectation (ICE). The construction is simple:
+
 In training data we replace all values for selected predictor with one of the factor levels and then we perform predictions on resulting dataset. The action is repeated for all factor levels. As a result we get $n * m$ predicted values, where $n$ is number of observations in original training dataset and $m$ is number of selected factor levels.
 
 For above example (and `salary` variable), we will get `nrow(HR_data) * 3` predicted values, as `salary` has 3 levels.
 
-In xspliner, we get result with `pdp::partial(ice = TRUE)` function. 
+To generate model ICE xspliner uses `pdp::partial(ice = TRUE)` function. 
 To specify additional options for the response, we may customize effect parameter for `xf`, just like it was using xs:
 
 ```
@@ -62,7 +63,7 @@ How can we use info gathered from above data?
 ## Merging similiar groups with factorMerger
 
 In countinuous case, we simplified the effect with spline approximation. The main idea for discrete case is to find out which groups gives similiar black box model response and merge them into common groups. 
-The final model is build on simpler variables that store some information sourced from black box.
+The final model is built on simpler variables that store some information sourced from black box.
 As a result the GLM is much easier to interpret (for example we reduce 10-level factor into 3-level one).
 
 How is that implemented in xspliner?
@@ -70,6 +71,7 @@ How is that implemented in xspliner?
 The transformation is based on factorMerger package that "Support Adaptive Post-Hoc Fusing of Groups".
 
 Merging the groups uses just two functions from the package:
+
 - `mergeFactors`
 - `getOptimalPartitionDf`
 
@@ -80,9 +82,9 @@ xf(salary, transition = list(method = "fast-adaptive", value = 4))
 ```
 
 In below example, we will transform `salary` predictor with cutting of GIC statistics at value = 2. 
-As in countinuous case we need to use the formula withing `xspline` function:
+As in countinuous case we need to use the formula within `xspline` function:
 
-```{r}
+```{r message = FALSE, warning = FALSE}
 library(xspliner)
 model_xs <- xspline(
   average_montly_hours ~ last_evaluation + xf(salary, transition = list(value = 2)) + satisfaction_level,
@@ -107,7 +109,7 @@ plot(model_xs, "salary")
 # Quantitative predictors
 
 xspliner can work with classification problems as well. 
-As the final GLM model can work only with binary classification, the only limit here is the number of levels for predicted value (equal to 2).
+As the final GLM model can work only with binary classification, the only limit here is the number of levels for predicted value (equals to 2).
 
 Let's check below example based on SVM algorithm (`e1071::svm`), and modified iris data.
 

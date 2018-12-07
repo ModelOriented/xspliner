@@ -1,5 +1,5 @@
 ---
-title: "xspliner package - methods and xspliner environment"
+title: "Methods and xspliner environment"
 author: "Krystian Igras"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -10,3 +10,9 @@ vignette: >
 ---
 
 ## TODO
+
+# Predict
+
+# Summary
+
+# Print
