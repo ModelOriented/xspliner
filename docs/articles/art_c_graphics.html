@@ -97,13 +97,13 @@
 
     
     
-<p>This document presents possible options how the final model can be described through plots and graphics</p>
+<p>This document presents possible options of how the final model can be described through plots and graphics</p>
 <div id="single-variable-results" class="section level1">
 <h1 class="hasAnchor">
 <a href="#single-variable-results" class="anchor"></a>Single variable results</h1>
-<p>As you actually saw in previous sections, the model tranformation can be presented on simple graphics. In continuous predictor case, the transformation is plotted as estimated spline - in case of discrete predictor, factorMerget plot is used.</p>
-<p>For quantitative predictors some additional options are offered. Let’d check them in below examples.</p>
-<p>Let’s use already known Boston Housing Data, and random forest model.</p>
+<p>As you actually saw in the previous sections, the model transformation can be presented on simple graphics. In continuous predictor case, the transformation is plotted as estimated spline - in case of discrete predictor, factorMerget plot is used.</p>
+<p>For quantitative predictors some additional options are offered. Let’s check them on the below examples.</p>
+<p>Let’s use already known Boston Housing Data, and a random forest model.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(pdp)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(boston)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(boston)</a></code></pre></div>
@@ -144,7 +144,7 @@
 <p>The derivative is plotted on scale of the second axis. To display it just add: <code>plot_deriv = TRUE</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"lstat"</span>, <span class="dt">plot_deriv =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="art_c_graphics_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<p>You can also specify if model effect or transition should be displayed. Parameters responsible for that are <code>plot_response</code> and <code>plot_approx</code> respectively.</p>
+<p>You can also specify if the model effect or transition should be displayed. Parameters responsible for that are <code>plot_response</code> and <code>plot_approx</code> respectively.</p>
 <p>For example below we display just the approximation and derivative for ptratio variable:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"ptratio"</span>, <span class="dt">plot_response =</span> <span class="ot">FALSE</span>, <span class="dt">plot_deriv =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="art_c_graphics_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
@@ -152,13 +152,13 @@
 <div id="models-comparison" class="section level1">
 <h1 class="hasAnchor">
 <a href="#models-comparison" class="anchor"></a>Models comparison</h1>
-<p>As we may want to compare final GLM model with its parent black box, xspliner provides one simple tool.</p>
+<p>As we may want to compare the final GLM model with its parent black box, xspliner provides one simple tool.</p>
 <p>For comparison just add model parameter for plot method, and provide data:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> boston.rf, <span class="dt">data =</span> boston)</a></code></pre></div>
 <p><img src="art_c_graphics_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>The resulting graphics compares predicted values for both GLM and black box model.</p>
 <p>For predicting values standard predict method is used: <code>function(object, newdata) predict(object, newdata)</code>. So for regression models the results are on the same scale.</p>
-<p>The notable difference occurs in classification models. GLM models by default return “link” function values, so for classification it can be any real number. Contrary to that, randomForest function returns predicted levels.</p>
+<p>The notable difference occurs in the classification models. GLM models by default return “link” function values, so for classification it can be any real number. Contrary to that, randomForest function returns predicted levels.</p>
 <p>To avoid the problem, <code>predictor_funs</code> parameter was added. This is the list of prediction functions for each model (in order: black box, xspliner). Let’s see it on SVM example:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">iris_data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/droplevels">droplevels</a></span>(iris[iris<span class="op">$</span>Species <span class="op">!=</span><span class="st"> "setosa"</span>, ])</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"></a>
@@ -180,8 +180,8 @@
 <div id="comparing-with-another-models" class="section level2">
 <h2 class="hasAnchor">
 <a href="#comparing-with-another-models" class="anchor"></a>Comparing with another models</h2>
-<p>Following above approach it’s easy to generate similiar graphics for higher amount of models.</p>
-<p>Just include additional models inside <code>compare_with</code> parameter (named list), and add corresponsing predict functions to them to <code>predictor_funs</code> parameter (if ommitted, the default one is used).</p>
+<p>Following above approach it’s easy to generate similar graphics for higher amount of models.</p>
+<p>Just include additional models inside <code>compare_with</code> parameter (named list), and add corresponding predict functions to them to <code>predictor_funs</code> parameter (if omitted, the default one is used).</p>
 <p>See below example on airquality data</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mgcv)</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"></a>

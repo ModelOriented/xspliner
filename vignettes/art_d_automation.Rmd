@@ -9,16 +9,16 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This document present how can you customize xspliner usage to you make it more easier and automate.
+This document presents how you can customize xspliner usage to you make it more easier and automated.
 
 # Hierarchy of parameters
 
 ## Local transition and effect
 
-In previous sections we learned how to specify parameters for effect and transition of single variable.
+In previous sections we learned how to specify parameters for the effect and transition of single variable.
 Let's name them **local** parameters.
 
-Quick example you can see below:
+A quick example you can see below:
 ```{r message = FALSE}
 library(xspliner)
 library(randomForest)
@@ -32,11 +32,11 @@ model_xs <- xspline(Petal.Width ~
 summary(model_xs)
 ```
 
-When black box model is based on higher amount of variables it can be problematic to specify local parameters for each predictor. Also formula becomes large and hardly to read.
+When the black box model is based on higher amount of variables it can be problematic to specify local parameters for each predictor. Also formula becomes large and hard to read.
 
 ## Global transition and effect
 
-Its more common that we use similiar configuration for each variable, as it's simple and allows us to build and experiment faster. To do this you can specify `xs_opts` and `xf_opts` of `xspline` function.
+Its more common that we use similar configuration for each variable, as it's simple and allows us to build and experiment faster. To do this you can specify `xs_opts` and `xf_opts` of `xspline` function.
 Let's name them **global** parameters.
 
 Each of global parameters can specify effect and transition, that should be used for xs and xf transformations respectively. Then you just need to use base xs and xf symbols without parameters:
@@ -53,7 +53,7 @@ model_xs <- xspline(Petal.Width ~
 summary(model_xs)
 ```
 
-But still you can specify local parameters that overrides the global ones.
+But still you can specify local parameters that override the global ones.
 
 ```{r message = FALSE}
 model_xs <- xspline(Petal.Width ~ 
@@ -67,7 +67,7 @@ model_xs <- xspline(Petal.Width ~
 summary(model_xs)
 ```
 
-In this case `last_evaluation` variable will be transformed with thin plate regression spline (`bs = "tp"` is default for `mgcv::s`) with basis dimension equal to `10`. At the same time `average_montly_hours` will be transformed with cubic splines.
+In this case `last_evaluation` variable will be transformed with thin plate regression spline (`bs = "tp"` is default for `mgcv::s`) with basis dimension equal to `10`. At the same time `average_monthly_hours` will be transformed with cubic splines.
 
 What if you forget specifying local and global parameters?
 
@@ -87,7 +87,7 @@ So the hierarchy of parameters importance is as follows:
 ```
 LOCAL > GLOBAL > DEFAULT
 ```
-But having model based on huge amount of variables it still requires a lot of our work to build the final model.
+But having model based on the huge amount of variables still requires a lot of our work to build the final model.
 Especially we need to use `xs` and `xf` symbols for each variable. How can we make it easier?
 
 # Automatic transformation
@@ -127,7 +127,7 @@ summary(model_xs)
 In some cases you may want to transform only quantitative or qualitative predictors.
 Looking into default parameters `xs_opts_default` and `xf_opts_default` we may find `alter` parameter for transition.
 
-The parameter is used to specify if predictor for which `xs` or `xf` was specified needs to be transformed or used as a bare variable in formula. You can specify it in local or global transition parameter. In this case using global is more reasonable.
+The parameter is used to specify if predictor for which `xs` or `xf` was specified needs to be transformed or used as a bare variable in formula. You can specify it in the local or global transition parameter. In this case using the global one is more reasonable.
 
 So, in order to transform only continuous variables just set `alter = "always"` (what is default) for `xs_opts` and `alter = "never"` for `xf_opts`:
 ```{r message = FALSE}
@@ -151,7 +151,7 @@ model_xs <- xspline(Petal.Width ~ Sepal.Length + Petal.Length + Species,
 summary(model_xs)
 ```
 
-Even having above learned options, we still can have problems with handling model with huge amount of variables.
+Even having learnt the above listed options, we still can have problems with handling model with a huge amount of variables.
 
 ## Model based dot formula
 
@@ -165,13 +165,13 @@ Good practice here is to provide `data` parameter as well to detect predictors c
 
 How predictors are sourced?
 
-`xspline` function tries to establish data in following order (if some way is not possible, it tries the next one):
+`xspline` function tries to establish data in the following order (if any way is not possible, it tries the next one):
 
 - model formula predictors
 - model training data predictors
 - xspline provided data parameter, excluding formula response
 
-To assure correct predictors usage, you may also specify precitor names vector in `predictors` parameter, and data (optional) to assure source of variable classes:
+To assure correct predictors usage, you may also specify predcitor names vector in `predictors` parameter, and data (optional) to assure source of variable classes:
 ```{r message = FALSE}
 model_xs <- xspline(Petal.Width ~ ., 
                     model = rf_iris,
@@ -199,16 +199,16 @@ summary(model_xs)
 Works! Can it be simpler? Actually not because of black box based transformation and theory, 
 but we can provide some model based parameters upfront using DALEX's `explainer` object (see next section).
 
-Unfortunately this simplicity works thanks to few approaches that randomForest follows.
+Unfortunately this simplicity works thanks to a few approaches that randomForest follows.
 
 They are:
 
 - Building the black box with formula
-- Black box training data stores factors in long form (the factor is one column, not spreaded into binary wide form)
+- Black box training data stores factors in long form (the factor is one column, not spread into binary wide form)
 
-Most of R based ML models satisfies above condition. One of exceptions is XGBoost which in actual xspliner version needs to be handled in more complex xspline call. You can see it in [use cases](https://krystian8207.github.io/xspliner/articles/use_cases.html) 
+Most of R based ML models satisfy the above condition. One of exceptions is XGBoost which in actual xspliner version needs to be handled in the more complex xspline call. You can see it in [use cases](https://krystian8207.github.io/xspliner/articles/use_cases.html) 
 
-## Exluding predictors from transformation
+## Excluding predictors from transformation
 
 For this example consider again Boston Housing Data from pdp package, and build simple `svm` model for predicting `chas` variable:
 
@@ -221,7 +221,7 @@ str(boston[, "rad"])
 unique(boston$rad)
 ```
 
-As we can see `rad` variable is integer and has only 9 unique values. As a result spline approximation may be misleading, and not possible to perform. We decide here to omit `rad` variable when performing transformation, nevertheless reamining predictors should be transformed.
+As we can see `rad` variable is integer and has only 9 unique values. As a result spline approximation may be misleading, and not possible to perform. We decide here to omit `rad` variable when performing transformation, nevertheless remaining predictors should be transformed.
 
 At first setup model based transformation:
 ```{r error = TRUE}
@@ -239,7 +239,7 @@ xs_model <- xspline(
 summary(xs_model)
 ```
 
-As we can see in summary, rad variable was omitted during transformation.
+As we can see in the summary, rad variable was omitted during transformation.
 
 **Note** 
 
@@ -247,7 +247,7 @@ The option is available only for xspline build on top of model or dot formula.
 
 # Integration with DALEX
 
-As mentioned in previous section, xspliner is integrated with DALEX package.
+As mentioned in the previous section, xspliner is integrated with DALEX package.
 The main function from the package `explain` returns useful black box data (such as bare black model or training data) that can be used by xspline function.
 
 Just check below example
@@ -262,4 +262,4 @@ model <- xspline(
 summary(model)
 ```
 
-You can provide your own xspline's parameters that overwrites that sourced from explainer.
+You can provide your own xspline's parameters that overwrite that sourced from explainer.
