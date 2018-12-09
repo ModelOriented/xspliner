@@ -13,7 +13,7 @@ This section describes how to xspliner works when some predictors are discrete, 
 
 # Qualitative predictors
 
-As before let's explain the approach basing on random forest model. 
+As before let's explain the approach basing on a random forest model. 
 For this case we use HR_data from breakDown package.
 
 Let's load the data
@@ -32,37 +32,37 @@ model_rf <- randomForest(average_montly_hours ~ last_evaluation + salary + satis
 We're going to make some transformation/simplification on `salary` variable.
 To do so, we need to transform formula passed into `xspline` function.
 
-Similiarily to continuous variable it is enough to use `xf` symbol on `salary` variable, ie. use formula:
+Similarly to continuous variable it is enough to use `xf` symbol on `salary` variable, ie. use formula:
 ```
-average_montly_hours ~ last_evaluation + xf(salary) + satisfaction_level
+average_monthly_hours ~ last_evaluation + xf(salary) + satisfaction_level
 ```
 
 We could use the formula for our final GLM model (then we will use basic parameters for xf), but first let's learn what changes it does.
 
 ## Individual Conditional Expectation for black box model
 
-Similiarily to continuous variables the first thing we do is to get black box model response on signle variable, called **effect**.
+Similarly to continuous variables the first thing we do is to get black box model response on single variable, called **effect**.
 
-For continuous variable we used PD or ALE plots, which was average model response on prodictor value.
-In discrete case we use Individual Conditional Expectation (ICE). The construction is simple:
+For continuous variable we used PD or ALE plots, which was average model response on predictor value.
+In a discrete case we use Individual Conditional Expectation (ICE). The construction is simple:
 
 In training data we replace all values for selected predictor with one of the factor levels and then we perform predictions on resulting dataset. The action is repeated for all factor levels. As a result we get $n * m$ predicted values, where $n$ is number of observations in original training dataset and $m$ is number of selected factor levels.
 
 For above example (and `salary` variable), we will get `nrow(HR_data) * 3` predicted values, as `salary` has 3 levels.
 
 To generate model ICE xspliner uses `pdp::partial(ice = TRUE)` function. 
-To specify additional options for the response, we may customize effect parameter for `xf`, just like it was using xs:
+To specify additional options for the response, we may customize the effect parameter for `xf`, just like it was using xs:
 
 ```
-average_montly_hours ~ last_evaluation + xf(salary, effect = list(...)) + satisfaction_level
+average_monthly_hours ~ last_evaluation + xf(salary, effect = list(...)) + satisfaction_level
 ```
 Possible parameters are inherited from `pdp::partial` function (except `ice` that is always TRUE).
 
 How can we use info gathered from above data?
 
-## Merging similiar groups with factorMerger
+## Merging similar groups with factorMerger
 
-In countinuous case, we simplified the effect with spline approximation. The main idea for discrete case is to find out which groups gives similiar black box model response and merge them into common groups. 
+In continuous case, we simplified the effect with spline approximation. The main idea for discrete case is to find out which groups give similar black box model response and merge them into common groups. 
 The final model is built on simpler variables that store some information sourced from black box.
 As a result the GLM is much easier to interpret (for example we reduce 10-level factor into 3-level one).
 
@@ -82,7 +82,7 @@ xf(salary, transition = list(method = "fast-adaptive", value = 4))
 ```
 
 In below example, we will transform `salary` predictor with cutting of GIC statistics at value = 2. 
-As in countinuous case we need to use the formula within `xspline` function:
+As in continuous case we need to use the formula within `xspline` function:
 
 ```{r message = FALSE, warning = FALSE}
 library(xspliner)
@@ -126,7 +126,7 @@ model_svm <- svm(Species ~  Sepal.Length + Sepal.Width + Petal.Length + Petal.Wi
                  data = iris_data, probability = TRUE)
 ```
 
-When base model response variable is of class factor (or integer with two unique values) then xspliner automatically detects classification problem. To force specific model response distribution you can set family and link parameters. 
+When the base model response variable is of class factor (or integer with two unique values) then xspliner automatically detects classification problem. To force specific model response distribution you can set family and link parameters. 
 In this case we can use xspliner in standard way. 
 
 As each predictor is continuous variable, let's transform it with `xs` usage on standard parameters, and build the model:

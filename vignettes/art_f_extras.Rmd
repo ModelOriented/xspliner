@@ -15,7 +15,7 @@ This sections provides some additional information and features that xspliner pr
 
 *For qualitative variables only*
 
-In some cases you may want to transform variables with monotonic function. xspliner provides option for monotonic spline approximation. You just need to specify `monotonic` parameter for local, or global `xs` transition. It actually can have 4 values:
+In some cases you may want to transform variables with monotonic function. xspliner provides an option for monotonic spline approximation. You just need to specify `monotonic` parameter for the local, or global `xs` transition. It actually can have 4 values:
 
 - "not" the default one. Monotonicity is not required
 - "up" approximation is increasing function
@@ -49,13 +49,13 @@ plot(model_xs, "lstat", plot_deriv = TRUE)
 *For qualitative variables only*
 
 When the response function has linear form, approximating it with splines may make the result worse.
-`xspline` function offers automatical check if spline approximation is better than linear one, and use it in final model.
+`xspline` function offers automatic check if the spline approximation is better than linear one, and use it in the final model.
 
 You may find two parameters responsible for that:
 
 - `alter` - The subparameter of `transition`. We already know how this parameter works for "always" and "never" values.
-There is also the third option, "auto". In this case xspline automatically choose whther variable should be transformed with splines
-- `compare_stat` - function of `lm` class object. Defines statistic that should be used in decision between spline model and linear one. The function should have attribute `higher`. When the attribute has `"better"` value then the model with higher statistic value is chosen.
+There is also the third option, "auto". In this case xspline automatically chooses whether variable should be transformed with splines
+- `compare_stat` - function of `lm` class object. It defines statistic that should be used in decision between spline model and linear one. The function should have the attribute `higher`. When the attribute has `"better"` value then the model with higher statistic value is chosen.
 
 You can see the feature in above example:
 ```{r message = FALSE}
@@ -80,16 +80,16 @@ Linear approximation was better for `ptratio` response function.
 # Specifying model family and link
 
 When GLM model is estimated there is possibility to specify response family and link parameters.
-Family stores information about the distribution of response - standard one is gaussian, what assumes that response comes from normal distribution. For classification binomial family is used. 
+Family stores information about the distribution of response - standard one is gaussian, which assumes that the response comes from a normal distribution. For classification the binomial family is used. 
 
-Link parameters stores info about what function should be used to transform response. The transformation is used in final model fitting. The standard link is identity (for gaussian distribution) - for binomial distibution logit is used.
+Link parameters stores info about what function should be used to transform the response. The transformation is used in the final model fitting. The standard link is the identity (for gaussian distribution) - for binomial distribution logit is used.
 
 See more at `??stats::family.glm`.
 
-`xspline` function allows you to decide which response should be used in final model.
-Let's check below example in which poisson distribution with log link is used.
+`xspline` function allows you to decide which response should be used in the final model.
+Let's check the example below in which poisson distribution with log link is used.
 
-  ```{r message = FALSE}
+```{r message = FALSE}
 library(xspliner)
 library(randomForest)
 x <- rnorm(100)
@@ -112,9 +112,9 @@ As we can see the second model is better.
 # Transformed response
 
 In some cases you may want to transform model response with you own function. 
-Let's check below example with random forest model:
+Let's check the example below with random forest model:
 
-```{r}
+```{r message = FALSE}
 set.seed(123)
 x <- rnorm(100, 10)
 z <- rnorm(100, 10)
@@ -123,7 +123,7 @@ data <- data.frame(x, z, y)
 model_rf <- randomForest(log(y) ~ x + z, data = data)
 ```
 
-In this case log transformation for y removes interaction of x and z. In xspliner same transformation is used by default:
+In this case log transformation for y, removes interaction of x and z. In xspliner same transformation is used by default:
 ```{r message = FALSE}
 model_xs <- xspline(model_rf)
 summary(model_xs)
@@ -132,13 +132,13 @@ plot(model_xs, model = model_rf, data = data)
 
 # Multiplicative form
 
-When interactions between predictors occurs black box models, in fact, deal much better that linear models.
-`xspliner` offers using formulas with variables interactions.
+When interactions between predictors occurs black box models in fact deal much better that linear models.
+xspliner offers using formulas with variables interactions.
 
 You can do it in two possible forms.
 
 Lets start with creating data and building black box:
-```{r}
+```{r message = FALSE}
 x <- rnorm(100)
 z <- rnorm(100)
 y <- x + x * z + z + rnorm(100, 0, 0.1)
@@ -155,7 +155,7 @@ plot(model_xs, model = model_rf, data = data)
 ```
 
 The second one is adding form parameter equal to "multiplicative" in case of passing just the model or dot formula.
-```{r}
+```{r message = FALSE}
 model_xs <- xspline(model_rf, form = "multiplicative")
 summary(model_xs)
 plot(model_xs, model = model_rf, data = data)
@@ -170,10 +170,10 @@ plot(model_xs, model = model_rf, data = data)
 # Subset formula
 
 Every example we saw before used to use the same variables in black box and xspliner model. 
-In fact this is not obligate. How can it be used? For example to build simpler model based on truncated amount of predictors.
+In fact this is not obligatory. How can it be used? For example to build a simpler model based on truncated amount of predictors.
 Let's see below example:
 
-```{r}
+```{r message = FALSE}
 library(randomForest)
 library(xspliner)
 data(airquality)
@@ -182,7 +182,7 @@ model_rf <- randomForest(Ozone ~ ., data = air)
 varImpPlot(model_rf)
 ```
 
-As we can see Wind and Temp variables are of highest importance. Let's build xspliner basnig on just the Two variables.
+As we can see Wind and Temp variables are of the highest importance. Let's build xspliner basing on just the Two variables.
 ```{r message = FALSE}
 model_xs <- xspline(Ozone ~ xs(Wind) + xs(Temp), model = model_rf)
 summary(model_xs)

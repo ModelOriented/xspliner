@@ -97,15 +97,15 @@
 
     
     
-<p>This document present how can you customize xspliner usage to you make it more easier and automate.</p>
+<p>This document presents how you can customize xspliner usage to you make it more easier and automated.</p>
 <div id="hierarchy-of-parameters" class="section level1">
 <h1 class="hasAnchor">
 <a href="#hierarchy-of-parameters" class="anchor"></a>Hierarchy of parameters</h1>
 <div id="local-transition-and-effect" class="section level2">
 <h2 class="hasAnchor">
 <a href="#local-transition-and-effect" class="anchor"></a>Local transition and effect</h2>
-<p>In previous sections we learned how to specify parameters for effect and transition of single variable. Let’s name them <strong>local</strong> parameters.</p>
-<p>Quick example you can see below:</p>
+<p>In previous sections we learned how to specify parameters for the effect and transition of single variable. Let’s name them <strong>local</strong> parameters.</p>
+<p>A quick example you can see below:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"></a>
@@ -123,31 +123,31 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.66503  -0.07473  -0.02711   0.10288   0.45385  
+## -0.66805  -0.07107  -0.02508   0.10377   0.45943  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.29690    0.21114  -6.142 7.42e-09 ***
-## Sepal.Length           0.03348    0.03522   0.950   0.3435    
-## xs(Petal.Length)       1.82892    0.34718   5.268 4.89e-07 ***
-## xf(Species)versicolor  0.07650    0.17064   0.448   0.6546    
-## xf(Species)virginica   0.39016    0.22751   1.715   0.0885 .  
+## (Intercept)           -1.25867    0.20748  -6.067 1.08e-08 ***
+## Sepal.Length           0.03349    0.03544   0.945    0.346    
+## xs(Petal.Length)       1.82998    0.35196   5.199 6.68e-07 ***
+## xf(Species)versicolor  0.01467    0.18429   0.080    0.937    
+## xf(Species)virginica   0.32565    0.24239   1.343    0.181    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03090341)
+## (Dispersion parameter for gaussian family taken to be 0.03103226)
 ## 
-##     Null deviance: 86.570  on 149  degrees of freedom
-## Residual deviance:  4.481  on 145  degrees of freedom
-## AIC: -88.937
+##     Null deviance: 86.5699  on 149  degrees of freedom
+## Residual deviance:  4.4997  on 145  degrees of freedom
+## AIC: -88.313
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<p>When black box model is based on higher amount of variables it can be problematic to specify local parameters for each predictor. Also formula becomes large and hardly to read.</p>
+<p>When the black box model is based on higher amount of variables it can be problematic to specify local parameters for each predictor. Also formula becomes large and hard to read.</p>
 </div>
 <div id="global-transition-and-effect" class="section level2">
 <h2 class="hasAnchor">
 <a href="#global-transition-and-effect" class="anchor"></a>Global transition and effect</h2>
-<p>Its more common that we use similiar configuration for each variable, as it’s simple and allows us to build and experiment faster. To do this you can specify <code>xs_opts</code> and <code>xf_opts</code> of <code>xspline</code> function. Let’s name them <strong>global</strong> parameters.</p>
+<p>Its more common that we use similar configuration for each variable, as it’s simple and allows us to build and experiment faster. To do this you can specify <code>xs_opts</code> and <code>xf_opts</code> of <code>xspline</code> function. Let’s name them <strong>global</strong> parameters.</p>
 <p>Each of global parameters can specify effect and transition, that should be used for xs and xf transformations respectively. Then you just need to use base xs and xf symbols without parameters:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Petal.Width <span class="op">~</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span></a>
@@ -165,26 +165,26 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.66503  -0.07473  -0.02711   0.10288   0.45385  
+## -0.66805  -0.07107  -0.02508   0.10377   0.45943  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.29690    0.21114  -6.142 7.42e-09 ***
-## Sepal.Length           0.03348    0.03522   0.950   0.3435    
-## xs(Petal.Length)       1.82892    0.34718   5.268 4.89e-07 ***
-## xf(Species)versicolor  0.07650    0.17064   0.448   0.6546    
-## xf(Species)virginica   0.39016    0.22751   1.715   0.0885 .  
+## (Intercept)           -1.25867    0.20748  -6.067 1.08e-08 ***
+## Sepal.Length           0.03349    0.03544   0.945    0.346    
+## xs(Petal.Length)       1.82998    0.35196   5.199 6.68e-07 ***
+## xf(Species)versicolor  0.01467    0.18429   0.080    0.937    
+## xf(Species)virginica   0.32565    0.24239   1.343    0.181    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03090341)
+## (Dispersion parameter for gaussian family taken to be 0.03103226)
 ## 
-##     Null deviance: 86.570  on 149  degrees of freedom
-## Residual deviance:  4.481  on 145  degrees of freedom
-## AIC: -88.937
+##     Null deviance: 86.5699  on 149  degrees of freedom
+## Residual deviance:  4.4997  on 145  degrees of freedom
+## AIC: -88.313
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<p>But still you can specify local parameters that overrides the global ones.</p>
+<p>But still you can specify local parameters that override the global ones.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Petal.Width <span class="op">~</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">xs</span>(Sepal.Length, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">10</span>)) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw">xs</span>(Petal.Length) <span class="op">+</span><span class="st"> </span></a>
@@ -201,26 +201,26 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67062  -0.07933  -0.02994   0.09829   0.45357  
+## -0.67258  -0.07654  -0.03039   0.09743   0.46077  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)            -1.4161     0.2545  -5.565 1.23e-07 ***
-## xs(Sepal.Length)        0.2955     0.3075   0.961   0.3382    
-## xs(Petal.Length)        1.7913     0.3705   4.835 3.36e-06 ***
-## xf(Species)versicolor   0.0854     0.1746   0.489   0.6256    
-## xf(Species)virginica    0.4063     0.2346   1.732   0.0854 .  
+## (Intercept)           -1.41204    0.26502  -5.328 3.71e-07 ***
+## xs(Sepal.Length)       0.33439    0.31991   1.045    0.298    
+## xs(Petal.Length)       1.77633    0.37133   4.784 4.19e-06 ***
+## xf(Species)versicolor  0.03044    0.18747   0.162    0.871    
+## xf(Species)virginica   0.35026    0.24841   1.410    0.161    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03089913)
+## (Dispersion parameter for gaussian family taken to be 0.03098989)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4804  on 145  degrees of freedom
-## AIC: -88.958
+## Residual deviance:  4.4935  on 145  degrees of freedom
+## AIC: -88.518
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<p>In this case <code>last_evaluation</code> variable will be transformed with thin plate regression spline (<code>bs = "tp"</code> is default for <code><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">mgcv::s</a></code>) with basis dimension equal to <code>10</code>. At the same time <code>average_montly_hours</code> will be transformed with cubic splines.</p>
+<p>In this case <code>last_evaluation</code> variable will be transformed with thin plate regression spline (<code>bs = "tp"</code> is default for <code><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">mgcv::s</a></code>) with basis dimension equal to <code>10</code>. At the same time <code>average_monthly_hours</code> will be transformed with cubic splines.</p>
 <p>What if you forget specifying local and global parameters?</p>
 </div>
 <div id="default-transition-and-effect" class="section level2">
@@ -256,7 +256,7 @@
 ## [1] 3</code></pre>
 <p>Default parameters are overwritten by global and local ones. So the hierarchy of parameters importance is as follows:</p>
 <pre><code>LOCAL &gt; GLOBAL &gt; DEFAULT</code></pre>
-<p>But having model based on huge amount of variables it still requires a lot of our work to build the final model. Especially we need to use <code>xs</code> and <code>xf</code> symbols for each variable. How can we make it easier?</p>
+<p>But having model based on the huge amount of variables still requires a lot of our work to build the final model. Especially we need to use <code>xs</code> and <code>xf</code> symbols for each variable. How can we make it easier?</p>
 </div>
 </div>
 <div id="automatic-transformation" class="section level1">
@@ -279,23 +279,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67361  -0.07977  -0.03169   0.09838   0.46164  
+## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)            -1.4070     0.2566  -5.484 1.80e-07 ***
-## xs(Sepal.Length)        0.3211     0.3095   1.037    0.301    
-## xs(Petal.Length)        1.7399     0.3631   4.792 4.05e-06 ***
-## xf(Species)versicolor   0.1126     0.1703   0.661    0.509    
-## xf(Species)virginica    0.4418     0.2293   1.927    0.056 .  
+## (Intercept)           -1.40759    0.26919  -5.229 5.84e-07 ***
+## xs(Sepal.Length)       0.36881    0.32353   1.140    0.256    
+## xs(Petal.Length)       1.71443    0.36286   4.725 5.39e-06 ***
+## xf(Species)versicolor  0.06471    0.18222   0.355    0.723    
+## xf(Species)virginica   0.39471    0.24198   1.631    0.105    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03097714)
+## (Dispersion parameter for gaussian family taken to be 0.03108655)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4917  on 145  degrees of freedom
-## AIC: -88.58
+## Residual deviance:  4.5075  on 145  degrees of freedom
+## AIC: -88.051
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Then each predictor is transformed with xs and xf symbols and use of default parameters or global ones when specified.</p>
@@ -314,23 +314,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67361  -0.07977  -0.03169   0.09838   0.46164  
+## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)            -1.4070     0.2566  -5.484 1.80e-07 ***
-## xs(Sepal.Length)        0.3211     0.3095   1.037    0.301    
-## xs(Petal.Length)        1.7399     0.3631   4.792 4.05e-06 ***
-## xf(Species)versicolor   0.1126     0.1703   0.661    0.509    
-## xf(Species)virginica    0.4418     0.2293   1.927    0.056 .  
+## (Intercept)           -1.40759    0.26919  -5.229 5.84e-07 ***
+## xs(Sepal.Length)       0.36881    0.32353   1.140    0.256    
+## xs(Petal.Length)       1.71443    0.36286   4.725 5.39e-06 ***
+## xf(Species)versicolor  0.06471    0.18222   0.355    0.723    
+## xf(Species)virginica   0.39471    0.24198   1.631    0.105    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03097714)
+## (Dispersion parameter for gaussian family taken to be 0.03108655)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4917  on 145  degrees of freedom
-## AIC: -88.58
+## Residual deviance:  4.5075  on 145  degrees of freedom
+## AIC: -88.051
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 </div>
@@ -338,7 +338,7 @@
 <h2 class="hasAnchor">
 <a href="#transform-only-continuous-or-discrete-variables" class="anchor"></a>Transform only continuous or discrete variables</h2>
 <p>In some cases you may want to transform only quantitative or qualitative predictors. Looking into default parameters <code>xs_opts_default</code> and <code>xf_opts_default</code> we may find <code>alter</code> parameter for transition.</p>
-<p>The parameter is used to specify if predictor for which <code>xs</code> or <code>xf</code> was specified needs to be transformed or used as a bare variable in formula. You can specify it in local or global transition parameter. In this case using global is more reasonable.</p>
+<p>The parameter is used to specify if predictor for which <code>xs</code> or <code>xf</code> was specified needs to be transformed or used as a bare variable in formula. You can specify it in the local or global transition parameter. In this case using the global one is more reasonable.</p>
 <p>So, in order to transform only continuous variables just set <code>alter = "always"</code> (what is default) for <code>xs_opts</code> and <code>alter = "never"</code> for <code>xf_opts</code>:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species,</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2">  <span class="dt">model =</span> rf_iris,</a>
@@ -354,23 +354,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67361  -0.07977  -0.03169   0.09838   0.46164  
+## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
 ## 
 ## Coefficients:
 ##                   Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)        -1.4070     0.2566  -5.484 1.80e-07 ***
-## xs(Sepal.Length)    0.3211     0.3095   1.037    0.301    
-## xs(Petal.Length)    1.7399     0.3631   4.792 4.05e-06 ***
-## Speciesversicolor   0.1126     0.1703   0.661    0.509    
-## Speciesvirginica    0.4418     0.2293   1.927    0.056 .  
+## (Intercept)       -1.40759    0.26919  -5.229 5.84e-07 ***
+## xs(Sepal.Length)   0.36881    0.32353   1.140    0.256    
+## xs(Petal.Length)   1.71443    0.36286   4.725 5.39e-06 ***
+## Speciesversicolor  0.06471    0.18222   0.355    0.723    
+## Speciesvirginica   0.39471    0.24198   1.631    0.105    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03097714)
+## (Dispersion parameter for gaussian family taken to be 0.03108655)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4917  on 145  degrees of freedom
-## AIC: -88.58
+## Residual deviance:  4.5075  on 145  degrees of freedom
+## AIC: -88.051
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>For transformation of factors only:</p>
@@ -407,7 +407,7 @@
 ## AIC: -81.41
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<p>Even having above learned options, we still can have problems with handling model with huge amount of variables.</p>
+<p>Even having learnt the above listed options, we still can have problems with handling model with a huge amount of variables.</p>
 </div>
 <div id="model-based-dot-formula" class="section level2">
 <h2 class="hasAnchor">
@@ -422,34 +422,34 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67361  -0.07977  -0.03169   0.09838   0.46164  
+## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)            -1.4070     0.2566  -5.484 1.80e-07 ***
-## xs(Sepal.Length)        0.3211     0.3095   1.037    0.301    
-## xs(Petal.Length)        1.7399     0.3631   4.792 4.05e-06 ***
-## xf(Species)versicolor   0.1126     0.1703   0.661    0.509    
-## xf(Species)virginica    0.4418     0.2293   1.927    0.056 .  
+## (Intercept)           -1.40759    0.26919  -5.229 5.84e-07 ***
+## xs(Sepal.Length)       0.36881    0.32353   1.140    0.256    
+## xs(Petal.Length)       1.71443    0.36286   4.725 5.39e-06 ***
+## xf(Species)versicolor  0.06471    0.18222   0.355    0.723    
+## xf(Species)virginica   0.39471    0.24198   1.631    0.105    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03097714)
+## (Dispersion parameter for gaussian family taken to be 0.03108655)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4917  on 145  degrees of freedom
-## AIC: -88.58
+## Residual deviance:  4.5075  on 145  degrees of freedom
+## AIC: -88.051
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Good practice here is to provide <code>data</code> parameter as well to detect predictors classes, and model type (classification or regression).</p>
 <p>How predictors are sourced?</p>
-<p><code>xspline</code> function tries to establish data in following order (if some way is not possible, it tries the next one):</p>
+<p><code>xspline</code> function tries to establish data in the following order (if any way is not possible, it tries the next one):</p>
 <ul>
 <li>model formula predictors</li>
 <li>model training data predictors</li>
 <li>xspline provided data parameter, excluding formula response</li>
 </ul>
-<p>To assure correct predictors usage, you may also specify precitor names vector in <code>predictors</code> parameter, and data (optional) to assure source of variable classes:</p>
+<p>To assure correct predictors usage, you may also specify predcitor names vector in <code>predictors</code> parameter, and data (optional) to assure source of variable classes:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Petal.Width <span class="op">~</span><span class="st"> </span>., </a>
 <a class="sourceLine" id="cb22-2" data-line-number="2">                    <span class="dt">model =</span> rf_iris,</a>
 <a class="sourceLine" id="cb22-3" data-line-number="3">                    <span class="dt">predictors =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(iris)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>, <span class="dv">4</span>)],</a>
@@ -462,23 +462,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67361  -0.07977  -0.03169   0.09838   0.46164  
+## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)            -1.4070     0.2566  -5.484 1.80e-07 ***
-## xs(Sepal.Length)        0.3211     0.3095   1.037    0.301    
-## xs(Petal.Length)        1.7399     0.3631   4.792 4.05e-06 ***
-## xf(Species)versicolor   0.1126     0.1703   0.661    0.509    
-## xf(Species)virginica    0.4418     0.2293   1.927    0.056 .  
+## (Intercept)           -1.40759    0.26919  -5.229 5.84e-07 ***
+## xs(Sepal.Length)       0.36881    0.32353   1.140    0.256    
+## xs(Petal.Length)       1.71443    0.36286   4.725 5.39e-06 ***
+## xf(Species)versicolor  0.06471    0.18222   0.355    0.723    
+## xf(Species)virginica   0.39471    0.24198   1.631    0.105    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03097714)
+## (Dispersion parameter for gaussian family taken to be 0.03108655)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4917  on 145  degrees of freedom
-## AIC: -88.58
+## Residual deviance:  4.5075  on 145  degrees of freedom
+## AIC: -88.051
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>In above examples each predictor is transformed by default. You can exclude needed, by specifying global <code>alter = "never"</code> parameters, or <code>bare</code>.</p>
@@ -499,36 +499,36 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67361  -0.07977  -0.03169   0.09838   0.46164  
+## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)            -1.4070     0.2566  -5.484 1.80e-07 ***
-## xs(Sepal.Length)        0.3211     0.3095   1.037    0.301    
-## xs(Petal.Length)        1.7399     0.3631   4.792 4.05e-06 ***
-## xf(Species)versicolor   0.1126     0.1703   0.661    0.509    
-## xf(Species)virginica    0.4418     0.2293   1.927    0.056 .  
+## (Intercept)           -1.40759    0.26919  -5.229 5.84e-07 ***
+## xs(Sepal.Length)       0.36881    0.32353   1.140    0.256    
+## xs(Petal.Length)       1.71443    0.36286   4.725 5.39e-06 ***
+## xf(Species)versicolor  0.06471    0.18222   0.355    0.723    
+## xf(Species)virginica   0.39471    0.24198   1.631    0.105    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03097714)
+## (Dispersion parameter for gaussian family taken to be 0.03108655)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4917  on 145  degrees of freedom
-## AIC: -88.58
+## Residual deviance:  4.5075  on 145  degrees of freedom
+## AIC: -88.051
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Works! Can it be simpler? Actually not because of black box based transformation and theory, but we can provide some model based parameters upfront using DALEX’s <code>explainer</code> object (see next section).</p>
-<p>Unfortunately this simplicity works thanks to few approaches that randomForest follows.</p>
+<p>Unfortunately this simplicity works thanks to a few approaches that randomForest follows.</p>
 <p>They are:</p>
 <ul>
 <li>Building the black box with formula</li>
-<li>Black box training data stores factors in long form (the factor is one column, not spreaded into binary wide form)</li>
+<li>Black box training data stores factors in long form (the factor is one column, not spread into binary wide form)</li>
 </ul>
-<p>Most of R based ML models satisfies above condition. One of exceptions is XGBoost which in actual xspliner version needs to be handled in more complex xspline call. You can see it in <a href="https://krystian8207.github.io/xspliner/articles/use_cases.html">use cases</a></p>
-<div id="exluding-predictors-from-transformation" class="section level2">
+<p>Most of R based ML models satisfy the above condition. One of exceptions is XGBoost which in actual xspliner version needs to be handled in the more complex xspline call. You can see it in <a href="https://krystian8207.github.io/xspliner/articles/use_cases.html">use cases</a></p>
+<div id="excluding-predictors-from-transformation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#exluding-predictors-from-transformation" class="anchor"></a>Exluding predictors from transformation</h2>
+<a href="#excluding-predictors-from-transformation" class="anchor"></a>Excluding predictors from transformation</h2>
 <p>For this example consider again Boston Housing Data from pdp package, and build simple <code>svm</code> model for predicting <code>chas</code> variable:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(pdp)</a>
 <a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(e1071)</a>
@@ -538,7 +538,7 @@
 <pre><code>##  int [1:506] 1 2 2 3 3 3 5 5 5 5 ...</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(boston<span class="op">$</span>rad)</a></code></pre></div>
 <pre><code>## [1]  1  2  3  5  4  8  6  7 24</code></pre>
-<p>As we can see <code>rad</code> variable is integer and has only 9 unique values. As a result spline approximation may be misleading, and not possible to perform. We decide here to omit <code>rad</code> variable when performing transformation, nevertheless reamining predictors should be transformed.</p>
+<p>As we can see <code>rad</code> variable is integer and has only 9 unique values. As a result spline approximation may be misleading, and not possible to perform. We decide here to omit <code>rad</code> variable when performing transformation, nevertheless remaining predictors should be transformed.</p>
 <p>At first setup model based transformation:</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">xs_model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(svm_boston)</a></code></pre></div>
 <pre><code>## Error in smooth.construct.tp.smooth.spec(object, dk$data, dk$knots): A term has fewer unique covariate combinations than specified maximum degrees of freedom</code></pre>
@@ -555,14 +555,14 @@
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -0.8193  -0.3415  -0.3391  -0.3367   2.4276  
+## -0.8194  -0.3415  -0.3391  -0.3367   2.4276  
 ## 
 ## Coefficients:
 ##               Estimate Std. Error z value Pr(&gt;|z|)   
-## (Intercept) 17.1276017 22.5102959   0.761  0.44673   
-## xs(cmedv)   17.6776179  6.8377224   2.585  0.00973 **
-## rad         -0.0008441  0.0214852  -0.039  0.96866   
-## xs(lstat)   -2.6014481 21.3671539  -0.122  0.90310   
+## (Intercept) 69.2301684 82.0953281   0.843  0.39907   
+## xs(cmedv)   64.8038715 25.0641438   2.586  0.00972 **
+## rad         -0.0008446  0.0214853  -0.039  0.96864   
+## xs(lstat)   -9.5519286 78.3245174  -0.122  0.90294   
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -573,7 +573,7 @@
 ## AIC: 252.4
 ## 
 ## Number of Fisher Scoring iterations: 5</code></pre>
-<p>As we can see in summary, rad variable was omitted during transformation.</p>
+<p>As we can see in the summary, rad variable was omitted during transformation.</p>
 <p><strong>Note</strong></p>
 <p>The option is available only for xspline build on top of model or dot formula.</p>
 </div>
@@ -581,7 +581,7 @@
 <div id="integration-with-dalex" class="section level1">
 <h1 class="hasAnchor">
 <a href="#integration-with-dalex" class="anchor"></a>Integration with DALEX</h1>
-<p>As mentioned in previous section, xspliner is integrated with DALEX package. The main function from the package <code>explain</code> returns useful black box data (such as bare black model or training data) that can be used by xspline function.</p>
+<p>As mentioned in the previous section, xspliner is integrated with DALEX package. The main function from the package <code>explain</code> returns useful black box data (such as bare black model or training data) that can be used by xspline function.</p>
 <p>Just check below example</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DALEX)</a>
 <a class="sourceLine" id="cb34-2" data-line-number="2">rf_boston &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(lstat <span class="op">~</span><span class="st"> </span>cmedv <span class="op">+</span><span class="st"> </span>crim <span class="op">+</span><span class="st"> </span>chas, <span class="dt">data =</span> boston)</a>
@@ -596,26 +596,26 @@
 ##     data = data)
 ## 
 ## Deviance Residuals: 
-##      Min        1Q    Median        3Q       Max  
-## -11.3464   -2.3957   -0.6754    1.7545   21.2175  
+##     Min       1Q   Median       3Q      Max  
+## -11.536   -2.393   -0.654    1.760   21.190  
 ## 
 ## Coefficients:
 ##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -15.70099    1.53076 -10.257  &lt; 2e-16 ***
-## xs(cmedv)     1.64427    0.07044  23.343  &lt; 2e-16 ***
-## xs(crim)      0.58249    0.15162   3.842 0.000138 ***
-## xf(chas)1     1.40278    0.69662   2.014 0.044574 *  
+## (Intercept) -16.55454    1.44398 -11.464  &lt; 2e-16 ***
+## xs(cmedv)     1.69892    0.07231  23.496  &lt; 2e-16 ***
+## xs(crim)      0.59703    0.14316   4.171 3.58e-05 ***
+## xf(chas)1     1.42773    0.69444   2.056   0.0403 *  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 15.51009)
+## (Dispersion parameter for gaussian family taken to be 15.40985)
 ## 
 ##     Null deviance: 25752.4  on 505  degrees of freedom
-## Residual deviance:  7786.1  on 502  degrees of freedom
-## AIC: 2829.1
+## Residual deviance:  7735.7  on 502  degrees of freedom
+## AIC: 2825.9
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<p>You can provide your own xspline’s parameters that overwrites that sourced from explainer.</p>
+<p>You can provide your own xspline’s parameters that overwrite that sourced from explainer.</p>
 </div>
   </div>
 
@@ -640,7 +640,7 @@
 </li>
       <li>
 <a href="#omit-formula">Omit formula</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#exluding-predictors-from-transformation">Exluding predictors from transformation</a></li>
+<li><a href="#excluding-predictors-from-transformation">Excluding predictors from transformation</a></li>
       </ul>
 </li>
       <li><a href="#integration-with-dalex">Integration with DALEX</a></li>

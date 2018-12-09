@@ -12,7 +12,7 @@ vignette: >
 # Predict
 
 As xspliner final model is GLM, predict method is just wrapper od `stats::predict.glm` function. 
-Let's see it in in below example:
+Let's see it on the below example:
 ```{r message = FALSE}
 library(xspliner)
 library(randomForest)
@@ -33,7 +33,7 @@ predict(model_xs, newdata = newdata)
 
 # Summary
 
-Summary method allows you to check basic model details. See below what possibilities offers the method to xspliner model.
+Summary method allows you to check the basic model details. See below what possibilities the method to xspliner model offers.
 
 ## GLM summary
 Standard summary method is just wrapper for `summary::glm`. In order to use this just type:
@@ -63,7 +63,7 @@ summary(model_xs, "Species")
 
 # Print
 
-Print method works similiarly to summary. In case of passing just the model, standard `print.glm` is used.
+Print method works similarly to the summary. In case of passing just the model, standard `print.glm` is used.
 
 ```{r}
 print(model_xs)
@@ -75,7 +75,7 @@ Summary method allows you to check details about transformation of specific vari
 Standard usage `print(xspliner_object, variable_name)`
 
 *Quantitative variable*
-When predictor is quantitative variable its transition is based on GAM model. For this case print uses standard `print.gam` method.
+When predictor is the quantitative variable its transition is based on GAM model. For this case print uses standard `print.gam` method.
 
 ```{r}
 print(model_xs, "Petal.Length")
@@ -96,11 +96,11 @@ You can see all details in [graphics](https://krystian8207.github.io/xspliner/ar
 # Transition
 
 Transition method allows you to extract objects used during building transition of variables.
-There are three possible object types thatcan be extracted.
+There are three possible object types that can be extracted.
 
 ## Extracting effect
 
-Each transition is built on top of black box response data. For example the default response for quantitative variables is PDP - for qualitative ones ICE.
+Each transition is built on top of the black box response data. For example the default response for quantitative variables is PDP - for qualitative ones ICE.
 
 In order to extract the effect use transition method with `type` parameter equals to data
 
@@ -114,11 +114,11 @@ transition(model_xs, predictor = "Species", type = "data") %>%
 
 ## Extracting transition model
 
-After we built transition basing on cotinuity of variable specific model is created.
+After we built transition basing on continuity of variable specific model is created.
 In case of quantitative predictor we build GAM model in order to get spline approximation of effect.
 In case of qualitative predictor we build factorMerger object and get optimal factor division on that.
 
-To extract the model, use transition mehod with `type = "base"`:
+To extract the model, use transition method with `type = "base"`:
 
 ```{r}
 transition(model_xs, predictor = "Petal.Length", type = "base")
@@ -128,7 +128,7 @@ transition(model_xs, predictor = "Species", type = "base")
 
 ## Extracting transition function
 
-The final result of building transition is tranformation function, that is used in final GLM model estimation.
+The final result of building transition is transformation function, that is used in the final GLM model estimation.
 
 To extract the function just use transition method with `type = "function"`.
 

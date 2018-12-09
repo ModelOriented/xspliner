@@ -101,7 +101,7 @@
 <h2 class="hasAnchor">
 <a href="#motivation" class="anchor"></a>Motivation</h2>
 <p>In regression or classification problem, the main issue is choosing the model that should meet our requirements as much as possible. On the one hand, we want the chosen solution to have the best statistical properties such as accuracy, RMSE or R Squared - on the other hand, we focus on the interpretability of the model.</p>
-<p>In the first case, black box models, such as randomForest or XGBoost, perform better than others, while the second case is dominated by linear models. The xspliner package aims to combine both methods: use the knowledge gathered from black box models in order to build an interpretable linear one.</p>
+<p>In the first case, the black box models, such as randomForest or XGBoost, perform better than others, while the second case is dominated by linear models. The xspliner package aims to combine both methods: use the knowledge gathered from black box models in order to build an interpretable linear one.</p>
 </div>
 <div id="general-idea" class="section level2">
 <h2 class="hasAnchor">
@@ -110,18 +110,18 @@
 <div id="black-box-variable-response" class="section level3">
 <h3 class="hasAnchor">
 <a href="#black-box-variable-response" class="anchor"></a>Black box variable response</h3>
-<p>When black box model is already built, you may want to check how each predictor variable affects the final response. This is quite easy when you use a linear model or have low dimensional data (up to 2, 3 dimensions). One of ideas for testing the predictor impact in more complicated model is to check an average model response of the selected variable.</p>
+<p>When black box model is already built, you may want to check how each predictor variable affects the final response. This is quite easy when you use a linear model or have low dimensional data (up to 2, 3 dimensions). One of the ideas for testing the predictor impact in more complicated model is to check an average model response of the selected variable.</p>
 <p>One of such approaches called Partial Dependence Plots is implemented in the <a href="https://github.com/bgreenwell/pdp">pdp</a> package (Brandon M. Greenwell (2017). Pdp: The R Journal, 9 (1), 421-436.), or the <a href="https://CRAN.R-project.org/package=ALEPlot">ALEPlot</a> package (Dan Apley (2017). ALEPlot: Accumulated Local Effects Plots and Partial Dependence Plots.) using Accumulated Local Effects Plots.</p>
 <p>In each case, we get a single variable function, which should explain the impact of the predictor on the response variable.</p>
-<p>The following pictures show the <code>ptratio</code> impact on <code>cmedv</code> in some random forest model based on Boston Housing Data. Below curves are obtained by the approach of the pdp and ale methods respectively.</p>
+<p>The following pictures show the <code>ptratio</code> impact on <code>cmedv</code> in some random forest model based on the Boston Housing Data. Below curves are obtained by the approach of the pdp and ale methods respectively.</p>
 <p><img src="art_a_introduction_files/figure-html/unnamed-chunk-2-1.png" width="288"><img src="art_a_introduction_files/figure-html/unnamed-chunk-2-2.png" width="288"></p>
 <p>As we can see, above functions are irregular, making it difficult to interpret explained effect.</p>
-<p>If above functions had linear character, one would be tempted to approximate them with linear function. As a result it could easy to interpret how it affects the variable explained in the black box model. What if the function is irregular, as above? Could we approximate it with polynomials?</p>
+<p>If above functions had linear character, one would be tempted to approximate them with linear function. As a result it could be easy to interpret how it affects the variable explained in the black box model. What if the function is irregular, as above? Could we approximate it with polynomials?</p>
 </div>
 <div id="splines" class="section level3">
 <h3 class="hasAnchor">
 <a href="#splines" class="anchor"></a>Splines</h3>
-<p>Due to the large errors that occurs with approximation of functions with polynomials, the approach using spline approximation is most common solution. Splines (functions that are piecewise polynomials) have good approximating properties, in addition their form is overt so we can thus interpret the resulting function.</p>
+<p>Due to the large errors that occur with approximation of functions with polynomials, the approach using spline approximation is the most common solution. Splines (functions that are piecewise polynomials) have good approximating properties, in addition their form is overt so we can thus interpret the resulting function.</p>
 <p>The following graphics show spline approximations of pdp and ale curves:</p>
 <p><img src="art_a_introduction_files/figure-html/unnamed-chunk-3-1.png" width="288"><img src="art_a_introduction_files/figure-html/unnamed-chunk-3-2.png" width="288"></p>
 <p>But even with approximated PDP, how could we use it to interpret black box model?</p>
@@ -139,7 +139,7 @@
 </li>
 </ul>
 <p>Shortly, using black box formula <span class="math display">\[y \sim x_{1} + \cdots + x_{n}\]</span> use <span class="math display">\[y \sim \widetilde{f}_{x_{1}}(x_{1}) + \cdots + \widetilde{f}_{x_{n}}(x_{n})\]</span> in linear one.</p>
-<p>The resulting model uses part of the information that was extracted while building black box model. If linear model performance is similiar to black box one, it could be used as it’s good interpretation.</p>
+<p>The resulting model uses a part of the information that was extracted while building black box model. If linear model performance is similar to black box one, it could be used as it’s good interpretation.</p>
 </div>
 </div>
 <div id="how-to-do-it-with-xspliner" class="section level2">
@@ -171,13 +171,13 @@
 <a class="sourceLine" id="cb1-19" data-line-number="19"><span class="co">#&gt;  $ lstat  : num  4.98 9.14 4.03 2.94 5.33 ...</span></a></code></pre></div>
 <p>We’re going to build model based on formula</p>
 <pre><code>cmedv ~ rm + lstat + nox</code></pre>
-<p>So let’s build random forest black box model, that we use as a base for further steps:</p>
+<p>So let’s build a random forest black box model, that we use as a base for further steps:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">boston_rf &lt;-<span class="st"> </span><span class="kw">randomForest</span>(cmedv <span class="op">~</span><span class="st"> </span>rm <span class="op">+</span><span class="st"> </span>lstat <span class="op">+</span><span class="st"> </span>nox, <span class="dt">data =</span> boston)</a></code></pre></div>
-<p>Now specify which variables should be transformed. In this example only <code>nox</code> variable will use random forest effect (PDP or ALEPlot).</p>
+<p>Now let’s specify which variables should be transformed. In this example only <code>nox</code> variable will use random forest effect (PDP or ALEPlot).</p>
 <p>To indicate transformation use <code>xs(nos)</code> symbol.</p>
 <p>So we have:</p>
 <pre><code>cmedv ~ rm + lstat + xs(nox)</code></pre>
-<p>This formula is enough to build GLM model (with using default parameters and xspliner glm generating function). Nevertheless to understand deeply the approach let’s go further with theory.</p>
+<p>This formula is enough to build a GLM model (with using default parameters and xspliner glm generating function). Nevertheless to understand deeply the approach let’s go further with the theory.</p>
 <p>As the algoritm goes through creating black box based response function and its approximation we need to specify desirable parameters.</p>
 <div id="specifying-which-method-should-we-use-to-build-response-function" class="section level4">
 <h4 class="hasAnchor">
@@ -200,7 +200,7 @@
 </ul>
 <p>Below we will use PDP random forest effect, that returns 40 response points for <code>nox</code> variable. By checking <code><a href="https://www.rdocumentation.org/packages/pdp/topics/partial">?pdp::partial</a></code> we can see that <code>grid.resolution</code> parameter specifies predictor grid.</p>
 <p>Now we should just specify: <code>xs(nox, effect = list(type = "pdp", grid.resolution = 40))</code>.</p>
-<p>Let’s verify correctness of this parameters with bare usage of <code><a href="https://www.rdocumentation.org/packages/pdp/topics/partial">pdp::partial</a></code>:</p>
+<p>Let’s verify correctness of this parameters with the bare usage of <code><a href="https://www.rdocumentation.org/packages/pdp/topics/partial">pdp::partial</a></code>:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">rf_effect &lt;-<span class="st"> </span>pdp<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/pdp/topics/partial">partial</a></span>(boston_rf, <span class="st">"nox"</span>, <span class="dt">grid.resolution =</span> <span class="dv">40</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(rf_effect)</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;         nox     yhat</span></a>
@@ -229,7 +229,7 @@
 <p>Response function is approximated with <code><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">mgcv::gam</a></code> package and <code><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">mgcv::s</a></code> smoothing function.</p>
 <p><code>xspliner</code> allows using all smoothing methods provided by <code><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">mgcv::s</a></code>.</p>
 <p>How can we do that?</p>
-<p>Let’s name approximation result as <strong>transition</strong>. To specify it’s parameters such as spline base we can use <code>transition</code> parameter inside <code>xs</code> symbol. Similiarily to <code>effect</code>, <code>transition</code> is specified as parameters list. Possible options can be found by <code>??mgcv::s</code> (few extra options can be found in next articles.</p>
+<p>Let’s name approximation result as <strong>transition</strong>. To specify it’s parameters such as spline base we can use <code>transition</code> parameter inside <code>xs</code> symbol. Similarly to <code>effect</code>, <code>transition</code> is specified as the parameters list. Possible options can be found by <code>??mgcv::s</code> (a few extra options can be found in next articles).</p>
 <p>Shortly:</p>
 <pre><code>transition = &lt;mgcv::s parameters&gt; # named list</code></pre>
 <p>Let’s assume we want to approximate response function with cubic splines and basis dimension equal to 10. As we can see in <code><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">mgcv::s</a></code> documentation, we need to set: <code>k = 10</code> and <code>bs = "cr"</code>.</p>
@@ -239,11 +239,11 @@
 <pre><code>cmedv ~ rm + lstat + xs(nox, 
   effect = list(type = "pdp", grid.resolution = 40),
   transition = list(k = 10, bs = "cr"))</code></pre>
-<p>To sum up, we specified formula for building GLM model, in which we transform <code>nox</code> variable with some function contructed on the following steps:</p>
+<p>To sum up, we specified formula for building GLM model, in which we transform <code>nox</code> variable with some function constructed on the following steps:</p>
 <ul>
 <li>we extract impact of <code>nox</code> variable on <code>cmedv</code> in already build black box model (actually not specified yet in formula)</li>
 <li>we get that impact as PDP in form of 40 evenly spaced (over <code>nox</code> range) points</li>
-<li>we estimate PDP with use of <code>cubic</code> splines with 10 dimensional base The estimation is our final function used for <code>nox</code> transformation in final GLM.</li>
+<li>we estimate PDP with the use of <code>cubic</code> splines with 10 dimensional base The estimation is our final function used for <code>nox</code> transformation in final GLM.</li>
 </ul>
 </div>
 </div>
@@ -287,7 +287,7 @@
 <a class="sourceLine" id="cb11-24" data-line-number="24"><span class="co">#&gt; AIC: 3106.2</span></a>
 <a class="sourceLine" id="cb11-25" data-line-number="25"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb11-26" data-line-number="26"><span class="co">#&gt; Number of Fisher Scoring iterations: 2</span></a></code></pre></div>
-<p>As the final model is just the GLM, the summary is also standard. One difference that we can see here is formula call. It has missing <code>xs</code> parameters, and <code>xs</code> is treated as standard R function (previously it was just the symbol used in formula).</p>
+<p>As the final model is just the GLM, the summary is also standard. One difference that we can see here is the formula call. It has missing <code>xs</code> parameters, and <code>xs</code> is treated as standard R function (previously it was just the symbol used in formula).</p>
 <p>More details about can be found in following sections:</p>
 <ul>
 <li>
@@ -303,7 +303,7 @@
 <li>
 <a href="https://krystian8207.github.io/xspliner/articles/7_use_cases.html">Use cases</a> - see <code>xspliner</code> in action with examples</li>
 </ul>
-<p>Here we shortly show how plot random forest effect and transition for <code>nox</code> variable:</p>
+<p>Here we shortly show how the plot random forest effect and transition for <code>nox</code> variable:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(xp_model, <span class="st">"nox"</span>)</a></code></pre></div>
 <p><img src="art_a_introduction_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
