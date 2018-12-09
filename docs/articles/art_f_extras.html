@@ -88,7 +88,7 @@
       <h1>Extra information about the package</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2018-12-07</h4>
+            <h4 class="date">2018-12-09</h4>
       
       
       <div class="hidden name"><code>art_f_extras.Rmd</code></div>
@@ -183,27 +183,247 @@
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Linear approximation was better for <code>ptratio</code> response function.</p>
-<p>(todo below sections)</p>
 </div>
 <div id="specifying-model-family-and-link" class="section level1">
 <h1 class="hasAnchor">
 <a href="#specifying-model-family-and-link" class="anchor"></a>Specifying model family and link</h1>
-<p>(When type is classification)</p>
+<p>When GLM model is estimated there is possibility to specify response family and link parameters. Family stores information about the distribution of response - standard one is gaussian, what assumes that response comes from normal distribution. For classification binomial family is used.</p>
+<p>Link parameters stores info about what function should be used to transform response. The transformation is used in final model fitting. The standard link is identity (for gaussian distribution) - for binomial distibution logit is used.</p>
+<p>See more at <code>??stats::family.glm</code>.</p>
+<p><code>xspline</code> function allows you to decide which response should be used in final model. Let’s check below example in which poisson distribution with log link is used.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">z &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">y &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Poisson">rpois</a></span>(<span class="dv">100</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">exp</a></span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z))</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(x, y, z)</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z, <span class="dt">data =</span> data)</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">model_xs_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf)</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">model_xs_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf, <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">poisson</a></span>(), <span class="dt">link =</span> <span class="st">"log"</span>)</a></code></pre></div>
+<p>Let’s compare two models by checking its AIC statistics:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">model_xs_<span class="dv">1</span><span class="op">$</span>aic</a></code></pre></div>
+<pre><code>## [1] 672.5753</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">model_xs_<span class="dv">2</span><span class="op">$</span>aic</a></code></pre></div>
+<pre><code>## [1] 580.0274</code></pre>
+<p>As we can see the second model is better.</p>
 </div>
 <div id="transformed-response" class="section level1">
 <h1 class="hasAnchor">
 <a href="#transformed-response" class="anchor"></a>Transformed response</h1>
-<p>(log(y) ~ .)</p>
+<p>In some cases you may want to transform model response with you own function. Let’s check below example with random forest model:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">z &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">y &lt;-<span class="st"> </span>x <span class="op">*</span><span class="st"> </span>z <span class="op">*</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(x, z, y)</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log</a></span>(y) <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z, <span class="dt">data =</span> data)</a></code></pre></div>
+<p>In this case log transformation for y, removes interaction of x and z. In xspliner same transformation is used by default:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf)</a></code></pre></div>
+<pre><code>## Cannot extract model family. Use gaussian.</code></pre>
+<pre><code>## Cannot extract model link. Use identity.</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = log(y) ~ xs(x) + xs(z), family = family, data = data)
+## 
+## Deviance Residuals: 
+##       Min         1Q     Median         3Q        Max  
+## -0.187175  -0.057420  -0.002821   0.058715   0.213533  
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -6.3310     0.8078  -7.838 5.93e-12 ***
+## xs(x)         1.1833     0.1400   8.449 2.96e-13 ***
+## xs(z)         1.1946     0.1062  11.248  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.008017078)
+## 
+##     Null deviance: 2.36576  on 99  degrees of freedom
+## Residual deviance: 0.77766  on 97  degrees of freedom
+## AIC: -193.88
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</a></code></pre></div>
+<p><img src="art_f_extras_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
 <div id="multiplicative-form" class="section level1">
 <h1 class="hasAnchor">
 <a href="#multiplicative-form" class="anchor"></a>Multiplicative form</h1>
-<p>(form = “multiplicative”)</p>
+<p>When interactions between predictors occurs black box models in fact deal much better that linear models. xspliner offers using formulas with variables interactions.</p>
+<p>You can do it in two possible forms.</p>
+<p>Lets start with creating data and building black box:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">z &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">y &lt;-<span class="st"> </span>x <span class="op">+</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>z <span class="op">+</span><span class="st"> </span>z <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(x, y, z)</a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z, <span class="dt">data =</span> data)</a></code></pre></div>
+<p>The first option is specifying formula with <code>*</code> sign, as in standard linear models.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>z, <span class="dt">model =</span> model_rf)</a></code></pre></div>
+<pre><code>## Cannot extract model family. Use gaussian.</code></pre>
+<pre><code>## Cannot extract model link. Use identity.</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = y ~ x * z, family = family, data = data)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -0.25207  -0.07359  -0.00393   0.05399   0.35369  
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.003076   0.011178   0.275    0.784    
+## x           0.979334   0.011650  84.062   &lt;2e-16 ***
+## z           1.007693   0.010496  96.007   &lt;2e-16 ***
+## x:z         0.991345   0.011292  87.792   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.01193796)
+## 
+##     Null deviance: 295.424  on 99  degrees of freedom
+## Residual deviance:   1.146  on 96  degrees of freedom
+## AIC: -153.1
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</a></code></pre></div>
+<p><img src="art_f_extras_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p>The second one is adding form parameter equal to “multiplicative” in case of passing just the model or dot formula.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf, <span class="dt">form =</span> <span class="st">"multiplicative"</span>)</a></code></pre></div>
+<pre><code>## Cannot extract model family. Use gaussian.</code></pre>
+<pre><code>## Cannot extract model link. Use identity.</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = y ~ xs(x) * xs(z), family = family, data = data)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -0.62089  -0.27456   0.00258   0.16788   1.42959  
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.06527    0.03838  -1.701   0.0923 .  
+## xs(x)        1.11395    0.04946  22.521   &lt;2e-16 ***
+## xs(z)        0.95928    0.03859  24.856   &lt;2e-16 ***
+## xs(x):xs(z)  1.09751    0.05076  21.620   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.1419257)
+## 
+##     Null deviance: 295.424  on 99  degrees of freedom
+## Residual deviance:  13.625  on 96  degrees of freedom
+## AIC: 94.46
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</a></code></pre></div>
+<p><img src="art_f_extras_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(y <span class="op">~</span><span class="st"> </span>., <span class="dt">model =</span> model_rf, <span class="dt">form =</span> <span class="st">"multiplicative"</span>)</a></code></pre></div>
+<pre><code>## Cannot extract model family. Use gaussian.</code></pre>
+<pre><code>## Cannot extract model link. Use identity.</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = y ~ xs(x) * xs(z), family = family, data = data)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -0.62089  -0.27456   0.00258   0.16788   1.42959  
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.06527    0.03838  -1.701   0.0923 .  
+## xs(x)        1.11395    0.04946  22.521   &lt;2e-16 ***
+## xs(z)        0.95928    0.03859  24.856   &lt;2e-16 ***
+## xs(x):xs(z)  1.09751    0.05076  21.620   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.1419257)
+## 
+##     Null deviance: 295.424  on 99  degrees of freedom
+## Residual deviance:  13.625  on 96  degrees of freedom
+## AIC: 94.46
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</a></code></pre></div>
+<p><img src="art_f_extras_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 </div>
 <div id="subset-formula" class="section level1">
 <h1 class="hasAnchor">
 <a href="#subset-formula" class="anchor"></a>Subset formula</h1>
-<p>(y ~ x1 + x2 and model uses x3 as well)</p>
+<p>Every example we saw before used to use the same variables in black box and xspliner model. In fact this is not obligate. How can it be used? For example to build simpler model based on truncated amount of predictors. Let’s see below example:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
+<a class="sourceLine" id="cb36-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(airquality)</a>
+<a class="sourceLine" id="cb36-4" data-line-number="4">air &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/na.fail">na.omit</a></span>(airquality)</a>
+<a class="sourceLine" id="cb36-5" data-line-number="5">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> air)</a>
+<a class="sourceLine" id="cb36-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/varImpPlot">varImpPlot</a></span>(model_rf)</a></code></pre></div>
+<p><img src="art_f_extras_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p>As we can see Wind and Temp variables are of highest importance. Let’s build xspliner basnig on just the Two variables.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Temp), <span class="dt">model =</span> model_rf)</a></code></pre></div>
+<pre><code>## Cannot extract model family. Use gaussian.</code></pre>
+<pre><code>## Cannot extract model link. Use identity.</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Ozone ~ xs(Wind) + xs(Temp), family = family, data = data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -45.078   -9.027   -1.908    8.083   81.449  
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -89.4457     8.2639 -10.824  &lt; 2e-16 ***
+## xs(Wind)      1.5576     0.2095   7.436 2.60e-11 ***
+## xs(Temp)      1.5583     0.1855   8.399 1.95e-13 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 321.0854)
+## 
+##     Null deviance: 121802  on 110  degrees of freedom
+## Residual deviance:  34677  on 108  degrees of freedom
+## AIC: 960.62
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> air)</a></code></pre></div>
+<p><img src="art_f_extras_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<p>Or model including variables interaction:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(Wind) <span class="op">*</span><span class="st"> </span><span class="kw">xs</span>(Temp), <span class="dt">model =</span> model_rf)</a></code></pre></div>
+<pre><code>## Cannot extract model family. Use gaussian.</code></pre>
+<pre><code>## Cannot extract model link. Use identity.</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Ozone ~ xs(Wind) * xs(Temp), family = family, data = data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -38.940  -10.049   -0.665    7.755   66.926  
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       -198.99004   36.90872  -5.391 4.21e-07 ***
+## xs(Wind)             4.18800    0.88861   4.713 7.39e-06 ***
+## xs(Temp)             3.80619    0.76085   5.003 2.23e-06 ***
+## xs(Wind):xs(Temp)   -0.05251    0.01728  -3.040  0.00298 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 298.3263)
+## 
+##     Null deviance: 121802  on 110  degrees of freedom
+## Residual deviance:  31921  on 107  degrees of freedom
+## AIC: 953.43
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> air)</a></code></pre></div>
+<p><img src="art_f_extras_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
   </div>
 

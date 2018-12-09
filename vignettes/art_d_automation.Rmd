@@ -190,7 +190,7 @@ This way we are ready to work with many predictors. Can the approach be simpler?
 As we could see in previous section, using dot formula the predictors are sourced from provided black box.
 Why cannot we fully extract formula from black box? We can.
 
-Let's use previously built rf_iris model:
+Let's use previously built `rf_iris` model:
 ```{r message = FALSE}
 model_xs <- xspline(rf_iris)
 summary(model_xs)
