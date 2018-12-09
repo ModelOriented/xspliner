@@ -116,7 +116,10 @@
     <p>Extract variable transformation from xspliner</p>
     
 
-    <pre class="usage"><span class='fu'>transition</span>(<span class='no'>model</span>, <span class='no'>predictor</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"function"</span>)</pre>
+    <pre class="usage"><span class='fu'>transition</span>(<span class='no'>model</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for xspliner</span>
+<span class='fu'>transition</span>(<span class='no'>model</span>, <span class='no'>predictor</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"function"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -124,6 +127,10 @@
     <tr>
       <th>model</th>
       <td><p>xspliner model</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other parameters passed to method. Currently not used.</p></td>
     </tr>
     <tr>
       <th>predictor</th>

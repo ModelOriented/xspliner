@@ -77,20 +77,121 @@ summary(model_pdp_auto)
 
 Linear approximation was better for `ptratio` response function.
 
-(todo below sections)
-
 # Specifying model family and link
 
-(When type is classification)
+When GLM model is estimated there is possibility to specify response family and link parameters.
+Family stores information about the distribution of response - standard one is gaussian, what assumes that response comes from normal distribution. For classification binomial family is used. 
+
+Link parameters stores info about what function should be used to transform response. The transformation is used in final model fitting. The standard link is identity (for gaussian distribution) - for binomial distibution logit is used.
+
+See more at `??stats::family.glm`.
+
+`xspline` function allows you to decide which response should be used in final model.
+Let's check below example in which poisson distribution with log link is used.
+
+  ```{r message = FALSE}
+library(xspliner)
+library(randomForest)
+x <- rnorm(100)
+z <- rnorm(100)
+y <- rpois(100, exp(1 + x + z))
+data <- data.frame(x, y, z)
+model_rf <- randomForest(y ~ x + z, data = data)
+model_xs_1 <- xspline(model_rf)
+model_xs_2 <- xspline(model_rf, family = poisson(), link = "log")
+```
+
+Let's compare two models by checking its AIC statistics:
+```{r}
+model_xs_1$aic
+model_xs_2$aic
+```
+
+As we can see the second model is better.
 
 # Transformed response
 
-(log(y) ~ .)
+In some cases you may want to transform model response with you own function. 
+Let's check below example with random forest model:
+
+```{r}
+set.seed(123)
+x <- rnorm(100, 10)
+z <- rnorm(100, 10)
+y <- x * z * rnorm(100, 1, 0.1)
+data <- data.frame(x, z, y)
+model_rf <- randomForest(log(y) ~ x + z, data = data)
+```
+
+In this case log transformation for y removes interaction of x and z. In xspliner same transformation is used by default:
+```{r message = FALSE}
+model_xs <- xspline(model_rf)
+summary(model_xs)
+plot(model_xs, model = model_rf, data = data)
+```
 
 # Multiplicative form
 
-(form = "multiplicative")
+When interactions between predictors occurs black box models, in fact, deal much better that linear models.
+`xspliner` offers using formulas with variables interactions.
+
+You can do it in two possible forms.
+
+Lets start with creating data and building black box:
+```{r}
+x <- rnorm(100)
+z <- rnorm(100)
+y <- x + x * z + z + rnorm(100, 0, 0.1)
+data <- data.frame(x, y, z)
+model_rf <- randomForest(y ~ x + z, data = data)
+```
+
+The first option is specifying formula with `*` sign, as in standard linear models.
+
+```{r message = FALSE}
+model_xs <- xspline(y ~ x * z, model = model_rf)
+summary(model_xs)
+plot(model_xs, model = model_rf, data = data)
+```
+
+The second one is adding form parameter equal to "multiplicative" in case of passing just the model or dot formula.
+```{r}
+model_xs <- xspline(model_rf, form = "multiplicative")
+summary(model_xs)
+plot(model_xs, model = model_rf, data = data)
+```
+
+```{r message = FALSE}
+model_xs <- xspline(y ~ ., model = model_rf, form = "multiplicative")
+summary(model_xs)
+plot(model_xs, model = model_rf, data = data)
+```
 
 # Subset formula
 
-(y ~ x1 + x2 and model uses x3 as well)
+Every example we saw before used to use the same variables in black box and xspliner model. 
+In fact this is not obligate. How can it be used? For example to build simpler model based on truncated amount of predictors.
+Let's see below example:
+
+```{r}
+library(randomForest)
+library(xspliner)
+data(airquality)
+air <- na.omit(airquality)
+model_rf <- randomForest(Ozone ~ ., data = air)
+varImpPlot(model_rf)
+```
+
+As we can see Wind and Temp variables are of highest importance. Let's build xspliner basnig on just the Two variables.
+```{r message = FALSE}
+model_xs <- xspline(Ozone ~ xs(Wind) + xs(Temp), model = model_rf)
+summary(model_xs)
+plot(model_xs, model = model_rf, data = air)
+```
+
+Or model including variables interaction:
+```{r message = FALSE}
+model_xs <- xspline(Ozone ~ xs(Wind) * xs(Temp), model = model_rf)
+summary(model_xs)
+plot(model_xs, model = model_rf, data = air)
+```
