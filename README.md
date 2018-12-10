@@ -1,4 +1,4 @@
-# The xspliner package - build generalized linear models basing on black boxes
+# xspliner - Assisted model building, using surrogate black-box models to train interpretable spline based additive models
 
 ## xspliner's pipeline: *model %>% xspline(...)* and analyze
 

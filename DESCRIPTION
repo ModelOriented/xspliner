@@ -1,5 +1,5 @@
 Package: xspliner
-Title: Build generalized linear models basing on black boxes
+Title: Assisted model building, using surrogate black-box models to train interpretable spline based additive models
 Version: 0.0.1.9000
 Authors@R: c(
   person("Krystian", "Igras", email = "krystian8270@gmail.com", role = c("aut", "cre")),

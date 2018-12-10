@@ -88,7 +88,7 @@
       <h1>Automate you work</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2018-12-09</h4>
+            <h4 class="date">2018-12-10</h4>
       
       
       <div class="hidden name"><code>art_d_automation.Rmd</code></div>
@@ -123,23 +123,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.66805  -0.07107  -0.02508   0.10377   0.45943  
+## -0.66914  -0.06974  -0.02469   0.10083   0.45784  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.25867    0.20748  -6.067 1.08e-08 ***
-## Sepal.Length           0.03349    0.03544   0.945    0.346    
-## xs(Petal.Length)       1.82998    0.35196   5.199 6.68e-07 ***
-## xf(Species)versicolor  0.01467    0.18429   0.080    0.937    
-## xf(Species)virginica   0.32565    0.24239   1.343    0.181    
+## (Intercept)           -1.35339    0.21835  -6.198 5.61e-09 ***
+## Sepal.Length           0.03119    0.03539   0.881    0.380    
+## xs(Petal.Length)       1.94754    0.36762   5.298 4.27e-07 ***
+## xf(Species)versicolor -0.05329    0.19350  -0.275    0.783    
+## xf(Species)virginica   0.26108    0.24996   1.044    0.298    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03103226)
+## (Dispersion parameter for gaussian family taken to be 0.03084718)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4997  on 145  degrees of freedom
-## AIC: -88.313
+## Residual deviance:  4.4728  on 145  degrees of freedom
+## AIC: -89.21
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>When the black box model is based on higher amount of variables it can be problematic to specify local parameters for each predictor. Also formula becomes large and hard to read.</p>
@@ -165,23 +165,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.66805  -0.07107  -0.02508   0.10377   0.45943  
+## -0.66914  -0.06974  -0.02469   0.10083   0.45784  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.25867    0.20748  -6.067 1.08e-08 ***
-## Sepal.Length           0.03349    0.03544   0.945    0.346    
-## xs(Petal.Length)       1.82998    0.35196   5.199 6.68e-07 ***
-## xf(Species)versicolor  0.01467    0.18429   0.080    0.937    
-## xf(Species)virginica   0.32565    0.24239   1.343    0.181    
+## (Intercept)           -1.35339    0.21835  -6.198 5.61e-09 ***
+## Sepal.Length           0.03119    0.03539   0.881    0.380    
+## xs(Petal.Length)       1.94754    0.36762   5.298 4.27e-07 ***
+## xf(Species)versicolor -0.05329    0.19350  -0.275    0.783    
+## xf(Species)virginica   0.26108    0.24996   1.044    0.298    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03103226)
+## (Dispersion parameter for gaussian family taken to be 0.03084718)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4997  on 145  degrees of freedom
-## AIC: -88.313
+## Residual deviance:  4.4728  on 145  degrees of freedom
+## AIC: -89.21
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>But still you can specify local parameters that override the global ones.</p>
@@ -201,23 +201,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67258  -0.07654  -0.03039   0.09743   0.46077  
+## -0.67320  -0.07735  -0.02846   0.09827   0.45894  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.41204    0.26502  -5.328 3.71e-07 ***
-## xs(Sepal.Length)       0.33439    0.31991   1.045    0.298    
-## xs(Petal.Length)       1.77633    0.37133   4.784 4.19e-06 ***
-## xf(Species)versicolor  0.03044    0.18747   0.162    0.871    
-## xf(Species)virginica   0.35026    0.24841   1.410    0.161    
+## (Intercept)           -1.47332    0.25723  -5.728 5.67e-08 ***
+## xs(Sepal.Length)       0.29214    0.30604   0.955    0.341    
+## xs(Petal.Length)       1.89689    0.39035   4.859 3.02e-06 ***
+## xf(Species)versicolor -0.03727    0.19825  -0.188    0.851    
+## xf(Species)virginica   0.28504    0.25768   1.106    0.270    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03098989)
+## (Dispersion parameter for gaussian family taken to be 0.0308187)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4935  on 145  degrees of freedom
-## AIC: -88.518
+## Residual deviance:  4.4687  on 145  degrees of freedom
+## AIC: -89.349
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>In this case <code>last_evaluation</code> variable will be transformed with thin plate regression spline (<code>bs = "tp"</code> is default for <code><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">mgcv::s</a></code>) with basis dimension equal to <code>10</code>. At the same time <code>average_monthly_hours</code> will be transformed with cubic splines.</p>
@@ -279,23 +279,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
+## -0.67599  -0.07742  -0.02958   0.09613   0.46823  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.40759    0.26919  -5.229 5.84e-07 ***
-## xs(Sepal.Length)       0.36881    0.32353   1.140    0.256    
-## xs(Petal.Length)       1.71443    0.36286   4.725 5.39e-06 ***
-## xf(Species)versicolor  0.06471    0.18222   0.355    0.723    
-## xf(Species)virginica   0.39471    0.24198   1.631    0.105    
+## (Intercept)           -1.46365    0.25995  -5.630 9.02e-08 ***
+## xs(Sepal.Length)       0.32388    0.30869   1.049    0.296    
+## xs(Petal.Length)       1.83444    0.38167   4.806 3.80e-06 ***
+## xf(Species)versicolor -0.00374    0.19312  -0.019    0.985    
+## xf(Species)virginica   0.32849    0.25140   1.307    0.193    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03108655)
+## (Dispersion parameter for gaussian family taken to be 0.03091928)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5075  on 145  degrees of freedom
-## AIC: -88.051
+## Residual deviance:  4.4833  on 145  degrees of freedom
+## AIC: -88.86
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Then each predictor is transformed with xs and xf symbols and use of default parameters or global ones when specified.</p>
@@ -314,23 +314,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
+## -0.67599  -0.07742  -0.02958   0.09613   0.46823  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.40759    0.26919  -5.229 5.84e-07 ***
-## xs(Sepal.Length)       0.36881    0.32353   1.140    0.256    
-## xs(Petal.Length)       1.71443    0.36286   4.725 5.39e-06 ***
-## xf(Species)versicolor  0.06471    0.18222   0.355    0.723    
-## xf(Species)virginica   0.39471    0.24198   1.631    0.105    
+## (Intercept)           -1.46365    0.25995  -5.630 9.02e-08 ***
+## xs(Sepal.Length)       0.32388    0.30869   1.049    0.296    
+## xs(Petal.Length)       1.83444    0.38167   4.806 3.80e-06 ***
+## xf(Species)versicolor -0.00374    0.19312  -0.019    0.985    
+## xf(Species)virginica   0.32849    0.25140   1.307    0.193    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03108655)
+## (Dispersion parameter for gaussian family taken to be 0.03091928)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5075  on 145  degrees of freedom
-## AIC: -88.051
+## Residual deviance:  4.4833  on 145  degrees of freedom
+## AIC: -88.86
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 </div>
@@ -354,23 +354,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
+## -0.67599  -0.07742  -0.02958   0.09613   0.46823  
 ## 
 ## Coefficients:
 ##                   Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)       -1.40759    0.26919  -5.229 5.84e-07 ***
-## xs(Sepal.Length)   0.36881    0.32353   1.140    0.256    
-## xs(Petal.Length)   1.71443    0.36286   4.725 5.39e-06 ***
-## Speciesversicolor  0.06471    0.18222   0.355    0.723    
-## Speciesvirginica   0.39471    0.24198   1.631    0.105    
+## (Intercept)       -1.46365    0.25995  -5.630 9.02e-08 ***
+## xs(Sepal.Length)   0.32388    0.30869   1.049    0.296    
+## xs(Petal.Length)   1.83444    0.38167   4.806 3.80e-06 ***
+## Speciesversicolor -0.00374    0.19312  -0.019    0.985    
+## Speciesvirginica   0.32849    0.25140   1.307    0.193    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03108655)
+## (Dispersion parameter for gaussian family taken to be 0.03091928)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5075  on 145  degrees of freedom
-## AIC: -88.051
+## Residual deviance:  4.4833  on 145  degrees of freedom
+## AIC: -88.86
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>For transformation of factors only:</p>
@@ -422,23 +422,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
+## -0.67599  -0.07742  -0.02958   0.09613   0.46823  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.40759    0.26919  -5.229 5.84e-07 ***
-## xs(Sepal.Length)       0.36881    0.32353   1.140    0.256    
-## xs(Petal.Length)       1.71443    0.36286   4.725 5.39e-06 ***
-## xf(Species)versicolor  0.06471    0.18222   0.355    0.723    
-## xf(Species)virginica   0.39471    0.24198   1.631    0.105    
+## (Intercept)           -1.46365    0.25995  -5.630 9.02e-08 ***
+## xs(Sepal.Length)       0.32388    0.30869   1.049    0.296    
+## xs(Petal.Length)       1.83444    0.38167   4.806 3.80e-06 ***
+## xf(Species)versicolor -0.00374    0.19312  -0.019    0.985    
+## xf(Species)virginica   0.32849    0.25140   1.307    0.193    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03108655)
+## (Dispersion parameter for gaussian family taken to be 0.03091928)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5075  on 145  degrees of freedom
-## AIC: -88.051
+## Residual deviance:  4.4833  on 145  degrees of freedom
+## AIC: -88.86
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Good practice here is to provide <code>data</code> parameter as well to detect predictors classes, and model type (classification or regression).</p>
@@ -462,23 +462,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
+## -0.67599  -0.07742  -0.02958   0.09613   0.46823  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.40759    0.26919  -5.229 5.84e-07 ***
-## xs(Sepal.Length)       0.36881    0.32353   1.140    0.256    
-## xs(Petal.Length)       1.71443    0.36286   4.725 5.39e-06 ***
-## xf(Species)versicolor  0.06471    0.18222   0.355    0.723    
-## xf(Species)virginica   0.39471    0.24198   1.631    0.105    
+## (Intercept)           -1.46365    0.25995  -5.630 9.02e-08 ***
+## xs(Sepal.Length)       0.32388    0.30869   1.049    0.296    
+## xs(Petal.Length)       1.83444    0.38167   4.806 3.80e-06 ***
+## xf(Species)versicolor -0.00374    0.19312  -0.019    0.985    
+## xf(Species)virginica   0.32849    0.25140   1.307    0.193    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03108655)
+## (Dispersion parameter for gaussian family taken to be 0.03091928)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5075  on 145  degrees of freedom
-## AIC: -88.051
+## Residual deviance:  4.4833  on 145  degrees of freedom
+## AIC: -88.86
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>In above examples each predictor is transformed by default. You can exclude needed, by specifying global <code>alter = "never"</code> parameters, or <code>bare</code>.</p>
@@ -499,23 +499,23 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67503  -0.07663  -0.02976   0.09713   0.46951  
+## -0.67599  -0.07742  -0.02958   0.09613   0.46823  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.40759    0.26919  -5.229 5.84e-07 ***
-## xs(Sepal.Length)       0.36881    0.32353   1.140    0.256    
-## xs(Petal.Length)       1.71443    0.36286   4.725 5.39e-06 ***
-## xf(Species)versicolor  0.06471    0.18222   0.355    0.723    
-## xf(Species)virginica   0.39471    0.24198   1.631    0.105    
+## (Intercept)           -1.46365    0.25995  -5.630 9.02e-08 ***
+## xs(Sepal.Length)       0.32388    0.30869   1.049    0.296    
+## xs(Petal.Length)       1.83444    0.38167   4.806 3.80e-06 ***
+## xf(Species)versicolor -0.00374    0.19312  -0.019    0.985    
+## xf(Species)virginica   0.32849    0.25140   1.307    0.193    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03108655)
+## (Dispersion parameter for gaussian family taken to be 0.03091928)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5075  on 145  degrees of freedom
-## AIC: -88.051
+## Residual deviance:  4.4833  on 145  degrees of freedom
+## AIC: -88.86
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Works! Can it be simpler? Actually not because of black box based transformation and theory, but we can provide some model based parameters upfront using DALEX’s <code>explainer</code> object (see next section).</p>
@@ -555,14 +555,14 @@
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -0.8194  -0.3415  -0.3391  -0.3367   2.4276  
+## -0.8193  -0.3415  -0.3391  -0.3367   2.4276  
 ## 
 ## Coefficients:
 ##               Estimate Std. Error z value Pr(&gt;|z|)   
-## (Intercept) 69.2301684 82.0953281   0.843  0.39907   
-## xs(cmedv)   64.8038715 25.0641438   2.586  0.00972 **
-## rad         -0.0008446  0.0214853  -0.039  0.96864   
-## xs(lstat)   -9.5519286 78.3245174  -0.122  0.90294   
+## (Intercept) 17.4960462 22.9315005   0.763  0.44548   
+## xs(cmedv)   18.0185780  6.9696062   2.585  0.00973 **
+## rad         -0.0008441  0.0214852  -0.039  0.96866   
+## xs(lstat)   -2.6516240 21.7792766  -0.122  0.90310   
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -596,23 +596,23 @@
 ##     data = data)
 ## 
 ## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -11.536   -2.393   -0.654    1.760   21.190  
+##      Min        1Q    Median        3Q       Max  
+## -11.2483   -2.3815   -0.6665    1.7173   21.1402  
 ## 
 ## Coefficients:
 ##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -16.55454    1.44398 -11.464  &lt; 2e-16 ***
-## xs(cmedv)     1.69892    0.07231  23.496  &lt; 2e-16 ***
-## xs(crim)      0.59703    0.14316   4.171 3.58e-05 ***
-## xf(chas)1     1.42773    0.69444   2.056   0.0403 *  
+## (Intercept) -15.05266    1.45436 -10.350  &lt; 2e-16 ***
+## xs(cmedv)     1.61593    0.06852  23.584  &lt; 2e-16 ***
+## xs(crim)      0.55566    0.14428   3.851 0.000133 ***
+## xf(chas)1     1.44531    0.69317   2.085 0.037568 *  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 15.40985)
+## (Dispersion parameter for gaussian family taken to be 15.3487)
 ## 
-##     Null deviance: 25752.4  on 505  degrees of freedom
-## Residual deviance:  7735.7  on 502  degrees of freedom
-## AIC: 2825.9
+##     Null deviance: 25752  on 505  degrees of freedom
+## Residual deviance:  7705  on 502  degrees of freedom
+## AIC: 2823.9
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>You can provide your own xspline’s parameters that overwrite that sourced from explainer.</p>
