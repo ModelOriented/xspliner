@@ -139,7 +139,7 @@ See details in <code><a href='../articles/xspliner.html'>vignette("xspliner")</a
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>Predictive model, formula or explainer (see DALEX2) object.</p></td>
+      <td><p>Predictive model, formula or explainer (see DALEX) object.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -258,8 +258,8 @@ call are considered in transition.</p></td>
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 2
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># using DALEX2</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>DALEX2</span>)</div><div class='output co'>#&gt; <span class='message'>Welcome to DALEX2 (version: 0.9).</span></div><div class='input'><span class='no'>xs_iris_explainer</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DALEX2/topics/explain'>explain</a></span>(<span class='no'>rf_iris</span>)
+<span class='co'># using DALEX</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>DALEX</span>)</div><div class='output co'>#&gt; <span class='message'>Welcome to DALEX (version: 0.2.4).</span></div><div class='input'><span class='no'>xs_iris_explainer</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DALEX/topics/explain'>explain</a></span>(<span class='no'>rf_iris</span>)
 <span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(<span class='no'>rf_iris</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot extract model family. Use gaussian.</span></div><div class='output co'>#&gt; <span class='message'>Cannot extract model link. Use identity.</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
 #&gt; Call:
 #&gt; glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 

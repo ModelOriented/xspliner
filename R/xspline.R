@@ -6,7 +6,7 @@
 #'
 #' model_surrogate_xspliner is a wrapper of xspline method to assure consistency with https://github.com/ModelOriented/DrWhy tools
 #'
-#' @param object Predictive model, formula or explainer (see DALEX2) object.
+#' @param object Predictive model, formula or explainer (see DALEX) object.
 #' @param model When \code{object} is formula - predictive model. Basic model used for extracting predictors transformation.
 #' @param lhs Left-hand side of model formula. Can be transformed response.
 #' @param response Name of response variable of \code{model}.
@@ -41,8 +41,8 @@
 #' summary(xs_iris)
 #' plot(xs_iris, "Sepal.Length")
 #'
-#' # using DALEX2
-#' library(DALEX2)
+#' # using DALEX
+#' library(DALEX)
 #' xs_iris_explainer <- explain(rf_iris)
 #' xs_iris <- xspline(rf_iris)
 #' summary(xs_iris)

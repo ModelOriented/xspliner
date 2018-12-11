@@ -1,4 +1,4 @@
-library(DALEX2)
+library(DALEX)
 library(caret)
 library(xspliner)
 data(apartments)
