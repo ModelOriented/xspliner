@@ -15,7 +15,7 @@ build_xspliner(formula, model, data, xf_opts = xf_opts_default,
 
 \item{data}{Training data of \code{model}.}
 
-\item{xf_opts}{Formula parameters used for factor variable transformatoins inherited from factorMerger package.}
+\item{xf_opts}{Formula parameters used for factor variable transformations inherited from factorMerger package.}
 
 \item{xs_opts}{Predictive model response method and approximation parameters used for quantitative.}
 

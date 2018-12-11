@@ -14,7 +14,7 @@ This document presents possible options of how the final model can be described 
 # Single variable results
 
 As you actually saw in the previous sections, the model transformation can be presented on simple graphics.
-In continuous predictor case, the transformation is plotted as estimated spline - in case of discrete predictor, factorMerget plot is used.
+In continuous predictor case, the transformation is plotted as estimated spline - in case of discrete predictor, factorMerger plot is used.
 
 For quantitative predictors some additional options are offered. Let's check them on the below examples.
 

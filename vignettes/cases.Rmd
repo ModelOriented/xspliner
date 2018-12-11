@@ -34,7 +34,7 @@ summary(model_xs)
 # Partially constant approximation
 
 ```{r message = FALSE}
-library(DALEX2)
+library(DALEX)
 library(caret)
 library(xspliner)
 data(apartments)

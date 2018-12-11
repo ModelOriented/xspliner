@@ -1,4 +1,4 @@
-#' Easy way for approxitmating data with splines.
+#' Easy way for approximating data with splines.
 #'
 #' @name xspliner-package
 #' @importFrom magrittr %>%

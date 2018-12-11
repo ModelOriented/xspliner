@@ -11,7 +11,7 @@ vignette: >
 
 # Predict
 
-As xspliner final model is GLM, predict method is just wrapper od `stats::predict.glm` function. 
+As xspliner final model is GLM, predict method is just wrapper of `stats::predict.glm` function. 
 Let's see it on the below example:
 ```{r message = FALSE}
 library(xspliner)

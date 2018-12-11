@@ -9,12 +9,12 @@ build_approximation_formula <- function(response, predictor, env, ...) {
 
 #' Approximate spline on data
 #'
-#' It aproximates data with spline function by fitting GAM model.
-#' @param effect_data Blackbox response data, for example pdp curve.
+#' It approximates data with spline function by fitting GAM model.
+#' @param effect_data Black box response data, for example pdp curve.
 #' @param response Name of response value from effect_data.
 #' @param predictor Name of predictor value from effect_data.
 #' @param env Formula environment that should be used for fitting gam model.
-#' @param monotonic Possible options "up", "down" and "auto. If up the spline is incresing, when down decreasing.
+#' @param monotonic Possible options "up", "down" and "auto. If up the spline is increasing, when down decreasing.
 #' @param ... Other arguments passed to \link[mgcv]{s} function.
 #' @return
 #' Object of class "gam". See \link[mgcv]{gamObject}

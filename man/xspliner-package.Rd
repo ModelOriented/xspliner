@@ -2,7 +2,7 @@
 % Please edit documentation in R/xspliner.R
 \name{xspliner-package}
 \alias{xspliner-package}
-\title{Easy way for approxitmating data with splines.}
+\title{Easy way for approximating data with splines.}
 \description{
-Easy way for approxitmating data with splines.
+Easy way for approximating data with splines.
 }

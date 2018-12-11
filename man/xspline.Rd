@@ -22,7 +22,7 @@ model_surrogate_xspliner(object, ...)
 \method{xspline}{explainer}(object, env = parent.frame(), ...)
 }
 \arguments{
-\item{object}{Predictive model, formula or explainer (see DALEX2) object.}
+\item{object}{Predictive model, formula or explainer (see DALEX) object.}
 
 \item{...}{Other arguments passed to \code{xspline} methods or \link{build_xspliner}.}
 
@@ -76,8 +76,8 @@ xs_iris <- xspline(rf_iris)
 summary(xs_iris)
 plot(xs_iris, "Sepal.Length")
 
-# using DALEX2
-library(DALEX2)
+# using DALEX
+library(DALEX)
 xs_iris_explainer <- explain(rf_iris)
 xs_iris <- xspline(rf_iris)
 summary(xs_iris)

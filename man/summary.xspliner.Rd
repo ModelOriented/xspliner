@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{xspliner object}
 
-\item{predictor}{precitor for xspliner model formula}
+\item{predictor}{predictor for xspliner model formula}
 
 \item{...}{Another arguments passed into model specific method.}
 }

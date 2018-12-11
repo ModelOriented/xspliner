@@ -1,12 +1,12 @@
 Package: xspliner
-Title: Assisted model building, using surrogate black-box models to train interpretable spline based additive models
+Title: Assisted Model Building, using Surrogate Black-Box Models to Train Interpretable Spline Based Additive Models
 Version: 0.0.2
 Authors@R: c(
-  person("Krystian", "Igras", email = "krystian8270@gmail.com", role = c("aut", "cre")),
+  person("Krystian", "Igras", email = "krystian8207@gmail.com", role = c("aut", "cre")),
   person("Przemyslaw", "Biecek", role =  c("aut", "ths")))
-Description: Builds generalised linear model with automatic data transformation. 
+Description: Builds generalized linear model with automatic data transformation. 
   The 'xspliner' helps to build simple, interpretable models that inherits informations provided by more complicated ones.
-  The resulting model may be treated as explanation of provided black box, that was supplied prior to the algoritm.
+  The resulting model may be treated as explanation of provided black box, that was supplied prior to the algorithm.
 Depends: R (>= 3.0)
 License: GPL
 Encoding: UTF-8
@@ -31,7 +31,7 @@ Suggests:
     e1071,
     caret,
     breakDown,
-    DALEX2,
+    DALEX,
     xgboost,
     gridExtra,
     grid

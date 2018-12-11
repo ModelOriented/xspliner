@@ -18,9 +18,9 @@
 
 \item{model}{Base model that xspliner is based on.}
 
-\item{plot_response}{If TRUE blackbox model response is drawn.}
+\item{plot_response}{If TRUE black box model response is drawn.}
 
-\item{plot_approx}{If TRUE blackbox model response approcimation is drawn.}
+\item{plot_approx}{If TRUE black box model response approximation is drawn.}
 
 \item{data}{Training data used for building \code{x} model. Required for plot_data option and model comparing.}
 

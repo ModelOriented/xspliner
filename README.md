@@ -4,6 +4,11 @@
 
 ![](vignettes/xspliner.png)
 
+## Installation from CRAN
+```
+install.packages("xspliner")
+```
+
 ## Installation from Github
 ```
 devtools::install_github("ModelOriented/xspliner")

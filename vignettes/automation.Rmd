@@ -151,7 +151,7 @@ model_xs <- xspline(Petal.Width ~ Sepal.Length + Petal.Length + Species,
 summary(model_xs)
 ```
 
-Even having learnt the above listed options, we still can have problems with handling model with a huge amount of variables.
+Even having learned the above listed options, we still can have problems with handling model with a huge amount of variables.
 
 ## Model based dot formula
 
@@ -171,7 +171,7 @@ How predictors are sourced?
 - model training data predictors
 - xspline provided data parameter, excluding formula response
 
-To assure correct predictors usage, you may also specify predcitor names vector in `predictors` parameter, and data (optional) to assure source of variable classes:
+To assure correct predictors usage, you may also specify predictor names vector in `predictors` parameter, and data (optional) to assure source of variable classes:
 ```{r message = FALSE}
 model_xs <- xspline(Petal.Width ~ ., 
                     model = rf_iris,
@@ -197,7 +197,7 @@ summary(model_xs)
 ```
 
 Works! Can it be simpler? Actually not because of black box based transformation and theory, 
-but we can provide some model based parameters upfront using DALEX2's `explainer` object (see next section).
+but we can provide some model based parameters upfront using DALEX's `explainer` object (see next section).
 
 Unfortunately this simplicity works thanks to a few approaches that randomForest follows.
 
@@ -245,15 +245,15 @@ As we can see in the summary, rad variable was omitted during transformation.
 
 The option is available only for xspline build on top of model or dot formula.
 
-# Integration with DALEX2
+# Integration with DALEX
 
-As mentioned in the previous section, xspliner is integrated with DALEX2 package.
+As mentioned in the previous section, xspliner is integrated with DALEX package.
 The main function from the package `explain` returns useful black box data (such as bare black model or training data) that can be used by xspline function.
 
 Just check below example
 
 ```{r message = FALSE}
-library(DALEX2)
+library(DALEX)
 rf_boston <- randomForest(lstat ~ cmedv + crim + chas, data = boston)
 explainer <- explain(rf_boston, label = "boston")
 model <- xspline(
