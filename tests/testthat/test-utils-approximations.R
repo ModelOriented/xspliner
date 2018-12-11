@@ -173,10 +173,6 @@ test_that("build_xs_function correctly use gam object for prediction", {
 
 })
 
-# (todo)
-# test_that("build_xs_function correctly use gam object for prediction", {
-# })
-
 test_that("is_lm_better_than_xs correctly chooses model", {
   x = 1:10
   y = 2 * x + rnorm(10, 0, 0.001)
