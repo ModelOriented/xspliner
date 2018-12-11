@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{Object of class 'xspliner'.}
 
-\item{newdata}{Data that should be prediciton based on.}
+\item{newdata}{Data that should be prediction based on.}
 
 \item{...}{Another arguments passed into \link[stats]{predict.glm} method.}
 }

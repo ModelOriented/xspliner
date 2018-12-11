@@ -94,11 +94,11 @@ But even with approximated PDP, how could we use it to interpret black box model
 
 ### Linear models based on response function and splines
 
-The general idea of how to use the response function and splines to build an interpretable model that could be used as black box expliner is as follows.
+The general idea of how to use the response function and splines to build an interpretable model that could be used as black box explainer is as follows.
 
 - For each variable used in the black box model, create a response function based on one of the known methods, let's mark it $f_{x}$
 - Approximate $f_{x}$ using spline - the result is $\widetilde{f}_{x}$
-- Build linear model, in which each predictior $x_{i}$ is transformed with approximated response function: $\widetilde{f}_{x_{i}}(x_{i})$
+- Build linear model, in which each predictor $x_{i}$ is transformed with approximated response function: $\widetilde{f}_{x_{i}}(x_{i})$
 
 Shortly, using black box formula
 $$y \sim x_{1} + \cdots + x_{n}$$
@@ -143,7 +143,7 @@ cmedv ~ rm + lstat + xs(nox)
 
 This formula is enough to build a GLM model (with using default parameters and xspliner glm generating function). Nevertheless to understand deeply the approach let's go further with the theory.
 
-As the algoritm goes through creating black box based response function and its approximation we need to specify desirable parameters.
+As the algorithm goes through creating black box based response function and its approximation we need to specify desirable parameters.
 
 #### Specifying which method should we use to build response function
 
@@ -256,7 +256,7 @@ It has missing `xs` parameters, and `xs` is treated as standard R function (prev
 
 More details about can be found in following sections:
 
-- [Discrete response or predictor](./discrete.html) - learn how model works when black box is classificator or what effect and transition is used when predictor is dicrete variable
+- [Discrete response or predictor](./discrete.html) - learn how model works when black box is classifier or what effect and transition is used when predictor is discrete variable
 - [Graphics](./graphics.html) - learn how to plot the results, or compare compare xspliner with base black box.
 - [Automation](./automation.html) - learn how to automate building xspliners without specifying your own formula and/or using global parameters
 - [Methods](./methods.html) - learn about other xspliner methods and its environment

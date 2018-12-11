@@ -12,7 +12,7 @@ approx_with_monotonic_spline(effect_data, response, predictor,
   env = parent.frame(), monotonic, ...)
 }
 \arguments{
-\item{effect_data}{Blackbox response data, for example pdp curve.}
+\item{effect_data}{Black box response data, for example pdp curve.}
 
 \item{response}{Name of response value from effect_data.}
 
@@ -22,13 +22,13 @@ approx_with_monotonic_spline(effect_data, response, predictor,
 
 \item{...}{Other arguments passed to \link[mgcv]{s} function.}
 
-\item{monotonic}{Possible options "up", "down" and "auto. If up the spline is incresing, when down decreasing.}
+\item{monotonic}{Possible options "up", "down" and "auto. If up the spline is increasing, when down decreasing.}
 }
 \value{
 Object of class "gam". See \link[mgcv]{gamObject}
 }
 \description{
-It aproximates data with spline function by fitting GAM model.
+It approximates data with spline function by fitting GAM model.
 }
 \examples{
 x <- sort(rnorm(20, 5, 5))

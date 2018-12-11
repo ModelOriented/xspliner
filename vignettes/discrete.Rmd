@@ -32,7 +32,7 @@ model_rf <- randomForest(average_montly_hours ~ last_evaluation + salary + satis
 We're going to make some transformation/simplification on `salary` variable.
 To do so, we need to transform formula passed into `xspline` function.
 
-Similarly to continuous variable it is enough to use `xf` symbol on `salary` variable, ie. use formula:
+Similarly to continuous variable it is enough to use `xf` symbol on `salary` variable, i.e. use formula:
 ```
 average_monthly_hours ~ last_evaluation + xf(salary) + satisfaction_level
 ```

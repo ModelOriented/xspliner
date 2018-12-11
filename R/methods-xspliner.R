@@ -3,8 +3,8 @@
 #' @param x Object of class 'xspliner'
 #' @param variable_names Names of predictors which transitions should be plotted.
 #' @param model Base model that xspliner is based on.
-#' @param plot_response If TRUE blackbox model response is drawn.
-#' @param plot_approx If TRUE blackbox model response approcimation is drawn.
+#' @param plot_response If TRUE black box model response is drawn.
+#' @param plot_approx If TRUE black box model response approximation is drawn.
 #' @param data Training data used for building \code{x} model. Required for plot_data option and model comparing.
 #' @param plot_data If TRUE raw data is drawn.
 #' @param plot_deriv If TRUE derivative of approximation is showed on plot.
@@ -48,7 +48,7 @@ plot.xspliner <- function(x, variable_names = NULL, model = NULL, plot_response 
 #' Summary method for xspliner object
 #'
 #' @param object xspliner object
-#' @param predictor precitor for xspliner model formula
+#' @param predictor predictor for xspliner model formula
 #' @param ... Another arguments passed into model specific method.
 #' @export
 summary.xspliner <- function(object, predictor, ...) {
@@ -70,7 +70,7 @@ summary.xspliner <- function(object, predictor, ...) {
 #' Print method for xspliner object
 #'
 #' @param x xspliner object
-#' @param predictor precitor for xsplner model formula
+#' @param predictor predictor for xspliner model formula
 #' @param ... Another arguments passed into model specific print method.
 #' @export
 print.xspliner <- function(x, predictor, ...) {

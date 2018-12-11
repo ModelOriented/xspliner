@@ -53,7 +53,7 @@ When the response function has linear form, approximating it with splines may ma
 
 You may find two parameters responsible for that:
 
-- `alter` - The subparameter of `transition`. We already know how this parameter works for "always" and "never" values.
+- `alter` - The sub-parameter of `transition`. We already know how this parameter works for "always" and "never" values.
 There is also the third option, "auto". In this case xspline automatically chooses whether variable should be transformed with splines
 - `compare_stat` - function of `lm` class object. It defines statistic that should be used in decision between spline model and linear one. The function should have the attribute `higher`. When the attribute has `"better"` value then the model with higher statistic value is chosen.
 

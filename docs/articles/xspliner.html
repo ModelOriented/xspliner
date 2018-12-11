@@ -129,13 +129,13 @@
 <div id="linear-models-based-on-response-function-and-splines" class="section level3">
 <h3 class="hasAnchor">
 <a href="#linear-models-based-on-response-function-and-splines" class="anchor"></a>Linear models based on response function and splines</h3>
-<p>The general idea of how to use the response function and splines to build an interpretable model that could be used as black box expliner is as follows.</p>
+<p>The general idea of how to use the response function and splines to build an interpretable model that could be used as black box explainer is as follows.</p>
 <ul>
 <li>For each variable used in the black box model, create a response function based on one of the known methods, let’s mark it <span class="math inline">\(f_{x}\)</span>
 </li>
 <li>Approximate <span class="math inline">\(f_{x}\)</span> using spline - the result is <span class="math inline">\(\widetilde{f}_{x}\)</span>
 </li>
-<li>Build linear model, in which each predictior <span class="math inline">\(x_{i}\)</span> is transformed with approximated response function: <span class="math inline">\(\widetilde{f}_{x_{i}}(x_{i})\)</span>
+<li>Build linear model, in which each predictor <span class="math inline">\(x_{i}\)</span> is transformed with approximated response function: <span class="math inline">\(\widetilde{f}_{x_{i}}(x_{i})\)</span>
 </li>
 </ul>
 <p>Shortly, using black box formula <span class="math display">\[y \sim x_{1} + \cdots + x_{n}\]</span> use <span class="math display">\[y \sim \widetilde{f}_{x_{1}}(x_{1}) + \cdots + \widetilde{f}_{x_{n}}(x_{n})\]</span> in linear one.</p>
@@ -178,7 +178,7 @@
 <p>So we have:</p>
 <pre><code>cmedv ~ rm + lstat + xs(nox)</code></pre>
 <p>This formula is enough to build a GLM model (with using default parameters and xspliner glm generating function). Nevertheless to understand deeply the approach let’s go further with the theory.</p>
-<p>As the algoritm goes through creating black box based response function and its approximation we need to specify desirable parameters.</p>
+<p>As the algorithm goes through creating black box based response function and its approximation we need to specify desirable parameters.</p>
 <div id="specifying-which-method-should-we-use-to-build-response-function" class="section level4">
 <h4 class="hasAnchor">
 <a href="#specifying-which-method-should-we-use-to-build-response-function" class="anchor"></a>Specifying which method should we use to build response function</h4>
@@ -291,7 +291,7 @@
 <p>More details about can be found in following sections:</p>
 <ul>
 <li>
-<a href="./discrete.html">Discrete response or predictor</a> - learn how model works when black box is classificator or what effect and transition is used when predictor is dicrete variable</li>
+<a href="./discrete.html">Discrete response or predictor</a> - learn how model works when black box is classifier or what effect and transition is used when predictor is discrete variable</li>
 <li>
 <a href="./graphics.html">Graphics</a> - learn how to plot the results, or compare compare xspliner with base black box.</li>
 <li>

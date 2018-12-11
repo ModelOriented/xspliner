@@ -120,7 +120,7 @@
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(average_montly_hours <span class="op">~</span><span class="st"> </span>last_evaluation <span class="op">+</span><span class="st"> </span>salary <span class="op">+</span><span class="st"> </span>satisfaction_level, <span class="dt">data =</span> HR_data)</a></code></pre></div>
 <p>We’re going to make some transformation/simplification on <code>salary</code> variable. To do so, we need to transform formula passed into <code>xspline</code> function.</p>
-<p>Similarly to continuous variable it is enough to use <code>xf</code> symbol on <code>salary</code> variable, ie. use formula:</p>
+<p>Similarly to continuous variable it is enough to use <code>xf</code> symbol on <code>salary</code> variable, i.e. use formula:</p>
 <pre><code>average_monthly_hours ~ last_evaluation + xf(salary) + satisfaction_level</code></pre>
 <p>We could use the formula for our final GLM model (then we will use basic parameters for xf), but first let’s learn what changes it does.</p>
 <div id="individual-conditional-expectation-for-black-box-model" class="section level2">
@@ -221,11 +221,11 @@
 ## 
 ## Coefficients:
 ##                  Estimate Std. Error z value Pr(&gt;|z|)   
-## (Intercept)         1.396      1.760   0.793  0.42762   
-## xs(Sepal.Length)   11.765     16.987   0.693  0.48856   
-## xs(Sepal.Width)     7.946      4.888   1.626  0.10402   
-## xs(Petal.Length)    3.050      1.242   2.456  0.01406 * 
-## xs(Petal.Width)     3.465      1.321   2.623  0.00872 **
+## (Intercept)        -1.753      1.034  -1.696  0.08984 . 
+## xs(Sepal.Length)   11.947     17.250   0.693  0.48856   
+## xs(Sepal.Width)     8.069      4.964   1.626  0.10402   
+## xs(Petal.Length)    3.097      1.261   2.456  0.01406 * 
+## xs(Petal.Width)     3.518      1.341   2.623  0.00872 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 

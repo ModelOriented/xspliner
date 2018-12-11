@@ -151,7 +151,7 @@ model_xs <- xspline(Petal.Width ~ Sepal.Length + Petal.Length + Species,
 summary(model_xs)
 ```
 
-Even having learnt the above listed options, we still can have problems with handling model with a huge amount of variables.
+Even having learned the above listed options, we still can have problems with handling model with a huge amount of variables.
 
 ## Model based dot formula
 
@@ -171,7 +171,7 @@ How predictors are sourced?
 - model training data predictors
 - xspline provided data parameter, excluding formula response
 
-To assure correct predictors usage, you may also specify predcitor names vector in `predictors` parameter, and data (optional) to assure source of variable classes:
+To assure correct predictors usage, you may also specify predictor names vector in `predictors` parameter, and data (optional) to assure source of variable classes:
 ```{r message = FALSE}
 model_xs <- xspline(Petal.Width ~ ., 
                     model = rf_iris,
