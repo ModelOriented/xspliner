@@ -117,9 +117,10 @@
     
 
     <pre class="usage"><span class='co'># S3 method for xspliner</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>variable_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>variable_names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>plot_response</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot_approx</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>plot_data</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>plot_deriv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>compare_with</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(),
+  <span class='kw'>plot_data</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>plot_deriv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>n_plots</span> <span class='kw'>=</span> <span class='fl'>6</span>,
+  <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>compare_with</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(),
   <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>,
   <span class='no'>newdata</span>)), <span class='no'>...</span>)</pre>
     
@@ -131,8 +132,8 @@
       <td><p>Object of class 'xspliner'</p></td>
     </tr>
     <tr>
-      <th>variable_name</th>
-      <td><p>Name of predictor that should be plotted.</p></td>
+      <th>variable_names</th>
+      <td><p>Names of predictors which transitions should be plotted.</p></td>
     </tr>
     <tr>
       <th>model</th>
@@ -157,6 +158,14 @@
     <tr>
       <th>plot_deriv</th>
       <td><p>If TRUE derivative of approximation is showed on plot.</p></td>
+    </tr>
+    <tr>
+      <th>n_plots</th>
+      <td><p>Threshold for number of plots when plotting all variables.</p></td>
+    </tr>
+    <tr>
+      <th>sort_by</th>
+      <td><p>When comparing models determines according to which model should observations be ordered.</p></td>
     </tr>
     <tr>
       <th>compare_with</th>

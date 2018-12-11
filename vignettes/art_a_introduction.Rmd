@@ -256,12 +256,12 @@ It has missing `xs` parameters, and `xs` is treated as standard R function (prev
 
 More details about can be found in following sections:
 
-- [Discrete response or predictor](https://krystian8207.github.io/xspliner/articles/2_discrete_response_or_predictor.html) - learn how model works when black box is classificator or what effect and transition is used when predictor is dicrete variable
-- [Graphics](https://krystian8207.github.io/xspliner/articles/3_graphics.html) - learn how to plot the results, or compare compare xspliner with base black box.
-- [Automation](https://krystian8207.github.io/xspliner/articles/4_automation.html) - learn how to automate building xspliners without specifying your own formula and/or using global parameters
-- [Methods](https://krystian8207.github.io/xspliner/articles/5_methods.html) - learn about other xspliner methods and its environment
-- [Extras](https://krystian8207.github.io/xspliner/articles/6_extras.html) - what additional features are provided by xspliner
-- [Use cases](https://krystian8207.github.io/xspliner/articles/7_use_cases.html) - see `xspliner` in action with examples
+- [Discrete response or predictor](https://ModelOriented.github.io/xspliner/articles/2_discrete_response_or_predictor.html) - learn how model works when black box is classificator or what effect and transition is used when predictor is dicrete variable
+- [Graphics](https://ModelOriented.github.io/xspliner/articles/3_graphics.html) - learn how to plot the results, or compare compare xspliner with base black box.
+- [Automation](https://ModelOriented.github.io/xspliner/articles/4_automation.html) - learn how to automate building xspliners without specifying your own formula and/or using global parameters
+- [Methods](https://ModelOriented.github.io/xspliner/articles/5_methods.html) - learn about other xspliner methods and its environment
+- [Extras](https://ModelOriented.github.io/xspliner/articles/6_extras.html) - what additional features are provided by xspliner
+- [Use cases](https://ModelOriented.github.io/xspliner/articles/7_use_cases.html) - see `xspliner` in action with examples
 
 Here we shortly show how the plot random forest effect and transition for `nox` variable:
 ```{r}

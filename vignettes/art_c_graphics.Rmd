@@ -107,6 +107,15 @@ plot(model_xs, model = model_svm, data = iris_data,
 )  
 ```
 
+It is also possible to sort the values of heatmap according to chosen model:
+
+```{r}
+plot(model_xs, model = model_svm, data = iris_data,
+     prediction_funs = list(prob_svm, prob_xs),
+     sort_by = "svm"
+)  
+```
+
 ## Comparing with another models
 
 Following above approach it's easy to generate similar graphics for higher amount of models.
@@ -127,12 +136,28 @@ model_xs <- xspline(Ozone ~ xs(Solar.R) + xs(Wind) + xs(Temp), model_rf, data = 
 model_glm <- glm(Ozone ~ ., data = ozone)
 model_gam <- mgcv::gam(Ozone ~ s(Solar.R) + s(Wind) + s(Temp), data = ozone)
 
-plot(model_xs, model = model_rf, data = ozone, compare_with = list(glm = model_glm, gam = model_gam))
+plot(model_xs, 
+     model = model_rf, 
+     data = ozone, 
+     compare_with = list(glm = model_glm, gam = model_gam),
+     sort_by = "xspliner")
 ```
 
-# Class based plot
+# Plotting more transitions at once
 
-The resulting xspliner model is GLM. So you may use graphical analytics for xspliner just typing:
-```{r}
+If you want to display many transitions on one plot just pass xspliner model to plot:
+```{r fig.width = 9.5}
 plot(model_xs)
+```
+
+For models trained on top of many predictors, there will be displayed plots for 6 first transformed variables.
+To change that value just set `n_plots` variable:
+
+```{r fig.width = 9.5}
+plot(model_xs, n_plots = 2)
+```
+
+You can select interesting variables to plot just passing predictor names in vector:
+```{r fig.width = 9.5}
+plot(model_xs, c("Wind", "Temp"))
 ```

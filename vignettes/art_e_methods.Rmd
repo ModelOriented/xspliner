@@ -91,7 +91,7 @@ print(model_xs, "Species")
 
 # Plot
 
-You can see all details in [graphics](https://krystian8207.github.io/xspliner/articles/graphics.html)
+You can see all details in [graphics](https://ModelOriented.github.io/xspliner/articles/graphics.html)
 
 # Transition
 

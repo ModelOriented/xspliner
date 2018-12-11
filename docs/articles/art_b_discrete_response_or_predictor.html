@@ -88,7 +88,7 @@
       <h1>Classification and discrete predictors</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2018-12-10</h4>
+            <h4 class="date">2018-12-11</h4>
       
       
       <div class="hidden name"><code>art_b_discrete_response_or_predictor.Rmd</code></div>
@@ -163,31 +163,32 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -137.197   -37.956    -1.425    37.728   129.925  
+## -137.220   -37.916    -1.436    37.765   129.623  
 ## 
 ## Coefficients:
 ##                     Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)         136.0467     2.2213  61.248  &lt; 2e-16 ***
-## last_evaluation     100.8673     2.2501  44.828  &lt; 2e-16 ***
-## xf(salary)lowmedium  -0.3096     1.3929  -0.222    0.824    
-## satisfaction_level  -11.3302     1.5494  -7.312 2.76e-13 ***
+## (Intercept)        136.07055    2.22157  61.250  &lt; 2e-16 ***
+## last_evaluation    100.87262    2.25016  44.829  &lt; 2e-16 ***
+## xf(salary)low       -0.56876    1.44317  -0.394    0.694    
+## xf(salary)medium    -0.01818    1.45620  -0.012    0.990    
+## satisfaction_level -11.37345    1.55075  -7.334 2.34e-13 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 2199.008)
+## (Dispersion parameter for gaussian family taken to be 2199.086)
 ## 
 ##     Null deviance: 37409709  on 14998  degrees of freedom
-## Residual deviance: 32974127  on 14995  degrees of freedom
-## AIC: 158000
+## Residual deviance: 32973090  on 14994  degrees of freedom
+## AIC: 158002
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Checking out the model summary, we can realize that “low” and “medium” values were merged into single level (generating “lowmedium” level).</p>
 <p>It can be also found by:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs, <span class="st">"salary"</span>)</a></code></pre></div>
-<pre><code>##     orig      pred
-## 1   high      high
-## 2    low lowmedium
-## 3 medium lowmedium</code></pre>
+<pre><code>##     orig          pred
+## 1   high lowmediumhigh
+## 2    low lowmediumhigh
+## 3 medium lowmediumhigh</code></pre>
 <p>The graphical result if fully sourced from factorMerger. It is enough to run:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"salary"</span>)</a></code></pre></div>
 <p><img src="art_b_discrete_response_or_predictor_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
@@ -221,11 +222,11 @@
 ## 
 ## Coefficients:
 ##                  Estimate Std. Error z value Pr(&gt;|z|)   
-## (Intercept)       -1.0237     0.7691  -1.331  0.18321   
-## xs(Sepal.Length)  12.8718    18.5846   0.693  0.48856   
-## xs(Sepal.Width)    8.6936     5.3477   1.626  0.10402   
-## xs(Petal.Length)   3.3365     1.3587   2.456  0.01406 * 
-## xs(Petal.Width)    3.7906     1.4452   2.623  0.00872 **
+## (Intercept)       -0.4544     0.7849  -0.579  0.56266   
+## xs(Sepal.Length)  12.5823    18.1666   0.693  0.48856   
+## xs(Sepal.Width)    8.4980     5.2274   1.626  0.10402   
+## xs(Petal.Length)   3.2615     1.3281   2.456  0.01406 * 
+## xs(Petal.Width)    3.7053     1.4127   2.623  0.00872 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 

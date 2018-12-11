@@ -197,7 +197,7 @@ summary(model_xs)
 ```
 
 Works! Can it be simpler? Actually not because of black box based transformation and theory, 
-but we can provide some model based parameters upfront using DALEX's `explainer` object (see next section).
+but we can provide some model based parameters upfront using DALEX2's `explainer` object (see next section).
 
 Unfortunately this simplicity works thanks to a few approaches that randomForest follows.
 
@@ -206,7 +206,7 @@ They are:
 - Building the black box with formula
 - Black box training data stores factors in long form (the factor is one column, not spread into binary wide form)
 
-Most of R based ML models satisfy the above condition. One of exceptions is XGBoost which in actual xspliner version needs to be handled in the more complex xspline call. You can see it in [use cases](https://krystian8207.github.io/xspliner/articles/use_cases.html) 
+Most of R based ML models satisfy the above condition. One of exceptions is XGBoost which in actual xspliner version needs to be handled in the more complex xspline call. You can see it in [use cases](https://ModelOriented.github.io/xspliner/articles/use_cases.html) 
 
 ## Excluding predictors from transformation
 
@@ -245,15 +245,15 @@ As we can see in the summary, rad variable was omitted during transformation.
 
 The option is available only for xspline build on top of model or dot formula.
 
-# Integration with DALEX
+# Integration with DALEX2
 
-As mentioned in the previous section, xspliner is integrated with DALEX package.
+As mentioned in the previous section, xspliner is integrated with DALEX2 package.
 The main function from the package `explain` returns useful black box data (such as bare black model or training data) that can be used by xspline function.
 
 Just check below example
 
 ```{r message = FALSE}
-library(DALEX)
+library(DALEX2)
 rf_boston <- randomForest(lstat ~ cmedv + crim + chas, data = boston)
 explainer <- explain(rf_boston, label = "boston")
 model <- xspline(

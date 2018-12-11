@@ -1,7 +1,7 @@
 #' Plot method for 'xspliner' model
 #'
 #' @param x Object of class 'xspliner'
-#' @param variable_name Name of predictor that should be plotted.
+#' @param variable_names Names of predictors which transitions should be plotted.
 #' @param model Base model that xspliner is based on.
 #' @param plot_response If TRUE blackbox model response is drawn.
 #' @param plot_approx If TRUE blackbox model response approcimation is drawn.
@@ -9,29 +9,39 @@
 #' @param plot_data If TRUE raw data is drawn.
 #' @param plot_deriv If TRUE derivative of approximation is showed on plot.
 #' @param compare_with Named list. Other models that should be compared with xspliner and \code{model}.
+#' @param n_plots Threshold for number of plots when plotting all variables.
+#' @param sort_by When comparing models determines according to which model should observations be ordered.
 #' @param prediction_funs Prediction functions that should be used in model comparison.
 #' @param ... Another arguments passed into model specific method.
 #'
 #' @export
-plot.xspliner <- function(x, variable_name = NULL, model = NULL, plot_response = TRUE, plot_approx = TRUE,
-                    data = NULL, plot_data = FALSE, plot_deriv = FALSE, compare_with = list(),
-                    prediction_funs = list(function(object, newdata) predict(object, newdata)),
+plot.xspliner <- function(x, variable_names = NULL, model = NULL, plot_response = TRUE, plot_approx = TRUE,
+                    data = NULL, plot_data = FALSE, plot_deriv = FALSE, n_plots = 6, sort_by = NULL,
+                    compare_with = list(), prediction_funs = list(function(object, newdata) predict(object, newdata)),
                     ...) {
 
-  if (is.null(variable_name) && is.null(model)) {
-    class(x) <- "lm"
-    plot(x, ...)
-  } else if (is.null(variable_name) && !is.null(model)) {
+  if (is.null(variable_names) && is.null(model)) {
+    special_vars <- specials(x, "all")
+    special_vars_to_plot <- special_vars[1:min(n_plots, length(special_vars))]
+    plot_specials_grid(x, special_vars_to_plot, plot_response, plot_approx, data, plot_data, plot_deriv)
+  } else if (length(variable_names) > 1 && is.null(model)) {
+    special_vars <- specials(x, "all")
+    special_vars_to_plot <- intersect(special_vars, variable_names)
+    if (length(special_vars_to_plot) == 0) {
+      stop("None of selected variables was transformed.")
+    }
+    plot_specials_grid(x, special_vars_to_plot, plot_response, plot_approx, data, plot_data, plot_deriv)
+  } else if (is.null(variable_names) && !is.null(model)) {
     if (is.null(data)) {
       stop("Data must be provided.")
     }
-    plot_model_comparison(x, model, data, compare_with, prediction_funs)
-  } else if (!(variable_name %in% specials(x, "all"))) {
+    plot_model_comparison(x, model, data, compare_with, prediction_funs, sort_by = sort_by)
+  } else if (!(variable_names %in% specials(x, "all"))) {
     stop("Variable wasn't transformed.")
-  } else if (variable_name %in% specials(x, "qualitative")) {
-    plot(transition(x, variable_name, "base"))
+  } else if (variable_names %in% specials(x, "qualitative")) {
+    plot(transition(x, variable_names, "base"))
   } else {
-    plot_quantitative(x, variable_name, plot_response, plot_approx, data, plot_data, plot_deriv)
+    plot_quantitative(x, variable_names, plot_response, plot_approx, data, plot_data, plot_deriv)
   }
 }
 

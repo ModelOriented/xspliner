@@ -31,8 +31,10 @@ Suggests:
     e1071,
     caret,
     breakDown,
-    DALEX,
-    xgboost
+    DALEX2,
+    xgboost,
+    gridExtra,
+    grid
 VignetteBuilder: knitr
-URL: https://krystian8207.github.io/xspliner/
-BugReports: https://github.com/krystian8207/xspliner/issues
+URL: https://ModelOriented.github.io/xspliner/
+BugReports: https://github.com/ModelOriented/xspliner/issues
