@@ -59,7 +59,7 @@ summary.xspliner <- function(object, predictor, ...) {
     return(mgcv::summary.gam(transition(object, predictor, "base"), ...))
   }
   if (predictor %in% specials(object, "qualitative")) {
-    return(attributes(transition(object, predictor, "base"))$partition) # (todo) write own method
+    return(attributes(transition(object, predictor, "base"))$partition)
   }
   if (!(predictor %in% specials(object, "qualitative"))) {
     message("Variable was not transformed.")

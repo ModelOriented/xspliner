@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>xspliner package - methods and xspliner environment • xspliner</title>
+<title>Methods and xspliner environment • xspliner</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -37,6 +37,9 @@
   </a>
 </li>
 <li>
+  <a href="../articles/xspliner.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -47,25 +50,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/automation.html">xspliner package - automate you work</a>
+      <a href="../articles/automation.html">Automate you work</a>
     </li>
     <li>
-      <a href="../articles/discrete_response_or_predictor.html">xspliner package - classification and discrete predictors</a>
+      <a href="../articles/cases.html">Use cases</a>
     </li>
     <li>
-      <a href="../articles/extras.html">xspliner package - extra information about the package</a>
+      <a href="../articles/discrete.html">Classification and discrete predictors</a>
     </li>
     <li>
-      <a href="../articles/graphics.html">xspliner package - graphics</a>
+      <a href="../articles/extras.html">Extra information about the package</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">xspliner package - basic theory and usage</a>
+      <a href="../articles/graphics.html">Graphics</a>
     </li>
     <li>
-      <a href="../articles/methods.html">xspliner package - methods and xspliner environment</a>
-    </li>
-    <li>
-      <a href="../articles/use_cases.html">xspliner package - use cases</a>
+      <a href="../articles/methods.html">Methods and xspliner environment</a>
     </li>
   </ul>
 </li>
@@ -85,10 +85,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>xspliner package - methods and xspliner environment</h1>
+      <h1>Methods and xspliner environment</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2018-12-07</h4>
+            <h4 class="date">2018-12-11</h4>
       
       
       <div class="hidden name"><code>methods.Rmd</code></div>
@@ -97,9 +97,225 @@
 
     
     
-<div id="todo" class="section level2">
+<div id="predict" class="section level1">
+<h1 class="hasAnchor">
+<a href="#predict" class="anchor"></a>Predict</h1>
+<p>As xspliner final model is GLM, predict method is just wrapper od <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict.glm">stats::predict.glm</a></code> function. Let’s see it on the below example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(magrittr)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">rf_iris &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(Petal.Width <span class="op">~</span><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Petal.Width <span class="op">~</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">  </span><span class="kw">xs</span>(Petal.Length, <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">grid.resolution =</span> <span class="dv">100</span>), <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">bs =</span> <span class="st">"cr"</span>)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">  </span><span class="kw">xf</span>(Species, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">stat =</span> <span class="st">"loglikelihood"</span>, <span class="dt">value =</span> <span class="dv">-300</span>)),</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">  <span class="dt">model =</span> rf_iris)</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">newdata &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">  <span class="dt">Sepal.Length =</span> <span class="dv">10</span>, </a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">  <span class="dt">Petal.Length =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">  <span class="dt">Species =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="st">"virginica"</span>, <span class="dt">levels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/levels">levels</a></span>(iris<span class="op">$</span>Species)))</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(model_xs, <span class="dt">newdata =</span> newdata)</a></code></pre></div>
+<pre><code>##          1 
+## -0.3349962</code></pre>
+</div>
+<div id="summary" class="section level1">
+<h1 class="hasAnchor">
+<a href="#summary" class="anchor"></a>Summary</h1>
+<p>Summary method allows you to check the basic model details. See below what possibilities the method to xspliner model offers.</p>
+<div id="glm-summary" class="section level2">
 <h2 class="hasAnchor">
-<a href="#todo" class="anchor"></a>TODO</h2>
+<a href="#glm-summary" class="anchor"></a>GLM summary</h2>
+<p>Standard summary method is just wrapper for <code>summary::glm</code>. In order to use this just type:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Petal.Width ~ Sepal.Length + xs(Petal.Length) + 
+##     xf(Species), family = family, data = data)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -0.68709  -0.09076  -0.01769   0.10618   0.50297  
+## 
+## Coefficients:
+##                                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                    -1.91747    0.13912 -13.783  &lt; 2e-16 ***
+## Sepal.Length                   -0.01500    0.03629  -0.413     0.68    
+## xs(Petal.Length)                3.05729    0.21024  14.542  &lt; 2e-16 ***
+## xf(Species)versicolorvirginica -0.56862    0.11736  -4.845  3.2e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.03508063)
+## 
+##     Null deviance: 86.5699  on 149  degrees of freedom
+## Residual deviance:  5.1218  on 146  degrees of freedom
+## AIC: -70.889
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+</div>
+<div id="predictor-based-summary" class="section level2">
+<h2 class="hasAnchor">
+<a href="#predictor-based-summary" class="anchor"></a>Predictor based summary</h2>
+<p>Summary method allows you to check details about transformation of specific variable.</p>
+<p>Standard usage <code><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary(xspliner_object, variable_name)</a></code></p>
+<p><em>Quantitative variable</em> When predictor is quantitative variable its transition is based on GAM model. For this case summary displays summary of that model.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs, <span class="st">"Petal.Length"</span>)</a></code></pre></div>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## yhat ~ s(Petal.Length, bs = "cr")
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.204625   0.003599   334.7   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Approximate significance of smooth terms:
+##                   edf Ref.df     F p-value    
+## s(Petal.Length) 8.814   8.99 756.8  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## R-sq.(adj) =  0.986   Deviance explained = 98.7%
+## GCV = 0.0014362  Scale est. = 0.0012952  n = 100</code></pre>
+<p><em>Qualitative variable</em></p>
+<p>In case of qualitative predictor, the method displays data.frame storing information how factors were merged during the transition.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs, <span class="st">"Species"</span>)</a></code></pre></div>
+<pre><code>##         orig                pred
+## 1     setosa              setosa
+## 2 versicolor versicolorvirginica
+## 3  virginica versicolorvirginica</code></pre>
+</div>
+</div>
+<div id="print" class="section level1">
+<h1 class="hasAnchor">
+<a href="#print" class="anchor"></a>Print</h1>
+<p>Print method works similarly to the summary. In case of passing just the model, standard <code>print.glm</code> is used.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(model_xs)</a></code></pre></div>
+<pre><code>## 
+## Call:  glm(formula = Petal.Width ~ Sepal.Length + xs(Petal.Length) + 
+##     xf(Species), family = family, data = data)
+## 
+## Coefficients:
+##                    (Intercept)                    Sepal.Length  
+##                        -1.9175                         -0.0150  
+##               xs(Petal.Length)  xf(Species)versicolorvirginica  
+##                         3.0573                         -0.5686  
+## 
+## Degrees of Freedom: 149 Total (i.e. Null);  146 Residual
+## Null Deviance:       86.57 
+## Residual Deviance: 5.122     AIC: -70.89</code></pre>
+<div id="predictor-based-print" class="section level2">
+<h2 class="hasAnchor">
+<a href="#predictor-based-print" class="anchor"></a>Predictor based print</h2>
+<p>Summary method allows you to check details about transformation of specific variable.</p>
+<p>Standard usage <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print(xspliner_object, variable_name)</a></code></p>
+<p><em>Quantitative variable</em> When predictor is the quantitative variable its transition is based on GAM model. For this case print uses standard <code>print.gam</code> method.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(model_xs, <span class="st">"Petal.Length"</span>)</a></code></pre></div>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## yhat ~ s(Petal.Length, bs = "cr")
+## 
+## Estimated degrees of freedom:
+## 8.81  total = 9.81 
+## 
+## GCV score: 0.001436187</code></pre>
+<p><em>Qualitative variable</em></p>
+<p>In case of qualitative predictor, standard <code>print.factorMerger</code> method is used.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(model_xs, <span class="st">"Species"</span>)</a></code></pre></div>
+<pre><code>## Family: gaussian Factor Merger.
+## 
+## Factor levels were merged in the following order:
+## 
+##      groupA       groupB                     model   pvalVsFull   pvalVsPrevious
+## ---  -----------  --------------------  ----------  -----------  ---------------
+## 0                                        -267.9528            1                1
+## 1    versicolor   virginica              -282.3556            0                0
+## 2    setosa       versicolorvirginica    -354.9141            0                0</code></pre>
+</div>
+</div>
+<div id="plot" class="section level1">
+<h1 class="hasAnchor">
+<a href="#plot" class="anchor"></a>Plot</h1>
+<p>You can see all details in <a href="./graphics.html">graphics</a></p>
+</div>
+<div id="transition" class="section level1">
+<h1 class="hasAnchor">
+<a href="#transition" class="anchor"></a>Transition</h1>
+<p>Transition method allows you to extract objects used during building transition of variables. There are three possible object types that can be extracted.</p>
+<div id="extracting-effect" class="section level2">
+<h2 class="hasAnchor">
+<a href="#extracting-effect" class="anchor"></a>Extracting effect</h2>
+<p>Each transition is built on top of the black box response data. For example the default response for quantitative variables is PDP - for qualitative ones ICE.</p>
+<p>In order to extract the effect use transition method with <code>type</code> parameter equals to data</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Petal.Length"</span>, <span class="dt">type =</span> <span class="st">"data"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span>head</a></code></pre></div>
+<pre><code>##   Petal.Length      yhat
+## 1     1.000000 0.7238401
+## 2     1.059596 0.7237628
+## 3     1.119192 0.7237628
+## 4     1.178788 0.7272669
+## 5     1.238384 0.7289280
+## 6     1.297980 0.7308933</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"data"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span>head</a></code></pre></div>
+<pre><code>##      Species      yhat yhat.id
+## 1     setosa 0.2478221       1
+## 2 versicolor 0.6867044       1
+## 3  virginica 0.8429771       1
+## 4     setosa 0.2158919       2
+## 5 versicolor 0.6767526       2
+## 6  virginica 0.8352157       2</code></pre>
+</div>
+<div id="extracting-transition-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#extracting-transition-model" class="anchor"></a>Extracting transition model</h2>
+<p>After we built transition basing on continuity of variable specific model is created. In case of quantitative predictor we build GAM model in order to get spline approximation of effect. In case of qualitative predictor we build factorMerger object and get optimal factor division on that.</p>
+<p>To extract the model, use transition method with <code>type = "base"</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Petal.Length"</span>, <span class="dt">type =</span> <span class="st">"base"</span>)</a></code></pre></div>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## yhat ~ s(Petal.Length, bs = "cr")
+## 
+## Estimated degrees of freedom:
+## 8.81  total = 9.81 
+## 
+## GCV score: 0.001436187</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"base"</span>)</a></code></pre></div>
+<pre><code>## Family: gaussian Factor Merger.
+## 
+## Factor levels were merged in the following order:
+## 
+##      groupA       groupB                     model   pvalVsFull   pvalVsPrevious
+## ---  -----------  --------------------  ----------  -----------  ---------------
+## 0                                        -267.9528            1                1
+## 1    versicolor   virginica              -282.3556            0                0
+## 2    setosa       versicolorvirginica    -354.9141            0                0</code></pre>
+</div>
+<div id="extracting-transition-function" class="section level2">
+<h2 class="hasAnchor">
+<a href="#extracting-transition-function" class="anchor"></a>Extracting transition function</h2>
+<p>The final result of building transition is transformation function, that is used in the final GLM model estimation.</p>
+<p>To extract the function just use transition method with <code>type = "function"</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">petal_length_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Petal.Length"</span>, <span class="dt">type =</span> <span class="st">"function"</span>)</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dt">length.out =</span> <span class="dv">50</span>)</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(x, <span class="kw">petal_length_xs</span>(x))</a></code></pre></div>
+<p><img src="methods_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">species_xf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"function"</span>)</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="kw">species_xf</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"setosa"</span>, <span class="st">"versicolor"</span>, <span class="st">"virginica"</span>))</a></code></pre></div>
+<pre><code>## [1] setosa              versicolorvirginica versicolorvirginica
+## Levels: setosa versicolorvirginica</code></pre>
+</div>
 </div>
   </div>
 
@@ -108,7 +324,26 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#todo">TODO</a></li>
+<li><a href="#predict">Predict</a></li>
+      <li>
+<a href="#summary">Summary</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#glm-summary">GLM summary</a></li>
+      <li><a href="#predictor-based-summary">Predictor based summary</a></li>
+      </ul>
+</li>
+      <li>
+<a href="#print">Print</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#predictor-based-print">Predictor based print</a></li>
+      </ul>
+</li>
+      <li><a href="#plot">Plot</a></li>
+      <li>
+<a href="#transition">Transition</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#extracting-effect">Extracting effect</a></li>
+      <li><a href="#extracting-transition-model">Extracting transition model</a></li>
+      <li><a href="#extracting-transition-function">Extracting transition function</a></li>
+      </ul>
+</li>
       </ul>
 </div>
       </div>

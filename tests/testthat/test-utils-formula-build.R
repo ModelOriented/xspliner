@@ -7,7 +7,6 @@ test_that("raw variable names correspond to additive components", {
   data <- data.frame(y = rnorm(10, 2), x = rnorm(10), z = rnorm(10, 10), t = runif(10), w = rexp(10))
   formula_terms <- terms.formula(formula, specials = c("xs", "xf"))
 
-  # (todo) test shows that functionality doesn't work when variables are duplicated
   expect_equal(
     get_formula_single_components(formula_terms),
     c("xs(x, effect = list(type = type))", "z", "xf(t)", "w", "I(z^2)")

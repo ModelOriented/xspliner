@@ -5,3 +5,41 @@ home:
   links:
   - text: Source code
     href: https://github.com/ModelOriented/xspliner
+navbar:
+  structure:
+    left:
+    - home
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right: github
+  components:
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    intro:
+      text: Get started
+      href: articles/xspliner.html
+    articles:
+      text: Articles
+      menu:
+      - text: Classification and discrete predictors
+        href: articles/discrete.html
+      - text: Graphics
+        href: articles/graphics.html
+      - text: Automate you work
+        href: articles/automation.html
+      - text: Methods and xspliner environment
+        href: articles/methods.html
+      - text: Extra information about the package
+        href: articles/extras.html
+      - text: Use cases
+        href: articles/cases.html
+    news:
+      text: Changelog
+      href: news/index.html

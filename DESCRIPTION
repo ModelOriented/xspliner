@@ -1,6 +1,6 @@
 Package: xspliner
 Title: Assisted model building, using surrogate black-box models to train interpretable spline based additive models
-Version: 0.0.1.9000
+Version: 0.0.2
 Authors@R: c(
   person("Krystian", "Igras", email = "krystian8270@gmail.com", role = c("aut", "cre")),
   person("Przemyslaw", "Biecek", role =  c("aut", "ths")))

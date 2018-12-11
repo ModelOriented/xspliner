@@ -2,10 +2,13 @@
 
 ## xspliner's pipeline: *model %>% xspline(...)* and analyze
 
+![](vignettes/xspliner.png)
+
 ## Installation from Github
 ```
 devtools::install_github("ModelOriented/xspliner")
 ```
+
 ## [News](NEWS.md)
 
 ## [Reference Manual](https://ModelOriented.github.io/xspliner/)
