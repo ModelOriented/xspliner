@@ -1,7 +1,7 @@
-# xspliner 0.0.1
+# xspliner 0.0.2
 * Specify parameters hierarchy
 * Use of S3
-* Add DALEX integration
+* Add DALEX2 integration
 * More variations on building xspliner
 * More examples
 * Add plot and summary method

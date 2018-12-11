@@ -4,16 +4,17 @@
 \alias{plot.xspliner}
 \title{Plot method for 'xspliner' model}
 \usage{
-\method{plot}{xspliner}(x, variable_name = NULL, model = NULL,
+\method{plot}{xspliner}(x, variable_names = NULL, model = NULL,
   plot_response = TRUE, plot_approx = TRUE, data = NULL,
-  plot_data = FALSE, plot_deriv = FALSE, compare_with = list(),
+  plot_data = FALSE, plot_deriv = FALSE, n_plots = 6,
+  sort_by = NULL, compare_with = list(),
   prediction_funs = list(function(object, newdata) predict(object,
   newdata)), ...)
 }
 \arguments{
 \item{x}{Object of class 'xspliner'}
 
-\item{variable_name}{Name of predictor that should be plotted.}
+\item{variable_names}{Names of predictors which transitions should be plotted.}
 
 \item{model}{Base model that xspliner is based on.}
 
@@ -26,6 +27,10 @@
 \item{plot_data}{If TRUE raw data is drawn.}
 
 \item{plot_deriv}{If TRUE derivative of approximation is showed on plot.}
+
+\item{n_plots}{Threshold for number of plots when plotting all variables.}
+
+\item{sort_by}{When comparing models determines according to which model should observations be ordered.}
 
 \item{compare_with}{Named list. Other models that should be compared with xspliner and \code{model}.}
 

@@ -1,14 +1,14 @@
-# xspliner - Assisted model building, using surrogate black-box models to train interpretable spline based additive models
+# xspliner - Using surrogate black-boxes to train interpretable spline based additive models
 
 ## xspliner's pipeline: *model %>% xspline(...)* and analyze
 
 ## Installation from Github
 ```
-devtools::install_github("krystian8207/xspliner")
+devtools::install_github("ModelOriented/xspliner")
 ```
 ## [News](NEWS.md)
 
-## [Reference Manual](https://krystian8207.github.io/xspliner/)
+## [Reference Manual](https://ModelOriented.github.io/xspliner/)
 
 ## DEMO
 
@@ -35,7 +35,7 @@ plot(xspliner, model = model_rf, data = boston)
 
 ```
 
-For more info check project [vignettes](https://krystian8207.github.io/xspliner/articles/) or [examples](https://github.com/krystian8207/xspliner/tree/master/examples).
+For more info check project [vignettes](https://ModelOriented.github.io/xspliner/articles/) or [examples](https://github.com/ModelOriented/xspliner/tree/master/examples).
 
 ## Further work
-See [github issues](https://github.com/krystian8207/xspliner/issues) 
+See [github issues](https://github.com/ModelOriented/xspliner/issues) 

@@ -86,7 +86,7 @@ summary(model)
 
 # explainer object
 
-explainer <- DALEX::explain(boston.rf, label = "boston")
+explainer <- DALEX2::explain(boston.rf, label = "boston")
 model <- xspline(
   explainer
 )

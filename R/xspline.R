@@ -1,8 +1,12 @@
 #' Builds predictive model based GLM.
 #'
+#' The method provides main functionality on building GLM models with automatic variables transformation.
+#' The transformations are based on specified single variable responses for selected black-box model.
 #' See details in \code{vignette("xspliner")}.
 #'
-#' @param object Predictive model, formula or explainer (see DALEX) object.
+#' model_surrogate_xspliner is a wrapper of xspline method to assure consistency with https://github.com/ModelOriented/DrWhy tools
+#'
+#' @param object Predictive model, formula or explainer (see DALEX2) object.
 #' @param model When \code{object} is formula - predictive model. Basic model used for extracting predictors transformation.
 #' @param lhs Left-hand side of model formula. Can be transformed response.
 #' @param response Name of response variable of \code{model}.
@@ -17,10 +21,41 @@
 #' @param ... Other arguments passed to \code{xspline} methods or \link{build_xspliner}.
 #'
 #' @return GLM object of class 'xspliner'.
+#'
+#' @examples
+#' # preparing blackbox model
+#' library(randomForest)
+#' rf_iris <- randomForest(
+#'   Petal.Width ~  Sepal.Length + Petal.Length + Species,
+#'   data = iris)
+#'
+#' # formula based xspliner
+#' xs_iris <- xspline(
+#'   Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + xf(Species),
+#'   model = rf_iris)
+#' summary(xs_iris)
+#' plot(xs_iris, "Sepal.Length")
+#'
+#' # passing just the model
+#' xs_iris <- xspline(rf_iris)
+#' summary(xs_iris)
+#' plot(xs_iris, "Sepal.Length")
+#'
+#' # using DALEX2
+#' library(DALEX2)
+#' xs_iris_explainer <- explain(rf_iris)
+#' xs_iris <- xspline(rf_iris)
+#' summary(xs_iris)
+#' plot(xs_iris, "Sepal.Length")
+#'
 #' @export
 xspline <- function(object, ...) {
   UseMethod("xspline", object)
 }
+
+#' @rdname xspline
+#' @export
+model_surrogate_xspliner <- xspline
 
 #' @rdname xspline
 #' @export

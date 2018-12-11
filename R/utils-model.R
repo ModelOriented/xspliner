@@ -101,7 +101,7 @@ plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data
 #' To avoid CRAN check problems
 utils::globalVariables(c("Observation", "Model", "Value"))
 
-plot_model_comparison <- function(x, model, data, compare_with, prediction_functions) {
+plot_model_comparison <- function(x, model, data, compare_with, prediction_functions, sort_by = NULL) {
   model_name <- rev(as.character(model$call[[1]]))[1]
   compare_with[[model_name]] <- model
   compare_with$xspliner <- x
@@ -112,11 +112,68 @@ plot_model_comparison <- function(x, model, data, compare_with, prediction_funct
     fitted <- compare_with %>%
       purrr::map2(prediction_functions, function(model, pred_fun) pred_fun(model, data))
   }
-  as.data.frame(fitted) %>%
+
+  fitted_values <- as.data.frame(fitted)
+
+  if (!is.null(sort_by)) {
+    fitted_values <- fitted_values[order(fitted_values[[sort_by]]), ]
+  }
+
+  fitted_values %>%
     dplyr::mutate(Observation = 1:nrow(.)) %>%
     tidyr::gather(key = "Model", value = "Value", -Observation) %>%
     ggplot2::ggplot(ggplot2::aes(Observation, Model)) +
     ggplot2::geom_tile(ggplot2::aes(fill = Value)) +
     ggplot2::theme_minimal()
+
+}
+
+plot_specials_grid <- function(x, vars, plot_response, plot_approx, data, plot_data, plot_deriv) {
+  plot_list <- list(nrow = ceiling(length(vars) / 3))
+  plot_list[["ncol"]] <- ceiling(length(vars) / plot_list$nrow)
+  for (var in vars)  {
+    plot_list[[var]] <- plot.xspliner(x, var, NULL, plot_response, plot_approx, data, plot_data, plot_deriv)
+  }
+  do.call(grid_arrange_shared_legend, plot_list)
+}
+
+grid_arrange_shared_legend <- function(...,
+                                       ncol = length(list(...)),
+                                       nrow = 1,
+                                       position = c("bottom", "right")) {
+  # trick to add one legend: https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html
+
+  plots <- list(...)
+  position <- match.arg(position)
+  g <- ggplot2::ggplotGrob(plots[[1]] + ggplot2::theme(legend.position = position))$grobs
+  legend <- g[[which(sapply(g, function(x)
+    x$name) == "guide-box")]]
+  lheight <- sum(legend$height)
+  lwidth <- sum(legend$width)
+  gl <- lapply(plots, function(x)
+    x + ggplot2::theme(legend.position = "none"))
+  gl <- c(gl, ncol = ncol, nrow = nrow)
+
+  combined <- switch(
+    position,
+    "bottom" = gridExtra::arrangeGrob(
+      do.call(gridExtra::arrangeGrob, gl),
+      legend,
+      ncol = 1,
+      heights = grid::unit.c(grid::unit(1, "npc") - lheight, lheight)
+    ),
+    "right" = gridExtra::arrangeGrob(
+      do.call(gridExtra::arrangeGrob, gl),
+      legend,
+      ncol = 2,
+      widths = grid::unit.c(grid::unit(1, "npc") - lwidth, lwidth)
+    )
+  )
+
+  grid::grid.newpage()
+  grid::grid.draw(combined)
+
+  # return gtable invisibly
+  invisible(combined)
 
 }

@@ -88,7 +88,7 @@
       <h1>Graphics</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2018-12-10</h4>
+            <h4 class="date">2018-12-11</h4>
       
       
       <div class="hidden name"><code>art_c_graphics.Rmd</code></div>
@@ -177,34 +177,50 @@
 <a class="sourceLine" id="cb12-2" data-line-number="2">     <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(prob_svm, prob_xs)</a>
 <a class="sourceLine" id="cb12-3" data-line-number="3">)  </a></code></pre></div>
 <p><img src="art_c_graphics_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p>It is also possible to sort the values of heatmap according to chosen model:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_svm, <span class="dt">data =</span> iris_data,</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">     <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(prob_svm, prob_xs),</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">     <span class="dt">sort_by =</span> <span class="st">"svm"</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">)  </a></code></pre></div>
+<p><img src="art_c_graphics_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <div id="comparing-with-another-models" class="section level2">
 <h2 class="hasAnchor">
 <a href="#comparing-with-another-models" class="anchor"></a>Comparing with another models</h2>
 <p>Following above approach it’s easy to generate similar graphics for higher amount of models.</p>
 <p>Just include additional models inside <code>compare_with</code> parameter (named list), and add corresponding predict functions to them to <code>predictor_funs</code> parameter (if omitted, the default one is used).</p>
 <p>See below example on airquality data</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mgcv)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(airquality)</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">ozone &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/na.fail">na.omit</a></span>(airquality),</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5">                <span class="dt">select =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Ozone"</span>, <span class="st">"Solar.R"</span>, <span class="st">"Wind"</span>, <span class="st">"Temp"</span>))</a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> ozone)</a>
-<a class="sourceLine" id="cb13-9" data-line-number="9">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(Solar.R) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Temp), model_rf, <span class="dt">data =</span> ozone)</a>
-<a class="sourceLine" id="cb13-10" data-line-number="10">model_glm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> ozone)</a>
-<a class="sourceLine" id="cb13-11" data-line-number="11">model_gam &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Solar.R) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Temp), <span class="dt">data =</span> ozone)</a>
-<a class="sourceLine" id="cb13-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb13-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> ozone, <span class="dt">compare_with =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">glm =</span> model_glm, <span class="dt">gam =</span> model_gam))</a></code></pre></div>
-<p><img src="art_c_graphics_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mgcv)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(airquality)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">ozone &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/na.fail">na.omit</a></span>(airquality),</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">                <span class="dt">select =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Ozone"</span>, <span class="st">"Solar.R"</span>, <span class="st">"Wind"</span>, <span class="st">"Temp"</span>))</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> ozone)</a>
+<a class="sourceLine" id="cb14-9" data-line-number="9">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(Solar.R) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Temp), model_rf, <span class="dt">data =</span> ozone)</a>
+<a class="sourceLine" id="cb14-10" data-line-number="10">model_glm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> ozone)</a>
+<a class="sourceLine" id="cb14-11" data-line-number="11">model_gam &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Solar.R) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Temp), <span class="dt">data =</span> ozone)</a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, </a>
+<a class="sourceLine" id="cb14-14" data-line-number="14">     <span class="dt">model =</span> model_rf, </a>
+<a class="sourceLine" id="cb14-15" data-line-number="15">     <span class="dt">data =</span> ozone, </a>
+<a class="sourceLine" id="cb14-16" data-line-number="16">     <span class="dt">compare_with =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">glm =</span> model_glm, <span class="dt">gam =</span> model_gam),</a>
+<a class="sourceLine" id="cb14-17" data-line-number="17">     <span class="dt">sort_by =</span> <span class="st">"xspliner"</span>)</a></code></pre></div>
+<p><img src="art_c_graphics_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 </div>
 </div>
-<div id="class-based-plot" class="section level1">
+<div id="plotting-more-transitions-at-once" class="section level1">
 <h1 class="hasAnchor">
-<a href="#class-based-plot" class="anchor"></a>Class based plot</h1>
-<p>The resulting xspliner model is GLM. So you may use graphical analytics for xspliner just typing:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs)</a></code></pre></div>
-<p><img src="art_c_graphics_files/figure-html/unnamed-chunk-12-1.png" width="700"><img src="art_c_graphics_files/figure-html/unnamed-chunk-12-2.png" width="700"><img src="art_c_graphics_files/figure-html/unnamed-chunk-12-3.png" width="700"><img src="art_c_graphics_files/figure-html/unnamed-chunk-12-4.png" width="700"></p>
+<a href="#plotting-more-transitions-at-once" class="anchor"></a>Plotting more transitions at once</h1>
+<p>If you want to display many transitions on one plot just pass xspliner model to plot:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs)</a></code></pre></div>
+<p><img src="art_c_graphics_files/figure-html/unnamed-chunk-13-1.png" width="912"></p>
+<p>For models trained on top of many predictors, there will be displayed plots for 6 first transformed variables. To change that value just set <code>n_plots</code> variable:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">n_plots =</span> <span class="dv">2</span>)</a></code></pre></div>
+<p><img src="art_c_graphics_files/figure-html/unnamed-chunk-14-1.png" width="912"></p>
+<p>You can select interesting variables to plot just passing predictor names in vector:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Wind"</span>, <span class="st">"Temp"</span>))</a></code></pre></div>
+<p><img src="art_c_graphics_files/figure-html/unnamed-chunk-15-1.png" width="912"></p>
 </div>
   </div>
 
@@ -219,7 +235,7 @@
 <li><a href="#comparing-with-another-models">Comparing with another models</a></li>
       </ul>
 </li>
-      <li><a href="#class-based-plot">Class based plot</a></li>
+      <li><a href="#plotting-more-transitions-at-once">Plotting more transitions at once</a></li>
       </ul>
 </div>
       </div>
