@@ -26,8 +26,12 @@ model_ale <- xspline(
   data = boston
 )
 
+
+pred_rf <- function(model, newdata) predict(model, newdata = newdata, type = "prob")[, 2]
+pred_xs <- function(model, newdata) predict(model, newdata = newdata, type = "response")
+
 # check model summary
-summary(model_pdp)
+summary(model_pdp, model = boston.rf, newdata = boston)
 
 summary(model_ale)
 

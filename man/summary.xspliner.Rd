@@ -4,7 +4,9 @@
 \alias{summary.xspliner}
 \title{Summary method for xspliner object}
 \usage{
-\method{summary}{xspliner}(object, predictor, ...)
+\method{summary}{xspliner}(object, predictor, ..., model = NULL,
+  newdata = NULL, prediction_funs = list(function(object, newdata)
+  predict(object, newdata)))
 }
 \arguments{
 \item{object}{xspliner object}
@@ -15,4 +17,45 @@
 }
 \description{
 Summary method for xspliner object
+}
+\details{
+The summary output depends strictly on data provided to it.
+
+Standard output for providing only xspliner model (object parameter) return default \code{glm::summary} output.
+
+Providing both xspliner model and predictor returns summary details for selecter variable.
+The following points decribe the rules:
+\itemize{
+  \item{When variable was quantitative and transformed with fitted spline, the output contain approximation details.}
+  \item{When variable was qualitative and transformed, factor matching is displayed.}
+  \item{When variable was not transformed, glm::summary output is displayed for the model.}
+}
+
+If both object parameter and model (original black box) was provided, the summary displays comparison of original and surrogate model.
+The following points decribe the rules (\eqn{y_{s}}{y_s} and \eqn{y_{o}}{y_o} are predictions of surrogate and original model respectively on provided dataset).
+
+For regression models:
+\itemize{
+  \item{Maximum prediction difference}{
+    \deqn{1 - \frac{\max_{i = 1}^{n} \abs{y_{s}_{i} - y_{o}_{i}}}{\max_{i = 1}^{n} y_{o}_{i} - \min_{i = 1}^{n} y_{o}_{i}}}{1 - max(abs(y_s - y_o)) / diff(range(y_o))}
+  }
+  \item{R^2 (\link{https://christophm.github.io/interpretable-ml-book/global.html#theory-4)}}{
+    \deqn{1 - \frac{\sum_{i = 1}^{n} ({y_{s}_{i} - y_{o}_{i}}) ^ {2}}{\sum_{i = 1}^{n} ({y_{o}_{i} - \bar{y_{o}}}) ^ {2}}}{1 - sum((y_s - y_o) ^ 2) / sum(y_o - mean(y_o))}
+  }
+  \item{Mean square erros for each model.}
+}
+
+For classification models the result depends on prediction type.
+When predictions are classified levels:
+\itemize{
+  \item{Maximum prediction difference}{\deqn{\frac{1}{n} \sum_{i = 1}^{n} \mathbb{I}_{y_{s}_{i} = y_{o}_{i}}}{mean(y_s == y_o)}}
+  \item{Accuracies for each models.}
+}
+
+When predictions are response probabilities:
+\itemize{
+  \item{R^2 as for regression model.}
+  \item{Maximum ROC difference}{\deqn{max_{t \in T} \norm{ROC_{o}(t) - ROC_{s}(t)}_{2}}{} Calculates maximum of euclidean distances between ROC points for specified thresholds.}
+  \item{Mean ROC differene}{Above version using mean instead of max measure.}
+}
 }

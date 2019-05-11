@@ -45,13 +45,130 @@ plot.xspliner <- function(x, variable_names = NULL, model = NULL, plot_response 
   }
 }
 
+fit_r_sq <- function(surrogate_predicted, original_predicted) {
+    1 - sum((surrogate_predicted - original_predicted) ^ 2) / sum((original_predicted - mean(original_predicted)) ^ 2)
+}
+
+fit_max_diff <- function(surrogate_predicted, original_predicted) {
+  if (is.numeric(surrogate_predicted) && is.numeric(original_predicted)) {
+    1 - max(abs(surrogate_predicted - original_predicted)) / diff(range(original_predicted))
+  } else if (is.factor(surrogate_predicted) && is.factor(original_predicted)) {
+    mean(surrogate_predicted == original_predicted)
+  } else {
+    warning("Not consistent predictions provided.")
+    NA
+  }
+}
+
+measure_diff_roc <- function(a, b, measure = max) {
+  diffs <- (a - b) ^ 2
+  measure(sqrt(diffs[1, ] + diffs[2, ]))
+}
+
+fit_roc_diff <- function(surrogate_scores, original_scores, original_labels) {
+  is_score_surrogate <- all(surrogate_scores <= 1 && surrogate_scores >=0)
+  is_score_original <- all(original_scores <= 1 && original_scores >=0)
+  if (is_score_original && is_score_surrogate) {
+    roc_surrogate <- pROC::roc(original_labels, surrogate_scores, direction="<")
+    roc_original <- pROC::roc(original_labels, original_scores, direction="<")
+    thresholds <- union(roc_surrogate$thresholds, roc_original$thresholds)
+    roc_surrogate_on_thresholds <- pROC::coords(roc_surrogate, x = thresholds, input = "threshold", ret = c("se", "1-sp"))
+    roc_original_on_thresholds <- pROC::coords(roc_original, x = thresholds, input = "threshold", ret = c("se", "1-sp"))
+    list(
+      max = measure_diff_roc(roc_surrogate_on_thresholds, roc_original_on_thresholds),
+      mean = measure_diff_roc(roc_surrogate_on_thresholds, roc_original_on_thresholds, measure = mean)
+    )
+  } else {
+    message("Predictions are not scores. Skipping ROC comparison.")
+    NULL
+  }
+}
+
+compare_summary <- function(surrogate, original, surrogate_pred_fun, original_pred_fun, newdata, response) {
+  surrogate_prediction <- surrogate_pred_fun(surrogate, newdata)
+  original_prediction <- original_pred_fun(original, newdata)
+  cat("Models comparison", "\n")
+  cat("  Normed max diff: ", fit_max_diff(surrogate_prediction, original_prediction), "\n")
+  if (attr(surrogate, "type") == "regression") {
+    cat("  R^2: ", fit_r_sq(surrogate_prediction, original_prediction), "\n")
+    cat("  MSE Black Box: ", mean((newdata[, response] - original_prediction) ^ 2), "\n")
+    cat("  MSE Surrogate: ", mean((newdata[, response] - surrogate_prediction) ^ 2), "\n")
+  } else {
+    if (!is.numeric(original_prediction) && !is.numeric(surrogate_prediction)) {
+      contingency_original <- table(newdata[, response], original_prediction)
+      contingency_surrogate <- table(newdata[, response], surrogate_prediction)
+      cat("  ACC Black Box: ", sum(diag(contingency_original)) / sum(contingency_original), "\n")
+      cat("  ACC Surrogate: ", sum(diag(contingency_surrogate)) / sum(contingency_surrogate), "\n")
+    }
+    if (is.numeric(surrogate_prediction) && is.numeric(original_prediction)) {
+      cat("  R^2: ", fit_r_sq(surrogate_prediction, original_prediction), "\n")
+      measure_roc_diff <- fit_roc_diff(surrogate_prediction, original_prediction, newdata[, response])
+      if (!is.null(measure_roc_diff)) {
+        cat("  Max ROC diff: ", measure_roc_diff$max, "\n")
+        cat("  Mean ROC diff: ", measure_roc_diff$mean, "\n")
+      }
+    }
+  }
+  return(invisible(NULL))
+}
+
 #' Summary method for xspliner object
 #'
 #' @param object xspliner object
 #' @param predictor predictor for xspliner model formula
 #' @param ... Another arguments passed into model specific method.
+#'
+#' @details
+#' The summary output depends strictly on data provided to it.
+#'
+#' Standard output for providing only xspliner model (object parameter) return default \code{glm::summary} output.
+#'
+#' Providing both xspliner model and predictor returns summary details for selecter variable.
+#' The following points decribe the rules:
+#' \itemize{
+#'   \item{When variable was quantitative and transformed with fitted spline, the output contain approximation details.}
+#'   \item{When variable was qualitative and transformed, factor matching is displayed.}
+#'   \item{When variable was not transformed, glm::summary output is displayed for the model.}
+#' }
+#'
+#' If both object parameter and model (original black box) was provided, the summary displays comparison of original and surrogate model.
+#' The following points decribe the rules (\eqn{y_{s}}{y_s} and \eqn{y_{o}}{y_o} are predictions of surrogate and original model respectively on provided dataset).
+#'
+#' For regression models:
+#' \itemize{
+#'   \item{Maximum prediction difference}{
+#'     \deqn{1 - \frac{\max_{i = 1}^{n} \abs{y_{s}_{i} - y_{o}_{i}}}{\max_{i = 1}^{n} y_{o}_{i} - \min_{i = 1}^{n} y_{o}_{i}}}{1 - max(abs(y_s - y_o)) / diff(range(y_o))}
+#'   }
+#'   \item{R^2 (\link{https://christophm.github.io/interpretable-ml-book/global.html#theory-4)}}{
+#'     \deqn{1 - \frac{\sum_{i = 1}^{n} ({y_{s}_{i} - y_{o}_{i}}) ^ {2}}{\sum_{i = 1}^{n} ({y_{o}_{i} - \bar{y_{o}}}) ^ {2}}}{1 - sum((y_s - y_o) ^ 2) / sum(y_o - mean(y_o))}
+#'   }
+#'   \item{Mean square erros for each model.}
+#' }
+#'
+#' For classification models the result depends on prediction type.
+#' When predictions are classified levels:
+#' \itemize{
+#'   \item{Maximum prediction difference}{\deqn{\frac{1}{n} \sum_{i = 1}^{n} \mathbb{I}_{y_{s}_{i} = y_{o}_{i}}}{mean(y_s == y_o)}}
+#'   \item{Accuracies for each models.}
+#' }
+#'
+#' When predictions are response probabilities:
+#' \itemize{
+#'   \item{R^2 as for regression model.}
+#'   \item{Maximum ROC difference}{\deqn{max_{t \in T} \norm{ROC_{o}(t) - ROC_{s}(t)}_{2}}{} Calculates maximum of euclidean distances between ROC points for specified thresholds.}
+#'   \item{Mean ROC differene}{Above version using mean instead of max measure.}
+#' }
+#'
 #' @export
-summary.xspliner <- function(object, predictor, ...) {
+summary.xspliner <- function(object, predictor, ..., model = NULL, newdata = NULL,
+                             prediction_funs = list(function(object, newdata) predict(object, newdata))) {
+  if (!is.null(model)) {
+    surrogate_pred_fun <- original_pred_fun <- prediction_funs[[1]]
+    if (length(prediction_funs) > 1) {
+      original_pred_fun <- prediction_funs[[2]]
+    }
+    return(compare_summary(object, model, surrogate_pred_fun, original_pred_fun, newdata, environment(object)$response))
+  }
   if (missing(predictor)) {
     return(summary.glm(object, ...))
   }

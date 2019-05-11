@@ -19,7 +19,8 @@ Imports: stats,
     mgcv,
     magrittr,
     purrr,
-    tidyr
+    tidyr,
+    pROC
 Suggests:
     ALEPlot,
     factorMerger,

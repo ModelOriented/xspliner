@@ -139,6 +139,7 @@ build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_o
   environment(glm_model) <- attr(cleared_formula, ".Environment")
   class(glm_model) <- c("xspliner", class(glm_model))
   glm_model$call[[2]] <- cleared_formula
+  attr(glm_model, "type") <- type
   glm_model
 }
 
