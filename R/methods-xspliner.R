@@ -136,11 +136,11 @@ compare_summary <- function(surrogate, original, surrogate_pred_fun, original_pr
 #'
 #' For regression models:
 #' \itemize{
-#'   \item{Maximum prediction difference}{
-#'     \deqn{1 - \frac{\max_{i = 1}^{n} \abs{y_{s}_{i} - y_{o}_{i}}}{\max_{i = 1}^{n} y_{o}_{i} - \min_{i = 1}^{n} y_{o}_{i}}}{1 - max(abs(y_s - y_o)) / diff(range(y_o))}
+#'   \item{Maximum predictions difference}{
+#'     \deqn{\frac{\max_{i = 1}^{n} |y_{s}^{(i)} - y_{o}^{(i)}|}{\max_{i = 1}^{n} y_{o}^{(i)} - \min_{i = 1}^{n} y_{o}^{(i)}}}{max(abs(y_s - y_o)) / diff(range(y_o))}
 #'   }
 #'   \item{R^2 (\link{https://christophm.github.io/interpretable-ml-book/global.html#theory-4)}}{
-#'     \deqn{1 - \frac{\sum_{i = 1}^{n} ({y_{s}_{i} - y_{o}_{i}}) ^ {2}}{\sum_{i = 1}^{n} ({y_{o}_{i} - \bar{y_{o}}}) ^ {2}}}{1 - sum((y_s - y_o) ^ 2) / sum(y_o - mean(y_o))}
+#'     \deqn{1 - \frac{\sum_{i = 1}^{n} ({y_{s}^{(i)} - y_{o}^{(i)}}) ^ {2}}{\sum_{i = 1}^{n} ({y_{o}^{(i)} - \overline{y_{o}}}) ^ {2}}}{1 - sum((y_s - y_o) ^ 2) / sum(y_o - mean(y_o))}
 #'   }
 #'   \item{Mean square erros for each model.}
 #' }
@@ -148,16 +148,50 @@ compare_summary <- function(surrogate, original, surrogate_pred_fun, original_pr
 #' For classification models the result depends on prediction type.
 #' When predictions are classified levels:
 #' \itemize{
-#'   \item{Maximum prediction difference}{\deqn{\frac{1}{n} \sum_{i = 1}^{n} \mathbb{I}_{y_{s}_{i} = y_{o}_{i}}}{mean(y_s == y_o)}}
+#'   \item{Maximum prediction difference}{\deqn{\frac{1}{n} \sum_{i = 1}^{n} I_{y_{s}^{(i)} \neq y_{o}^{(i)}}}{mean(y_s != y_o)}}
 #'   \item{Accuracies for each models.}
 #' }
 #'
 #' When predictions are response probabilities:
 #' \itemize{
 #'   \item{R^2 as for regression model.}
-#'   \item{Maximum ROC difference}{\deqn{max_{t \in T} \norm{ROC_{o}(t) - ROC_{s}(t)}_{2}}{} Calculates maximum of euclidean distances between ROC points for specified thresholds.}
-#'   \item{Mean ROC differene}{Above version using mean instead of max measure.}
+#'   \item{Maximum ROC difference}{\deqn{\max_{t \in T} ||ROC_{o}(t) - ROC_{s}(t)||_{2}}{} Calculates maximum of euclidean distances between ROC points for specified thresholds set T.}
+#'   \item{Mean ROC differene}{ Above version using mean instead of max measure.}
 #' }
+#'
+#' @examples
+#' library(randomForest)
+#' set.seed(1)
+#' data <- iris
+#' # regression model
+#' iris.rf <- randomForest(Petal.Width ~  Sepal.Length + Petal.Length + Species, data = data)
+#' iris.xs <- xspline(iris.rf)
+#' # Summary of quantitative variable transition
+#' summary(iris.xs, "Sepal.Length")
+#' # Summary of qualitative variable transition
+#' summary(iris.xs, "Species")
+#' # Comparing surrogate with original model (regression)
+#' summary(iris.xs, model = iris.rf, newdata = data)
+#'
+#' # Classification model
+#' data <- droplevels(iris[51:150, ]) # selecting only two species data
+#' iris.rf <- randomForest(Species ~ ., data = data)
+#' iris.xs <- xspline(iris.rf)
+#'
+#' # Comparing summaries requires providing prediction function
+#' # Prediction as probability for success
+#' prob_rf <- function(object, newdata) predict(object, newdata = newdata, type = "prob")[, 2]
+#' prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
+#' summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(prob_xs, prob_rf))
+#' # Prediction as final category
+#' response_rf <- function(object, newdata) predict(object, newdata = newdata)
+#' response_xs <- function(object, newdata) {
+#'   y_levels <- levels(newdata[[environment(object)$response]])
+#'   factor(y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1], levels = y_levels)
+#' }
+#' response_rf(iris.rf, newdata = data)
+#' response_xs(iris.xs, newdata = data)
+#' summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(response_xs, response_rf))
 #'
 #' @export
 summary.xspliner <- function(object, predictor, ..., model = NULL, newdata = NULL,
