@@ -26,14 +26,10 @@ model_ale <- xspline(
   data = boston
 )
 
-
-pred_rf <- function(model, newdata) predict(model, newdata = newdata, type = "prob")[, 2]
-pred_xs <- function(model, newdata) predict(model, newdata = newdata, type = "response")
-
 # check model summary
 summary(model_pdp, model = boston.rf, newdata = boston)
 
-summary(model_ale)
+summary(model_ale, model = boston.rf, newdata = boston)
 
 # compare with standard gam model
 summary(mgcv::gam(cmedv ~ s(lstat, k = 6) + s(ptratio, k = 4) + age, data = boston))
