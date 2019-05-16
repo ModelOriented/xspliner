@@ -14,6 +14,13 @@
 \item{predictor}{predictor for xspliner model formula}
 
 \item{...}{Another arguments passed into model specific method.}
+
+\item{model}{Original black box model. Providing enables models comparison. See details.}
+
+\item{newdata}{Data used for models comparison. By default training data used for black box build.}
+
+\item{prediction_funs}{List of prediction functions for surrogate and black box model. For classification problem,
+different statistics are displayed based on predictions type. See details section for more info.}
 }
 \description{
 Summary method for xspliner object

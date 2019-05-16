@@ -61,6 +61,37 @@ In case of qualitative predictor, the method displays data.frame storing informa
 summary(model_xs, "Species")
 ```
 
+## Surrogate vs Black Box comparison
+Providing model parameter instead of predictor, the summary displays a few statistics that compares original model with surrogate one.
+All statistics definitions are included in summary.xspline documentation.
+
+Here we show one example for classification model.
+
+For this example we will use graduation data (source: ) and build svm model as black box.
+```{r}
+library(xspliner)
+library(e1071)
+set.seed(1)
+data <- read.csv("binary.csv")
+data$admit <- as.factor(data$admit)
+# Classification model
+grad.svm <- svm(admit ~ ., data = data, probability = TRUE)
+grad.xs <- xspline(admit ~ xs(gre) + xs(gpa) + rank, model = grad.svm)
+
+# Comparing summaries requires providing prediction function
+# Prediction as probability for success
+prob_svm <- function(object, newdata) attr(predict(object, newdata = newdata, probability = TRUE), "probabilities")[, 2]
+prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
+summary(grad.xs, model = grad.svm, newdata = data, prediction_funs = list(prob_xs, prob_svm))
+# Prediction as final category
+response_svm <- function(object, newdata) predict(object, newdata = newdata)
+response_xs <- function(object, newdata) {
+  y_levels <- levels(newdata[[environment(object)$response]])
+  factor(y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1], levels = y_levels)
+}
+summary(grad.xs, model = grad.svm, newdata = data, prediction_funs = list(response_xs, response_svm))
+```
+
 # Print
 
 Print method works similarly to the summary. In case of passing just the model, standard `print.glm` is used.
