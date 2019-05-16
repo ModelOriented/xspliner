@@ -198,7 +198,7 @@ build_predictor_based_formula <- function(response, predictors, classes, bare, f
 }
 
 get_predictors_classes <- function(data) {
-  purrr::map_chr(1:ncol(data), function(x) class(data[, x]))
+  purrr::map_chr(1:ncol(data), function(x) class(data[[x]]))
 }
 
 try_get <- function(possible) {

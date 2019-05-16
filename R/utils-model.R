@@ -23,7 +23,7 @@ plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data
   transition_fun <- transition(x, variable_name, "function")
 
   if (plot_data) {
-    plot_range <- range(data[, variable_name])
+    plot_range <- range(data[[variable_name]])
   } else {
     plot_range <- attr(transition_fun, "variable_range")
   }
