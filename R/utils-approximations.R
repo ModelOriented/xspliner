@@ -150,8 +150,8 @@ prepare_transition_params_ice <- function(formula_metadata, component_details, b
 
   effect_outcome <- do.call(pdp::partial, effect)
   attr(effect_outcome, "type") <- "ice"
-  transition[["response"]] <- effect_outcome[, "yhat"]
-  transition[["factor"]] <- effect_outcome[, component_details$var]
+  transition[["response"]] <- effect_outcome[["yhat"]]
+  transition[["factor"]] <- effect_outcome[[component_details$var]]
   transition[["effect_data"]] <- effect_outcome
 
   transition
