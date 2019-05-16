@@ -198,6 +198,6 @@ hoslem <- function(glm_model) {
   if (glm_model$family$family != "binomial") {
     stop("Not classification model.")
   }
-  ResourceSelection::hoslem.test(glm_model$model[, 1], fitted(glm_model))$statistic
+  ResourceSelection::hoslem.test(glm_model$model[[1]], fitted(glm_model))$statistic
 }
 attr(hoslem, "higher-better") <- TRUE
