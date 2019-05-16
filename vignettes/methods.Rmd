@@ -31,67 +31,6 @@ newdata <- data.frame(
 predict(model_xs, newdata = newdata)
 ```
 
-# Summary
-
-Summary method allows you to check the basic model details. See below what possibilities the method to xspliner model offers.
-
-## GLM summary
-Standard summary method is just wrapper for `summary::glm`. In order to use this just type:
-```{r}
-summary(model_xs)
-```
-
-## Predictor based summary
-Summary method allows you to check details about transformation of specific variable.
-
-Standard usage `summary(xspliner_object, variable_name)`
-
-*Quantitative variable*
-When predictor is quantitative variable its transition is based on GAM model. For this case summary displays summary of that model.
-
-```{r}
-summary(model_xs, "Petal.Length")
-```
-
-*Qualitative variable*
-
-In case of qualitative predictor, the method displays data.frame storing information how factors were merged during the transition.
-
-```{r}
-summary(model_xs, "Species")
-```
-
-## Surrogate vs Black Box comparison
-Providing model parameter instead of predictor, the summary displays a few statistics that compares original model with surrogate one.
-All statistics definitions are included in summary.xspline documentation.
-
-Here we show one example for classification model.
-
-For this example we will use graduation data (source: ) and build svm model as black box.
-```{r}
-library(xspliner)
-library(e1071)
-set.seed(1)
-data <- read.csv("binary.csv")
-data$admit <- as.factor(data$admit)
-# Classification model
-grad.svm <- svm(admit ~ ., data = data, probability = TRUE)
-grad.xs <- xspline(admit ~ xs(gre) + xs(gpa) + rank, model = grad.svm)
-
-# Comparing summaries requires providing prediction function
-# Prediction as probability for success
-prob_svm <- function(object, newdata) attr(predict(object, newdata = newdata, probability = TRUE), "probabilities")[, 2]
-prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
-summary(grad.xs, model = grad.svm, newdata = data, prediction_funs = list(prob_xs, prob_svm))
-# Prediction as final category
-response_svm <- function(object, newdata) predict(object, newdata = newdata)
-response_xs <- function(object, newdata) {
-  y_levels <- levels(newdata[[environment(object)$response]])
-  factor(y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1], levels = y_levels)
-}
-summary(grad.xs, model = grad.svm, newdata = data, prediction_funs = list(response_xs, response_svm))
-```
-
 # Print
 
 Print method works similarly to the summary. In case of passing just the model, standard `print.glm` is used.
@@ -106,6 +45,7 @@ Summary method allows you to check details about transformation of specific vari
 Standard usage `print(xspliner_object, variable_name)`
 
 *Quantitative variable*
+
 When predictor is the quantitative variable its transition is based on GAM model. For this case print uses standard `print.gam` method.
 
 ```{r}
@@ -172,4 +112,84 @@ plot(x, petal_length_xs(x))
 ```{r}
 species_xf <- transition(model_xs, predictor = "Species", type = "function")
 species_xf(c("setosa", "versicolor", "virginica"))
+```
+
+# Summary
+
+Summary method allows you to check the basic model details. See below what possibilities the method to xspliner model offers.
+
+## GLM summary
+Standard summary method is just wrapper for `summary::glm`. In order to use this just type:
+```{r}
+summary(model_xs)
+```
+
+## Predictor based summary
+Summary method allows you to check details about transformation of specific variable.
+
+Standard usage `summary(xspliner_object, variable_name)`
+
+*Quantitative variable*
+
+When predictor is quantitative variable its transition is based on GAM model. For this case summary displays summary of that model.
+
+```{r}
+summary(model_xs, "Petal.Length")
+```
+
+*Qualitative variable*
+
+In case of qualitative predictor, the method displays data.frame storing information how factors were merged during the transition.
+
+```{r}
+summary(model_xs, "Species")
+```
+
+## Surrogate vs Black Box comparison
+Providing `model` parameter instead of `predictor`, the summary displays a few statistics that compares original model with surrogate one.
+All statistics definitions are included in `summary.xspline` documentation.
+
+Here we show one example for classification model.
+
+For this example we use `ISLR::Default` data and build svm model as black box. The model aims to predict `default` variable, indicating whether the customer defaulted on their debt.
+```{r}
+library(xspliner)
+library(e1071)
+set.seed(1)
+data <- ISLR::Default
+default.svm <- svm(default ~ ., data = data, probability = TRUE)
+default.xs <- xspline(default ~ student + xs(balance) + xs(income), model = default.svm)
+```
+
+In order to check the summary, we need to specify prediction functions for each model.
+In this case predictions are probabilities of success:
+```{r}
+prob_svm <- function(object, newdata) attr(predict(object, newdata = newdata, probability = TRUE), "probabilities")[, 2]
+prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
+```
+
+Almost each summary statistic compares models basing on some data.
+
+In this case we're going to compare models on training data providing:
+
+- `newdata` parameter as training data
+- `model` parameter with black box model
+- `prediction_funs` as a list of prediction functions (for surrogate and original model respectively)
+
+```{r}
+summary(default.xs, model = default.svm, newdata = data, prediction_funs = list(prob_xs, prob_svm))
+```
+
+Another set of statistics is generated for prediction functions that return response levels.
+```{r}
+response_svm <- function(object, newdata) predict(object, newdata = newdata)
+response_xs <- function(object, newdata) {
+  y_levels <- levels(newdata[[environment(object)$response]])
+  factor(y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1], levels = y_levels)
+}
+```
+
+And similarly to previous example:
+```{r}
+summary(default.xs, model = default.svm, newdata = data, prediction_funs = list(response_xs, response_svm))
 ```

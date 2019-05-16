@@ -40,30 +40,31 @@ The following points decribe the rules:
 
 If both object parameter and model (original black box) was provided, the summary displays comparison of original and surrogate model.
 The following points decribe the rules (\eqn{y_{s}}{y_s} and \eqn{y_{o}}{y_o} are predictions of surrogate and original model respectively on provided dataset).
+When comparing statistic is close to 1, this means surrogate model is similiar to black box one (according to this statistic).
 
 For regression models:
 \itemize{
-  \item{Maximum predictions difference}{
-    \deqn{\frac{\max_{i = 1}^{n} |y_{s}^{(i)} - y_{o}^{(i)}|}{\max_{i = 1}^{n} y_{o}^{(i)} - \min_{i = 1}^{n} y_{o}^{(i)}}}{max(abs(y_s - y_o)) / diff(range(y_o))}
+  \item{1 - Maximum predictions normed-difference}{
+    \deqn{1 - \frac{\max_{i = 1}^{n} |y_{s}^{(i)} - y_{o}^{(i)}|}{\max_{i = 1}^{n} y_{o}^{(i)} - \min_{i = 1}^{n} y_{o}^{(i)}}}{1 - (max(abs(y_s - y_o)) / diff(range(y_o)))}
   }
-  \item{R^2 (\link{https://christophm.github.io/interpretable-ml-book/global.html#theory-4)}}{
-    \deqn{1 - \frac{\sum_{i = 1}^{n} ({y_{s}^{(i)} - y_{o}^{(i)}}) ^ {2}}{\sum_{i = 1}^{n} ({y_{o}^{(i)} - \overline{y_{o}}}) ^ {2}}}{1 - sum((y_s - y_o) ^ 2) / sum(y_o - mean(y_o))}
+  \item{R^2 (\url{https://christophm.github.io/interpretable-ml-book/global.html#theory-4})}{
+    \deqn{1 - \frac{\sum_{i = 1}^{n} ({y_{s}^{(i)} - y_{o}^{(i)}}) ^ {2}}{\sum_{i = 1}^{n} ({y_{o}^{(i)} - \overline{y_{o}}}) ^ {2}}}{1 - sum((y_s - y_o) ^ 2) / sum((y_o - mean(y_o)) ^ 2)}
   }
-  \item{Mean square erros for each model.}
+  \item{Mean square errors for each model.}
 }
 
 For classification models the result depends on prediction type.
 When predictions are classified levels:
 \itemize{
-  \item{Maximum prediction difference}{\deqn{\frac{1}{n} \sum_{i = 1}^{n} I_{y_{s}^{(i)} \neq y_{o}^{(i)}}}{mean(y_s != y_o)}}
+  \item{Mean predictions similarity}{\deqn{\frac{1}{n} \sum_{i = 1}^{n} I_{y_{s}^{(i)} = y_{o}^{(i)}}}{mean(y_s == y_o)}}
   \item{Accuracies for each models.}
 }
 
 When predictions are response probabilities:
 \itemize{
   \item{R^2 as for regression model.}
-  \item{Maximum ROC difference}{\deqn{\max_{t \in T} ||ROC_{o}(t) - ROC_{s}(t)||_{2}}{} Calculates maximum of euclidean distances between ROC points for specified thresholds set T.}
-  \item{Mean ROC differene}{ Above version using mean instead of max measure.}
+  \item{1 - Maximum ROC difference}{\deqn{1 - \max_{t \in T} ||ROC_{o}(t) - ROC_{s}(t)||_{2}}{} Calculates maximum of euclidean distances between ROC points for specified thresholds set T. In this imlplementation T is union of breakpoints for each ROC curve.}
+  \item{1 - Mean ROC difference}{ Above version using mean instead of max measure.}
 }
 }
 \examples{
@@ -94,7 +95,10 @@ summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(prob_xs
 response_rf <- function(object, newdata) predict(object, newdata = newdata)
 response_xs <- function(object, newdata) {
   y_levels <- levels(newdata[[environment(object)$response]])
-  factor(y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1], levels = y_levels)
+  factor(
+    y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1],
+    levels = y_levels
+  )
 }
 response_rf(iris.rf, newdata = data)
 response_xs(iris.xs, newdata = data)
