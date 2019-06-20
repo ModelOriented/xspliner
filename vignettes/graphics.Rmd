@@ -103,7 +103,7 @@ prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "
 And plot the result
 ```{r}
 plot(model_xs, model = model_svm, data = iris_data,
-     prediction_funs = list(prob_svm, prob_xs)
+     prediction_funs = list(prob_xs, prob_svm)
 )  
 ```
 
@@ -111,7 +111,33 @@ It is also possible to sort the values of heatmap according to chosen model:
 
 ```{r}
 plot(model_xs, model = model_svm, data = iris_data,
-     prediction_funs = list(prob_svm, prob_xs),
+     prediction_funs = list(prob_xs, prob_svm),
+     sort_by = "svm"
+)  
+```
+
+In case of class predictions, let's create class prediction function first:
+```{r}
+class_svm <- function(object, newdata) predict(object, newdata = newdata)
+response_levels <- levels(iris_data$Species)
+class_xs <- function(object, newdata) {
+  probs <- predict(object, newdata = newdata, type = "response")
+  factor(ifelse(probs > 0.5, response_levels[2], response_levels[1]), levels = response_levels)
+}
+```
+
+And plot the result:
+```{r}
+plot(model_xs, model = model_svm, data = iris_data,
+     prediction_funs = list(class_xs, class_svm)
+)  
+```
+
+Sorting values according to specified model is also possible:
+
+```{r}
+plot(model_xs, model = model_svm, data = iris_data,
+     prediction_funs = list(class_xs, class_svm),
      sort_by = "svm"
 )  
 ```
