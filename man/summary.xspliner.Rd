@@ -6,7 +6,7 @@
 \usage{
 \method{summary}{xspliner}(object, predictor, ..., model = NULL,
   newdata = NULL, prediction_funs = list(function(object, newdata)
-  predict(object, newdata)))
+  predict(object, newdata)), env = parent.frame())
 }
 \arguments{
 \item{object}{xspliner object}
@@ -21,6 +21,8 @@
 
 \item{prediction_funs}{List of prediction functions for surrogate and black box model. For classification problem,
 different statistics are displayed based on predictions type. See details section for more info.}
+
+\item{env}{Environment in which newdata is stored (if not provided as parameter).}
 }
 \description{
 Summary method for xspliner object

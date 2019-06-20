@@ -124,6 +124,7 @@ compare_summary <- function(surrogate, original, surrogate_pred_fun, original_pr
 #' @param newdata Data used for models comparison. By default training data used for black box build.
 #' @param prediction_funs List of prediction functions for surrogate and black box model. For classification problem,
 #'   different statistics are displayed based on predictions type. See details section for more info.
+#' @param env Environment in which newdata is stored (if not provided as parameter).
 #'
 #' @details
 #' The summary output depends strictly on data provided to it.
@@ -206,7 +207,8 @@ compare_summary <- function(surrogate, original, surrogate_pred_fun, original_pr
 #'
 #' @export
 summary.xspliner <- function(object, predictor, ..., model = NULL, newdata = NULL,
-                             prediction_funs = list(function(object, newdata) predict(object, newdata))) {
+                             prediction_funs = list(function(object, newdata) predict(object, newdata)),
+                             env = parent.frame()) {
   if (!is.null(model)) {
     data <- get_model_data(object, data, env)
     surrogate_pred_fun <- original_pred_fun <- prediction_funs[[1]]
