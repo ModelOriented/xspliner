@@ -1,10 +1,10 @@
 ---
-title: "Automate you work"
+title: "Automate your work"
 author: "Krystian Igras"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Automate you work}
+  %\VignetteIndexEntry{Automate your work}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
