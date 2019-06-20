@@ -50,7 +50,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/automation.html">Automate you work</a>
+      <a href="../articles/automation.html">Automate your work</a>
     </li>
     <li>
       <a href="../articles/cases.html">Use cases</a>
@@ -88,7 +88,7 @@
       <h1>Extra information about the package</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2019-05-17</h4>
+            <h4 class="date">2019-06-20</h4>
       
       
       <div class="hidden name"><code>extras.Rmd</code></div>
@@ -159,7 +159,7 @@
 <a class="sourceLine" id="cb3-14" data-line-number="14"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_pdp_auto)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = cmedv ~ xs(lstat) + ptratio + age, family = family, 
+## stats::glm(formula = cmedv ~ xs(lstat) + ptratio + age, family = family, 
 ##     data = data)
 ## 
 ## Deviance Residuals: 
@@ -222,7 +222,8 @@
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = log(y) ~ xs(x) + xs(z), family = family, data = data)
+## stats::glm(formula = log(y) ~ xs(x) + xs(z), family = family, 
+##     data = data)
 ## 
 ## Deviance Residuals: 
 ##       Min         1Q     Median         3Q        Max  
@@ -262,7 +263,7 @@
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = y ~ x * z, family = family, data = data)
+## stats::glm(formula = y ~ x * z, family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
@@ -291,7 +292,7 @@
 <a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = y ~ xs(x) * xs(z), family = family, data = data)
+## stats::glm(formula = y ~ xs(x) * xs(z), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
@@ -319,7 +320,7 @@
 <a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = y ~ xs(x) * xs(z), family = family, data = data)
+## stats::glm(formula = y ~ xs(x) * xs(z), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
@@ -360,7 +361,8 @@
 <a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Ozone ~ xs(Wind) + xs(Temp), family = family, data = data)
+## stats::glm(formula = Ozone ~ xs(Wind) + xs(Temp), family = family, 
+##     data = data)
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
@@ -388,7 +390,8 @@
 <a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Ozone ~ xs(Wind) * xs(Temp), family = family, data = data)
+## stats::glm(formula = Ozone ~ xs(Wind) * xs(Temp), family = family, 
+##     data = data)
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  

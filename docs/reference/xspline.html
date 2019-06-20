@@ -72,7 +72,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/automation.html">Automate you work</a>
+      <a href="../articles/automation.html">Automate your work</a>
     </li>
     <li>
       <a href="../articles/cases.html">Use cases</a>
@@ -206,7 +206,7 @@ call are considered in transition.</p></td>
   <span class='no'>Petal.Width</span> ~ <span class='fu'>xs</span>(<span class='no'>Sepal.Length</span>) + <span class='fu'>xs</span>(<span class='no'>Petal.Length</span>) + <span class='fu'>xf</span>(<span class='no'>Species</span>),
   <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>rf_iris</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot extract model family. Use gaussian.</span></div><div class='output co'>#&gt; <span class='message'>Cannot extract model link. Use identity.</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
 #&gt; Call:
-#&gt; glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
+#&gt; stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 #&gt;     xf(Species), family = family, data = data)
 #&gt; 
 #&gt; Deviance Residuals: 
@@ -234,7 +234,7 @@ call are considered in transition.</p></td>
 <span class='co'># passing just the model</span>
 <span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(<span class='no'>rf_iris</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot extract model family. Use gaussian.</span></div><div class='output co'>#&gt; <span class='message'>Cannot extract model link. Use identity.</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
 #&gt; Call:
-#&gt; glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
+#&gt; stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 #&gt;     xf(Species), family = family, data = data)
 #&gt; 
 #&gt; Deviance Residuals: 
@@ -263,7 +263,7 @@ call are considered in transition.</p></td>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>DALEX</span>)</div><div class='output co'>#&gt; <span class='message'>Welcome to DALEX (version: 0.2.4).</span></div><div class='input'><span class='no'>xs_iris_explainer</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DALEX/topics/explain'>explain</a></span>(<span class='no'>rf_iris</span>)
 <span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(<span class='no'>rf_iris</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot extract model family. Use gaussian.</span></div><div class='output co'>#&gt; <span class='message'>Cannot extract model link. Use identity.</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
 #&gt; Call:
-#&gt; glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
+#&gt; stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 #&gt;     xf(Species), family = family, data = data)
 #&gt; 
 #&gt; Deviance Residuals: 
