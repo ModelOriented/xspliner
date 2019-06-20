@@ -6,7 +6,7 @@
 \usage{
 build_xspliner(formula, model, data, xf_opts = xf_opts_default,
   xs_opts = xs_opts_default, link = "identity", family = "gaussian",
-  env = parent.frame(), compare_stat = aic)
+  env = parent.frame(), compare_stat = aic, control)
 }
 \arguments{
 \item{formula}{xspliner-specific formula object. Check vignette("xspliner") for more details.}
@@ -29,6 +29,8 @@ be extracted from model. By default 'gaussian'. See \link[stats]{family} for pos
 
 \item{compare_stat}{Function of linear model (lm function output). Statistic that measures if linear model is better
 that transformed one. See \link{stats}.}
+
+\item{control}{Fitting settings. See \link{glm.control}.}
 }
 \description{
 Helper function for building GLM object with transformed variables.
