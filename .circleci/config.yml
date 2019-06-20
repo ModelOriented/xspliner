@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  build:
+    docker:
+            - image: krystian8207/xspliner:1.0
+    steps:
+      - checkout
+      - run:
+          name: Print the Current Time
+          command: date
+      - run:
+          name: Install current package
+          command: |
+            R -e 'devtools::install_local()'
+      - run:
+          name: Lint R code
+          command: "set -e; export CI=\"\"; Rscript lint.R --verbose"
+      - run:
+          name: Run unittests
+          command: |
+            R -e 'devtools::test()'
+      - run:
+          name: Run check
+          command: |
+            R -e 'devtools::check()'
+
