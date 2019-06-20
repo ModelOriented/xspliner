@@ -1,6 +1,6 @@
 Package: xspliner
 Title: Assisted Model Building, using Surrogate Black-Box Models to Train Interpretable Spline Based Additive Models
-Version: 0.0.2.9001
+Version: 0.0.2.9002
 Authors@R: c(
   person("Krystian", "Igras", email = "krystian8207@gmail.com", role = c("aut", "cre")),
   person("Przemyslaw", "Biecek", role =  c("aut", "ths")))
@@ -19,7 +19,8 @@ Imports: stats,
     mgcv,
     magrittr,
     purrr,
-    tidyr
+    tidyr,
+    pROC
 Suggests:
     ALEPlot,
     factorMerger,
@@ -34,7 +35,8 @@ Suggests:
     DALEX,
     xgboost,
     gridExtra,
-    grid
+    grid,
+    ISLR
 VignetteBuilder: knitr
 URL: https://ModelOriented.github.io/xspliner/
 BugReports: https://github.com/ModelOriented/xspliner/issues

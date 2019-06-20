@@ -27,9 +27,9 @@ model_ale <- xspline(
 )
 
 # check model summary
-summary(model_pdp)
+summary(model_pdp, model = boston.rf, newdata = boston)
 
-summary(model_ale)
+summary(model_ale, model = boston.rf, newdata = boston)
 
 # compare with standard gam model
 summary(mgcv::gam(cmedv ~ s(lstat, k = 6) + s(ptratio, k = 4) + age, data = boston))

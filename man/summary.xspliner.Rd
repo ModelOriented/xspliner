@@ -4,7 +4,9 @@
 \alias{summary.xspliner}
 \title{Summary method for xspliner object}
 \usage{
-\method{summary}{xspliner}(object, predictor, ...)
+\method{summary}{xspliner}(object, predictor, ..., model = NULL,
+  newdata = NULL, prediction_funs = list(function(object, newdata)
+  predict(object, newdata)))
 }
 \arguments{
 \item{object}{xspliner object}
@@ -12,7 +14,94 @@
 \item{predictor}{predictor for xspliner model formula}
 
 \item{...}{Another arguments passed into model specific method.}
+
+\item{model}{Original black box model. Providing enables models comparison. See details.}
+
+\item{newdata}{Data used for models comparison. By default training data used for black box build.}
+
+\item{prediction_funs}{List of prediction functions for surrogate and black box model. For classification problem,
+different statistics are displayed based on predictions type. See details section for more info.}
 }
 \description{
 Summary method for xspliner object
+}
+\details{
+The summary output depends strictly on data provided to it.
+
+Standard output for providing only xspliner model (object parameter) return default \code{glm::summary} output.
+
+Providing both xspliner model and predictor returns summary details for selecter variable.
+The following points decribe the rules:
+\itemize{
+  \item{When variable was quantitative and transformed with fitted spline, the output contain approximation details.}
+  \item{When variable was qualitative and transformed, factor matching is displayed.}
+  \item{When variable was not transformed, glm::summary output is displayed for the model.}
+}
+
+If both object parameter and model (original black box) was provided, the summary displays comparison of original and surrogate model.
+The following points decribe the rules (\eqn{y_{s}}{y_s} and \eqn{y_{o}}{y_o} are predictions of surrogate and original model respectively on provided dataset).
+When comparing statistic is close to 1, this means surrogate model is similiar to black box one (according to this statistic).
+
+For regression models:
+\itemize{
+  \item{1 - Maximum predictions normed-difference}{
+    \deqn{1 - \frac{\max_{i = 1}^{n} |y_{s}^{(i)} - y_{o}^{(i)}|}{\max_{i = 1}^{n} y_{o}^{(i)} - \min_{i = 1}^{n} y_{o}^{(i)}}}{1 - (max(abs(y_s - y_o)) / diff(range(y_o)))}
+  }
+  \item{R^2 (\url{https://christophm.github.io/interpretable-ml-book/global.html#theory-4})}{
+    \deqn{1 - \frac{\sum_{i = 1}^{n} ({y_{s}^{(i)} - y_{o}^{(i)}}) ^ {2}}{\sum_{i = 1}^{n} ({y_{o}^{(i)} - \overline{y_{o}}}) ^ {2}}}{1 - sum((y_s - y_o) ^ 2) / sum((y_o - mean(y_o)) ^ 2)}
+  }
+  \item{Mean square errors for each model.}
+}
+
+For classification models the result depends on prediction type.
+When predictions are classified levels:
+\itemize{
+  \item{Mean predictions similarity}{\deqn{\frac{1}{n} \sum_{i = 1}^{n} I_{y_{s}^{(i)} = y_{o}^{(i)}}}{mean(y_s == y_o)}}
+  \item{Accuracies for each models.}
+}
+
+When predictions are response probabilities:
+\itemize{
+  \item{R^2 as for regression model.}
+  \item{1 - Maximum ROC difference}{\deqn{1 - \max_{t \in T} ||ROC_{o}(t) - ROC_{s}(t)||_{2}}{} Calculates maximum of euclidean distances between ROC points for specified thresholds set T. In this imlplementation T is union of breakpoints for each ROC curve.}
+  \item{1 - Mean ROC difference}{ Above version using mean instead of max measure.}
+}
+}
+\examples{
+library(randomForest)
+set.seed(1)
+data <- iris
+# regression model
+iris.rf <- randomForest(Petal.Width ~  Sepal.Length + Petal.Length + Species, data = data)
+iris.xs <- xspline(iris.rf)
+# Summary of quantitative variable transition
+summary(iris.xs, "Sepal.Length")
+# Summary of qualitative variable transition
+summary(iris.xs, "Species")
+# Comparing surrogate with original model (regression)
+summary(iris.xs, model = iris.rf, newdata = data)
+
+# Classification model
+data <- droplevels(iris[51:150, ]) # selecting only two species data
+iris.rf <- randomForest(Species ~ ., data = data)
+iris.xs <- xspline(iris.rf)
+
+# Comparing summaries requires providing prediction function
+# Prediction as probability for success
+prob_rf <- function(object, newdata) predict(object, newdata = newdata, type = "prob")[, 2]
+prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
+summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(prob_xs, prob_rf))
+# Prediction as final category
+response_rf <- function(object, newdata) predict(object, newdata = newdata)
+response_xs <- function(object, newdata) {
+  y_levels <- levels(newdata[[environment(object)$response]])
+  factor(
+    y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1],
+    levels = y_levels
+  )
+}
+response_rf(iris.rf, newdata = data)
+response_xs(iris.xs, newdata = data)
+summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(response_xs, response_rf))
+
 }

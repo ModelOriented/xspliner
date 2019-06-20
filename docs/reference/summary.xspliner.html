@@ -117,7 +117,9 @@
     
 
     <pre class="usage"><span class='co'># S3 method for xspliner</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>object</span>, <span class='no'>predictor</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>object</span>, <span class='no'>predictor</span>, <span class='no'>...</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>)
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>, <span class='no'>newdata</span>)))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -134,15 +136,173 @@
       <th>...</th>
       <td><p>Another arguments passed into model specific method.</p></td>
     </tr>
+    <tr>
+      <th>model</th>
+      <td><p>Original black box model. Providing enables models comparison. See details.</p></td>
+    </tr>
+    <tr>
+      <th>newdata</th>
+      <td><p>Data used for models comparison. By default training data used for black box build.</p></td>
+    </tr>
+    <tr>
+      <th>prediction_funs</th>
+      <td><p>List of prediction functions for surrogate and black box model. For classification problem,
+different statistics are displayed based on predictions type. See details section for more info.</p></td>
+    </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>The summary output depends strictly on data provided to it.</p>
+<p>Standard output for providing only xspliner model (object parameter) return default <code>glm::summary</code> output.</p>
+<p>Providing both xspliner model and predictor returns summary details for selecter variable.
+The following points decribe the rules:</p><ul>
+<li><p>When variable was quantitative and transformed with fitted spline, the output contain approximation details.</p></li>
+<li><p>When variable was qualitative and transformed, factor matching is displayed.</p></li>
+<li><p>When variable was not transformed, glm::summary output is displayed for the model.</p></li>
+</ul>
+    <p>If both object parameter and model (original black box) was provided, the summary displays comparison of original and surrogate model.
+The following points decribe the rules (\(y_{s}\) and \(y_{o}\) are predictions of surrogate and original model respectively on provided dataset).
+When comparing statistic is close to 1, this means surrogate model is similiar to black box one (according to this statistic).</p>
+<p>For regression models:</p><ul>
+<li><p>1 - Maximum predictions normed-difference
+    $$1 - \frac{\max_{i = 1}^{n} |y_{s}^{(i)} - y_{o}^{(i)}|}{\max_{i = 1}^{n} y_{o}^{(i)} - \min_{i = 1}^{n} y_{o}^{(i)}}$$</p></li>
+<li><p>R^2 (<a href='https://christophm.github.io/interpretable-ml-book/global.html#theory-4'>https://christophm.github.io/interpretable-ml-book/global.html#theory-4</a>)
+    $$1 - \frac{\sum_{i = 1}^{n} ({y_{s}^{(i)} - y_{o}^{(i)}}) ^ {2}}{\sum_{i = 1}^{n} ({y_{o}^{(i)} - \overline{y_{o}}}) ^ {2}}$$</p></li>
+<li><p>Mean square errors for each model.</p></li>
+</ul>
+    <p>For classification models the result depends on prediction type.
+When predictions are classified levels:</p><ul>
+<li><p>Mean predictions similarity$$\frac{1}{n} \sum_{i = 1}^{n} I_{y_{s}^{(i)} = y_{o}^{(i)}}$$</p></li>
+<li><p>Accuracies for each models.</p></li>
+</ul>
+    <p>When predictions are response probabilities:</p><ul>
+<li><p>R^2 as for regression model.</p></li>
+<li><p>1 - Maximum ROC difference$$1 - \max_{t \in T} ||ROC_{o}(t) - ROC_{s}(t)||_{2}$$ Calculates maximum of euclidean distances between ROC points for specified thresholds set T. In this imlplementation T is union of breakpoints for each ROC curve.</p></li>
+<li><p>1 - Mean ROC difference Above version using mean instead of max measure.</p></li>
+</ul>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>randomForest</span>)</div><div class='output co'>#&gt; <span class='message'>randomForest 4.6-14</span></div><div class='output co'>#&gt; <span class='message'>Type rfNews() to see new features/changes/bug fixes.</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>1</span>)
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
+<span class='co'># regression model</span>
+<span class='no'>iris.rf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/randomForest/topics/randomForest'>randomForest</a></span>(<span class='no'>Petal.Width</span> ~  <span class='no'>Sepal.Length</span> + <span class='no'>Petal.Length</span> + <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+<span class='no'>iris.xs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='xspline.html'>xspline</a></span>(<span class='no'>iris.rf</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot extract model family. Use gaussian.</span></div><div class='output co'>#&gt; <span class='message'>Cannot extract model link. Use identity.</span></div><div class='input'><span class='co'># Summary of quantitative variable transition</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='output co'>#&gt; 
+#&gt; Family: gaussian 
+#&gt; Link function: identity 
+#&gt; 
+#&gt; Formula:
+#&gt; yhat ~ s(Sepal.Length)
+#&gt; 
+#&gt; Parametric coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept) 1.205104   0.002266   531.8   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; Approximate significance of smooth terms:
+#&gt;                   edf Ref.df     F p-value    
+#&gt; s(Sepal.Length) 5.784  6.939 313.4  &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; R-sq.(adj) =  0.985   Deviance explained = 98.7%
+#&gt; GCV = 0.00022296  Scale est. = 0.00017975  n = 35</div><div class='input'><span class='co'># Summary of qualitative variable transition</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='st'>"Species"</span>)</div><div class='output co'>#&gt;         orig       pred
+#&gt; 1     setosa     setosa
+#&gt; 2 versicolor versicolor
+#&gt; 3  virginica  virginica</div><div class='input'><span class='co'># Comparing surrogate with original model (regression)</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>iris.rf</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>data</span>)</div><div class='output co'>#&gt; Models comparison 
+#&gt;   1 - Max prediction normed-diff:  0.8840345 
+#&gt;   R^2:  0.9960708 
+#&gt;   MSE Black Box:  0.02251746 
+#&gt;   MSE Surrogate:  0.02989727 </div><div class='input'>
+<span class='co'># Classification model</span>
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/droplevels'>droplevels</a></span>(<span class='no'>iris</span>[<span class='fl'>51</span>:<span class='fl'>150</span>, ]) <span class='co'># selecting only two species data</span>
+<span class='no'>iris.rf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/randomForest/topics/randomForest'>randomForest</a></span>(<span class='no'>Species</span> ~ <span class='no'>.</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+<span class='no'>iris.xs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='xspline.html'>xspline</a></span>(<span class='no'>iris.rf</span>)
+
+<span class='co'># Comparing summaries requires providing prediction function</span>
+<span class='co'># Prediction as probability for success</span>
+<span class='no'>prob_rf</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>newdata</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"prob"</span>)[, <span class='fl'>2</span>]
+<span class='no'>prob_xs</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>newdata</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>iris.rf</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>prob_xs</span>, <span class='no'>prob_rf</span>))</div><div class='output co'>#&gt; Models comparison 
+#&gt;   1 - Max prediction normed-diff:  0.3908407 
+#&gt;   R^2:  0.958412 
+#&gt;   1 - Max ROC diff:  0.56 
+#&gt;   1 - Mean ROC diff:  0.8443484 </div><div class='input'><span class='co'># Prediction as final category</span>
+<span class='no'>response_rf</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>newdata</span>)
+<span class='no'>response_xs</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) {
+  <span class='no'>y_levels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/levels'>levels</a></span>(<span class='no'>newdata</span><span class='kw'>[[</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/environment'>environment</a></span>(<span class='no'>object</span>)$<span class='no'>response</span>]])
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(
+    <span class='no'>y_levels</span>[(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict.glm'>predict.glm</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>newdata</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"link"</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span>) + <span class='fl'>1</span>],
+    <span class='kw'>levels</span> <span class='kw'>=</span> <span class='no'>y_levels</span>
+  )
+}
+<span class='fu'>response_rf</span>(<span class='no'>iris.rf</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>data</span>)</div><div class='output co'>#&gt;         51         52         53         54         55         56         57 
+#&gt; versicolor versicolor versicolor versicolor versicolor versicolor versicolor 
+#&gt;         58         59         60         61         62         63         64 
+#&gt; versicolor versicolor versicolor versicolor versicolor versicolor versicolor 
+#&gt;         65         66         67         68         69         70         71 
+#&gt; versicolor versicolor versicolor versicolor versicolor versicolor versicolor 
+#&gt;         72         73         74         75         76         77         78 
+#&gt; versicolor versicolor versicolor versicolor versicolor versicolor versicolor 
+#&gt;         79         80         81         82         83         84         85 
+#&gt; versicolor versicolor versicolor versicolor versicolor versicolor versicolor 
+#&gt;         86         87         88         89         90         91         92 
+#&gt; versicolor versicolor versicolor versicolor versicolor versicolor versicolor 
+#&gt;         93         94         95         96         97         98         99 
+#&gt; versicolor versicolor versicolor versicolor versicolor versicolor versicolor 
+#&gt;        100        101        102        103        104        105        106 
+#&gt; versicolor  virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;        107        108        109        110        111        112        113 
+#&gt;  virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;        114        115        116        117        118        119        120 
+#&gt;  virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;        121        122        123        124        125        126        127 
+#&gt;  virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;        128        129        130        131        132        133        134 
+#&gt;  virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;        135        136        137        138        139        140        141 
+#&gt;  virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;        142        143        144        145        146        147        148 
+#&gt;  virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;        149        150 
+#&gt;  virginica  virginica 
+#&gt; Levels: versicolor virginica</div><div class='input'><span class='fu'>response_xs</span>(<span class='no'>iris.xs</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>data</span>)</div><div class='output co'>#&gt;   [1] versicolor versicolor versicolor versicolor versicolor versicolor
+#&gt;   [7] versicolor versicolor versicolor versicolor versicolor versicolor
+#&gt;  [13] versicolor versicolor versicolor versicolor versicolor versicolor
+#&gt;  [19] versicolor versicolor versicolor versicolor versicolor versicolor
+#&gt;  [25] versicolor versicolor versicolor virginica  versicolor versicolor
+#&gt;  [31] versicolor versicolor versicolor virginica  versicolor versicolor
+#&gt;  [37] versicolor versicolor versicolor versicolor versicolor versicolor
+#&gt;  [43] versicolor versicolor versicolor versicolor versicolor versicolor
+#&gt;  [49] versicolor versicolor virginica  virginica  virginica  virginica 
+#&gt;  [55] virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;  [61] virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;  [67] virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;  [73] virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;  [79] virginica  virginica  virginica  virginica  virginica  versicolor
+#&gt;  [85] virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;  [91] virginica  virginica  virginica  virginica  virginica  virginica 
+#&gt;  [97] virginica  virginica  virginica  virginica 
+#&gt; Levels: versicolor virginica</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>iris.rf</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>response_xs</span>, <span class='no'>response_rf</span>))</div><div class='output co'>#&gt; Models comparison 
+#&gt;   Mean predictions similarity:  0.97 
+#&gt;   ACC Black Box:  1 
+#&gt;   ACC Surrogate:  0.97 </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
