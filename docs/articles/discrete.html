@@ -50,7 +50,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/automation.html">Automate you work</a>
+      <a href="../articles/automation.html">Automate your work</a>
     </li>
     <li>
       <a href="../articles/cases.html">Use cases</a>
@@ -88,7 +88,7 @@
       <h1>Classification and discrete predictors</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2019-05-17</h4>
+            <h4 class="date">2019-06-20</h4>
       
       
       <div class="hidden name"><code>discrete.Rmd</code></div>
@@ -158,8 +158,8 @@
 <a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = average_montly_hours ~ last_evaluation + xf(salary) + 
-##     satisfaction_level, family = family, data = data)
+## stats::glm(formula = average_montly_hours ~ last_evaluation + 
+##     xf(salary) + satisfaction_level, family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
@@ -212,20 +212,20 @@
 <a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Species ~ xs(Sepal.Length) + xs(Sepal.Width) + 
+## stats::glm(formula = Species ~ xs(Sepal.Length) + xs(Sepal.Width) + 
 ##     xs(Petal.Length) + xs(Petal.Width), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -2.28620  -0.05596  -0.00260   0.05195   1.72605  
+## -2.28620  -0.05596  -0.00260   0.05195   1.72606  
 ## 
 ## Coefficients:
 ##                  Estimate Std. Error z value Pr(&gt;|z|)   
-## (Intercept)        -1.778      1.046  -1.700  0.08921 . 
-## xs(Sepal.Length)   13.250     19.131   0.693  0.48855   
-## xs(Sepal.Width)     8.949      5.505   1.626  0.10402   
-## xs(Petal.Length)    3.435      1.399   2.456  0.01406 * 
-## xs(Petal.Width)     3.902      1.488   2.623  0.00872 **
+## (Intercept)        0.3017     1.0891   0.277  0.78176   
+## xs(Sepal.Length)  13.0566    18.8514   0.693  0.48856   
+## xs(Sepal.Width)    8.8184     5.4244   1.626  0.10402   
+## xs(Petal.Length)   3.3844     1.3782   2.456  0.01406 * 
+## xs(Petal.Width)    3.8450     1.4660   2.623  0.00872 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 

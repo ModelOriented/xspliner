@@ -72,7 +72,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/automation.html">Automate you work</a>
+      <a href="../articles/automation.html">Automate your work</a>
     </li>
     <li>
       <a href="../articles/cases.html">Use cases</a>
@@ -119,7 +119,7 @@
     <pre class="usage"><span class='co'># S3 method for xspliner</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>object</span>, <span class='no'>predictor</span>, <span class='no'>...</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>, <span class='no'>newdata</span>)))</pre>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>, <span class='no'>newdata</span>)), <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -148,6 +148,10 @@
       <th>prediction_funs</th>
       <td><p>List of prediction functions for surrogate and black box model. For classification problem,
 different statistics are displayed based on predictions type. See details section for more info.</p></td>
+    </tr>
+    <tr>
+      <th>env</th>
+      <td><p>Environment in which newdata is stored (if not provided as parameter).</p></td>
     </tr>
     </table>
     
