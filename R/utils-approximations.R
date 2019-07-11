@@ -27,7 +27,7 @@ build_approximation_formula <- function(response, predictor, env, ...) {
 #' approx_with_monotonic_spline(data.frame(x = x, y = y), "y", "x", env, "up")
 #' @export
 approx_with_spline <- function(effect_data, response, predictor, env = parent.frame(), ...) {
-    log_msg(cat(sprintf("Estimating %s variable..  \n", predictor)))
+  log_msg(cat(sprintf("Estimating %s variable..", predictor)))
   s <- mgcv::s
   formula <- build_approximation_formula(response, predictor, env, ...)
   mgcv::gam(formula, data = effect_data)
@@ -37,6 +37,7 @@ approx_with_spline <- function(effect_data, response, predictor, env = parent.fr
 #' @export
 approx_with_monotonic_spline <- function(effect_data, response,
                                          predictor, env = parent.frame(), monotonic, ...) {
+  log_msg(cat(sprintf("Estimating %s variable..", predictor)))
   if (monotonic == "auto") {
     model_up <- approx_with_monotonic_spline(effect_data, response, predictor, env = parent.frame(), "up", ...)
     model_down <- approx_with_monotonic_spline(effect_data, response, predictor, env = parent.frame(), "down", ...)
@@ -178,6 +179,7 @@ get_qualitative_transition <- function(formula_metadata, component_details, blac
     transition[c("stat", "value")] <- NULL
     transition$abbreviate <-  FALSE
 
+    log_msg(cat(sprintf("Estimating %s variable..", component_details[["var"]])))
     transition_outcome <- do.call(factorMerger::mergeFactors, transition)
 
     partition_params$factorMerger <- transition_outcome
@@ -303,11 +305,12 @@ build_xs_function <- function(quantitative_transition, predictor_name) {
 build_xf_function <- function(qualitative_transition, predictor_name) {
   matched_factors <- attr(qualitative_transition$transition_outcome, "partition")
   if (length(unique(matched_factors$pred)) < 2) {
+    message(sprintf("Variable %s merged into constant during transition. Identity used.", predictor_name))
     return(function(predictor) predictor)
   } else {
     function(predictor) {
       predictor_values <- data.frame(orig = predictor)
-      suppressMessages(transformed_predictor <- dplyr::left_join(predictor_values, matched_factors, by = "orig"))
+      transformed_predictor <- dplyr::left_join(predictor_values, matched_factors, by = "orig")
       factor(transformed_predictor$pred, levels = unique(matched_factors$pred))
     }
   }
