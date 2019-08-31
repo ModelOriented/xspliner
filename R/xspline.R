@@ -80,7 +80,7 @@ xspline.formula <- function(object, model, data = NULL, consider = "specials", e
   model_lhs <- get_model_lhs(model, NULL)
   if (model_lhs != formula_lhs) {
     message("Model and formula lhs's must be the same. Using lhs from model.")
-    object[[2]] <- model$terms[[2]]
+    object[[2]] <- model_lhs
   }
 
   model_predictors <- get_model_predictors(model, data, NULL, get_model_response(model, data, NULL))
