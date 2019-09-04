@@ -103,13 +103,17 @@ utils::globalVariables(c("Observation", "Model", "Value"))
 
 plot_model_comparison <- function(x, model, data, compare_with, prediction_functions, sort_by = NULL) {
   model_name <- rev(as.character(model$call[[1]]))[1]
-  compare_with$xspliner <- x
-  compare_with[[model_name]] <- model
+  models_list <- list(xspliner = x)
+  models_list[[model_name]] <- model
+  models_list <- append(models_list, compare_with)
   if (length(prediction_functions) == 1) {
-    fitted <- compare_with %>%
+    fitted <- models_list %>%
       purrr::map(~ prediction_functions[[1]](., data))
   } else {
-    fitted <- compare_with %>%
+    if (length(models_list) != length(prediction_functions)) {
+      stop("prediction_functions should provide prediction functions for all models (surrogate, original and model to compare), or common one.")
+    }
+    fitted <- models_list %>%
       purrr::map2(prediction_functions, function(model, pred_fun) pred_fun(model, data))
   }
 

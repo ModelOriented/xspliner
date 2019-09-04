@@ -13,6 +13,7 @@
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -23,6 +24,7 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -95,7 +97,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -112,11 +113,9 @@
     <h1>Builds predictive model based GLM.</h1>
     </div>
 
-    
     <p>The method provides main functionality on building GLM models with automatic variables transformation.
 The transformations are based on specified single variable responses for selected black-box model.
 See details in <code><a href='../articles/xspliner.html'>vignette("xspliner")</a></code>.</p>
-    
 
     <pre class="usage"><span class='fu'>xspline</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
@@ -133,7 +132,7 @@ See details in <code><a href='../articles/xspliner.html'>vignette("xspliner")</a
 
 <span class='co'># S3 method for explainer</span>
 <span class='fu'>xspline</span>(<span class='no'>object</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -184,15 +183,13 @@ variables transformation. See vignette("xspliner") for details.</p></td>
 call are considered in transition.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>GLM object of class 'xspliner'.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>model_surrogate_xspliner is a wrapper of xspline method to assure consistency with https://github.com/ModelOriented/DrWhy tools</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># preparing blackbox model</span>
@@ -204,7 +201,8 @@ call are considered in transition.</p></td>
 <span class='co'># formula based xspliner</span>
 <span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(
   <span class='no'>Petal.Width</span> ~ <span class='fu'>xs</span>(<span class='no'>Sepal.Length</span>) + <span class='fu'>xs</span>(<span class='no'>Petal.Length</span>) + <span class='fu'>xf</span>(<span class='no'>Species</span>),
-  <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>rf_iris</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot extract model family. Use gaussian.</span></div><div class='output co'>#&gt; <span class='message'>Cannot extract model link. Use identity.</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
+  <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>rf_iris</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
 #&gt; Call:
 #&gt; stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 #&gt;     xf(Species), family = family, data = data)
@@ -232,7 +230,8 @@ call are considered in transition.</p></td>
 #&gt; Number of Fisher Scoring iterations: 2
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># passing just the model</span>
-<span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(<span class='no'>rf_iris</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot extract model family. Use gaussian.</span></div><div class='output co'>#&gt; <span class='message'>Cannot extract model link. Use identity.</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
+<span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(<span class='no'>rf_iris</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
 #&gt; Call:
 #&gt; stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 #&gt;     xf(Species), family = family, data = data)
@@ -260,8 +259,20 @@ call are considered in transition.</p></td>
 #&gt; Number of Fisher Scoring iterations: 2
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># using DALEX</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>DALEX</span>)</div><div class='output co'>#&gt; <span class='message'>Welcome to DALEX (version: 0.2.4).</span></div><div class='input'><span class='no'>xs_iris_explainer</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DALEX/topics/explain'>explain</a></span>(<span class='no'>rf_iris</span>)
-<span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(<span class='no'>rf_iris</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot extract model family. Use gaussian.</span></div><div class='output co'>#&gt; <span class='message'>Cannot extract model link. Use identity.</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>DALEX</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'DALEX':</span>
+#&gt; <span class='message'>  method            from     </span>
+#&gt; <span class='message'>  print.description questionr</span></div><div class='output co'>#&gt; <span class='message'>Welcome to DALEX (version: 0.4.7).</span>
+#&gt; <span class='message'>Find examples and detailed introduction at: https://pbiecek.github.io/PM_VEE/</span>
+#&gt; <span class='message'>Additional features will be available after installation of: ingredients, iBreakDown.</span>
+#&gt; <span class='message'>Use 'install_dependencies()' to get all suggested dependencies</span></div><div class='input'><span class='no'>xs_iris_explainer</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DALEX/topics/explain'>explain</a></span>(<span class='no'>rf_iris</span>)</div><div class='output co'>#&gt; Preparation of a new explainer is initiated
+#&gt;   -&gt; model label       :  randomForest  (<span style='color: #BBBB00;'>default</span><span>)
+#&gt;   -&gt; data              :  150  rows  4  cols (</span><span style='color: #BBBB00;'>extracted from the model</span><span>)
+#&gt;   -&gt; target variable   :  not specified! (</span><span style='color: #BB0000;'>WARNING</span><span>)
+#&gt;   -&gt; predict function  :  yhat.randomForest  will be used (</span><span style='color: #BBBB00;'>default</span><span>)
+#&gt;   -&gt; predicted values  :  numerical, min =  0.1991898 , mean =  1.199876 , max =  2.134114  
+#&gt;   -&gt; residual function :  difference between y and yhat (</span><span style='color: #BBBB00;'>default</span><span>)
+#&gt; </span><span style='color: #00BB00;'>A new explainer has been created!</span><span></div><div class='input'><span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(<span class='no'>rf_iris</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
 #&gt; Call:
 #&gt; stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 #&gt;     xf(Species), family = family, data = data)
@@ -288,17 +299,14 @@ call are considered in transition.</p></td>
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 2
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-3.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
