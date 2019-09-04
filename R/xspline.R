@@ -125,9 +125,10 @@ xspline.explainer <- function(object, env = parent.frame(), ...) {
 #' @param compare_stat Function of linear model (lm function output). Statistic that measures if linear model is better
 #'   that transformed one. See \link{stats}.
 #' @param control Fitting settings. See \link{glm.control}.
+#' @param ... Another parameters passed from chosen method. Not used.
 #'
 build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_opts = xs_opts_default, link = "identity",
-                           family = "gaussian", env = parent.frame(), compare_stat = aic, control) {
+                           family = "gaussian", env = parent.frame(), compare_stat = aic, control, ...) {
   formula_environment <- new.env(parent = env)
   attr(formula, ".Environment") <- formula_environment
   formula_metadata <- get_formula_metadata(formula, extract_formula_var_names(formula, data))

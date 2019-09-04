@@ -231,6 +231,9 @@ get_model_response <- function(model, data, response) {
   if (is.null(response)) {
     response <- try_get(all.vars(model$Terms[[2]]))
   }
+  if (is.null(response)) {
+    response <- all.vars(model$call$formula[[2]])
+  }
   if (!is.null(response)) {
     response_in_data <- response %in% colnames(data)
     if (!all(response_in_data)) {
@@ -253,6 +256,9 @@ get_model_lhs <- function(model, lhs) {
   }
   if (is.null(lhs)) {
     lhs <- try_get(colnames(model.frame(model))[1])
+  }
+  if (is.null(lhs)) {
+    lhs <- try_get(deparse(model$call$formula[[2]], width.cutoff = 500))
   }
   if (is.null(lhs)) {
     stop("Cannot extract model lhs")
