@@ -171,10 +171,10 @@ correct_improved_components <- function(special_components_details, transformed_
 }
 
 add_special_to_predictor <- function(predictor, class, bare) {
-  if (!(class %in% c("numeric", "integer", "factor"))) {
+  if (!(class %in% c("numeric", "integer", "factor", "logical"))) {
     stop("Wrong class passed.")
   }
-  if (predictor %in% bare) {
+  if (predictor %in% bare || class == "logical") {
     return(predictor)
   }
   if (class == "factor") {
