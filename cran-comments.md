@@ -1,39 +1,42 @@
 ## Test environments
-* local Ubuntu 18.10, R 3.5.1
-* Rhub Ubuntu Linux 16.04 LTS, R-release, GCC
+* local check
+  Ubuntu 18.10, R 3.6.1
 * win-builder
+  R version 3.5.3 (2019-03-11)
+  R Under development (unstable) (2019-09-02 r77130)
+  R version 3.6.1 (2019-07-05)
 
-## R CMD check results
+## `R CMD check xspliner_0.0.3.tar.gz --as-cran` results
 
 ```
 Status: OK
 ```
 
-## check_rhub() result
+## win-builder result
 
 ```
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: ‘Krystian Igras <krystian8207@gmail.com>’
-
-New submission
-
-Possibly mis-spelled words in DESCRIPTION:
-  interpretable (9:41)
-  Interpretable (3:15)
-
-* checking examples ... NOTE
-Examples with CPU or elapsed time > 5s
-user system elapsed
-xspline 5.92  0.164   6.217
-
-0 errors | 0 warnings | 2 notes
+* using log directory 'd:/RCompile/CRANguest/R-oldrelease/xspliner.Rcheck'
+* using R version 3.5.3 (2019-03-11)
+* using platform: x86_64-w64-mingw32 (64-bit)
+...
+* DONE
+Status: OK
 ```
 
-# win-builder result
+```
+* using log directory 'd:/RCompile/CRANguest/R-devel/xspliner.Rcheck'
+* using R Under development (unstable) (2019-09-02 r77130)
+* using platform: x86_64-w64-mingw32 (64-bit)
+...
+* DONE
+Status: OK
+```
 
 ```
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Krystian Igras <krystian8207@gmail.com>'
-
-Status: 1 NOTE
+* using log directory 'd:/RCompile/CRANguest/R-release/xspliner.Rcheck'
+* using R version 3.6.1 (2019-07-05)
+* using platform: x86_64-w64-mingw32 (64-bit)
+...
+* DONE
+Status: OK
 ```

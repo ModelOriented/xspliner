@@ -88,7 +88,7 @@
       <h1>Use cases</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2019-08-31</h4>
+            <h4 class="date">2019-09-05</h4>
       
       
       <div class="hidden name"><code>cases.Rmd</code></div>
@@ -100,12 +100,12 @@
 <div id="xgboost-case" class="section level1">
 <h1 class="hasAnchor">
 <a href="#xgboost-case" class="anchor"></a>XGBoost case</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xgboost)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(breakDown)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">HR &lt;-<span class="st"> </span>HR_data</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(HR_data)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xgboost)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(breakDown)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>HR &lt;-<span class="st"> </span>HR_data</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(HR_data)</span></code></pre></div>
 <pre><code>## 'data.frame':    14999 obs. of  10 variables:
 ##  $ satisfaction_level   : num  0.38 0.8 0.11 0.72 0.37 0.41 0.1 0.92 0.89 0.42 ...
 ##  $ last_evaluation      : num  0.53 0.86 0.88 0.87 0.52 0.5 0.77 0.85 1 0.53 ...
@@ -117,17 +117,17 @@
 ##  $ promotion_last_5years: int  0 0 0 0 0 0 0 0 0 0 ...
 ##  $ sales                : Factor w/ 10 levels "accounting","hr",..: 8 8 8 8 8 8 8 8 8 8 ...
 ##  $ salary               : Factor w/ 3 levels "high","low","medium": 2 3 3 2 2 2 2 2 2 2 ...</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">model_matrix_train &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/model.matrix">model.matrix</a></span>(left <span class="op">~</span><span class="st"> </span>. <span class="dv">-1</span>, HR)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">data_train &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/xgboost/topics/xgb.DMatrix">xgb.DMatrix</a></span>(model_matrix_train, <span class="dt">label =</span> HR<span class="op">$</span>left)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">param &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">max_depth =</span> <span class="dv">2</span>, <span class="dt">objective =</span> <span class="st">"binary:logistic"</span>)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">HR_xgb_model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/xgboost/topics/xgb.train">xgb.train</a></span>(param, data_train, <span class="dt">nrounds =</span> <span class="dv">50</span>)</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(HR_xgb_model, <span class="dt">lhs =</span> <span class="st">"left"</span>, <span class="dt">response =</span> <span class="st">"left"</span>, <span class="dt">predictors =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(HR)[<span class="op">-</span><span class="dv">7</span>],</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">                 <span class="dt">data =</span> HR, <span class="dt">form =</span> <span class="st">"additive"</span>, <span class="dt">family =</span> <span class="st">"binomial"</span>, <span class="dt">link =</span> <span class="st">"logit"</span>,</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">                 <span class="dt">bare =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"number_project"</span>, <span class="st">"time_spend_company"</span>, <span class="st">"Work_accident"</span>, <span class="st">"promotion_last_5years"</span>),</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">                 <span class="dt">xs_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">train =</span> model_matrix_train)),</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">                 <span class="dt">xf_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">alter =</span> <span class="st">"never"</span>))) </a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>model_matrix_train &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/model.matrix">model.matrix</a></span>(left <span class="op">~</span><span class="st"> </span>. <span class="dv">-1</span>, HR)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>data_train &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/xgboost/topics/xgb.DMatrix">xgb.DMatrix</a></span>(model_matrix_train, <span class="dt">label =</span> HR<span class="op">$</span>left)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>param &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">max_depth =</span> <span class="dv">2</span>, <span class="dt">objective =</span> <span class="st">"binary:logistic"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a>HR_xgb_model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/xgboost/topics/xgb.train">xgb.train</a></span>(param, data_train, <span class="dt">nrounds =</span> <span class="dv">50</span>)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(HR_xgb_model, <span class="dt">lhs =</span> <span class="st">"left"</span>, <span class="dt">response =</span> <span class="st">"left"</span>, <span class="dt">predictors =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(HR)[<span class="op">-</span><span class="dv">7</span>],</span>
+<span id="cb3-7"><a href="#cb3-7"></a>                 <span class="dt">data =</span> HR, <span class="dt">form =</span> <span class="st">"additive"</span>, <span class="dt">family =</span> <span class="st">"binomial"</span>, <span class="dt">link =</span> <span class="st">"logit"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8"></a>                 <span class="dt">bare =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"number_project"</span>, <span class="st">"time_spend_company"</span>, <span class="st">"Work_accident"</span>, <span class="st">"promotion_last_5years"</span>),</span>
+<span id="cb3-9"><a href="#cb3-9"></a>                 <span class="dt">xs_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">train =</span> model_matrix_train)),</span>
+<span id="cb3-10"><a href="#cb3-10"></a>                 <span class="dt">xf_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">alter =</span> <span class="st">"never"</span>))) </span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = left ~ xs(satisfaction_level) + xs(last_evaluation) + 
@@ -174,19 +174,19 @@
 <div id="partially-constant-approximation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#partially-constant-approximation" class="anchor"></a>Partially constant approximation</h1>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DALEX)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(caret)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(apartments)</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">variable &lt;-<span class="st"> "construction.year"</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">regr_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/caret/topics/train">train</a></span>(m2.price <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> apartments, <span class="dt">method =</span> <span class="st">"rf"</span>, <span class="dt">ntree =</span> <span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(regr_rf, <span class="dt">data =</span> apartments, <span class="dt">bare =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"floor"</span>, <span class="st">"no.rooms"</span>),</a>
-<a class="sourceLine" id="cb5-10" data-line-number="10">                    <span class="dt">xs_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">bs =</span> <span class="st">"ps"</span>, <span class="dt">fx =</span> <span class="ot">FALSE</span>, <span class="dt">k =</span> <span class="dv">20</span>, <span class="dt">m =</span> <span class="dv">-1</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DALEX)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(caret)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(apartments)</span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>variable &lt;-<span class="st"> "construction.year"</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>regr_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/caret/topics/train">train</a></span>(m2.price <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> apartments, <span class="dt">method =</span> <span class="st">"rf"</span>, <span class="dt">ntree =</span> <span class="dv">100</span>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(regr_rf, <span class="dt">data =</span> apartments, <span class="dt">bare =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"floor"</span>, <span class="st">"no.rooms"</span>),</span>
+<span id="cb5-10"><a href="#cb5-10"></a>                    <span class="dt">xs_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">bs =</span> <span class="st">"ps"</span>, <span class="dt">fx =</span> <span class="ot">FALSE</span>, <span class="dt">k =</span> <span class="dv">20</span>, <span class="dt">m =</span> <span class="dv">-1</span>)))</span></code></pre></div>
 <pre><code>## Warning: Column `orig` joining factors with different levels, coercing to
 ## character vector</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"surface"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"surface"</span>)</span></code></pre></div>
 <p><img src="cases_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 </div>
   </div>

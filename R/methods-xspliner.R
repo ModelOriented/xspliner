@@ -66,14 +66,18 @@ measure_diff_roc <- function(a, b, measure = max) {
 }
 
 fit_roc_diff <- function(surrogate_scores, original_scores, original_labels) {
-  is_score_surrogate <- all(surrogate_scores <= 1 && surrogate_scores >=0)
-  is_score_original <- all(original_scores <= 1 && original_scores >=0)
+  is_score_surrogate <- all(surrogate_scores <= 1) && all(surrogate_scores >=0)
+  is_score_original <- all(original_scores <= 1) && all(original_scores >=0)
   if (is_score_original && is_score_surrogate) {
     roc_surrogate <- pROC::roc(original_labels, surrogate_scores, direction="<")
     roc_original <- pROC::roc(original_labels, original_scores, direction="<")
     thresholds <- union(roc_surrogate$thresholds, roc_original$thresholds)
-    roc_surrogate_on_thresholds <- pROC::coords(roc_surrogate, x = thresholds, input = "threshold", ret = c("se", "1-sp"))
-    roc_original_on_thresholds <- pROC::coords(roc_original, x = thresholds, input = "threshold", ret = c("se", "1-sp"))
+    roc_surrogate_on_thresholds <- pROC::coords(
+      roc_surrogate, x = thresholds, input = "threshold", ret = c("se", "1-sp"), transpose = TRUE
+    )
+    roc_original_on_thresholds <- pROC::coords(
+      roc_original, x = thresholds, input = "threshold", ret = c("se", "1-sp"), transpose = TRUE
+    )
     list(
       max = measure_diff_roc(roc_surrogate_on_thresholds, roc_original_on_thresholds),
       mean = measure_diff_roc(roc_surrogate_on_thresholds, roc_original_on_thresholds, measure = mean)
@@ -183,27 +187,27 @@ compare_summary <- function(surrogate, original, surrogate_pred_fun, original_pr
 #' summary(iris.xs, model = iris.rf, newdata = data)
 #'
 #' # Classification model
-#' data <- droplevels(iris[51:150, ]) # selecting only two species data
-#' iris.rf <- randomForest(Species ~ ., data = data)
-#' iris.xs <- xspline(iris.rf)
-#'
-#' # Comparing summaries requires providing prediction function
-#' # Prediction as probability for success
-#' prob_rf <- function(object, newdata) predict(object, newdata = newdata, type = "prob")[, 2]
-#' prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
-#' summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(prob_xs, prob_rf))
-#' # Prediction as final category
-#' response_rf <- function(object, newdata) predict(object, newdata = newdata)
-#' response_xs <- function(object, newdata) {
-#'   y_levels <- levels(newdata[[environment(object)$response]])
-#'   factor(
-#'     y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1],
-#'     levels = y_levels
-#'   )
-#' }
-#' response_rf(iris.rf, newdata = data)
-#' response_xs(iris.xs, newdata = data)
-#' summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(response_xs, response_rf))
+# data <- droplevels(iris[51:150, ]) # selecting only two species data
+# iris.rf <- randomForest(Species ~ ., data = data)
+# iris.xs <- xspline(iris.rf)
+#
+# # Comparing summaries requires providing prediction function
+# # Prediction as probability for success
+# prob_rf <- function(object, newdata) predict(object, newdata = newdata, type = "prob")[, 2]
+# prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
+# summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(prob_xs, prob_rf))
+# # Prediction as final category
+# response_rf <- function(object, newdata) predict(object, newdata = newdata)
+# response_xs <- function(object, newdata) {
+#   y_levels <- levels(newdata[[environment(object)$response]])
+#   factor(
+#     y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1],
+#     levels = y_levels
+#   )
+# }
+# response_rf(iris.rf, newdata = data)
+# response_xs(iris.xs, newdata = data)
+# summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(response_xs, response_rf))
 #'
 #' @export
 summary.xspliner <- function(object, predictor, ..., model = NULL, newdata = NULL,

@@ -88,7 +88,7 @@
       <h1>Extra information about the package</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2019-08-31</h4>
+            <h4 class="date">2019-09-05</h4>
       
       
       <div class="hidden name"><code>extras.Rmd</code></div>
@@ -110,24 +110,24 @@
 <li>“auto” compare increasing and decreasing approximation and chooses better one (basing on <span class="math inline">\(R^2\)</span> statistic)</li>
 </ul>
 <p>Let’s see below example:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(pdp)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(boston)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">boston_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(cmedv <span class="op">~</span><span class="st"> </span>lstat <span class="op">+</span><span class="st"> </span>ptratio <span class="op">+</span><span class="st"> </span>age, <span class="dt">data =</span> boston)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">  cmedv <span class="op">~</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">    </span><span class="kw">xs</span>(lstat, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">6</span>), <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">type =</span> <span class="st">"pdp"</span>, <span class="dt">grid.resolution =</span> <span class="dv">100</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="st">    </span><span class="kw">xs</span>(ptratio, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">5</span>), <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">type =</span> <span class="st">"pdp"</span>, <span class="dt">grid.resolution =</span> <span class="dv">100</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">    </span>age,</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">  <span class="dt">model =</span> boston_rf,</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">  <span class="dt">xs_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">monotonic =</span> <span class="st">"auto"</span>))</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14">)</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"ptratio"</span>, <span class="dt">plot_deriv =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(pdp)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(boston)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>boston_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(cmedv <span class="op">~</span><span class="st"> </span>lstat <span class="op">+</span><span class="st"> </span>ptratio <span class="op">+</span><span class="st"> </span>age, <span class="dt">data =</span> boston)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(</span>
+<span id="cb1-8"><a href="#cb1-8"></a>  cmedv <span class="op">~</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="st">    </span><span class="kw">xs</span>(lstat, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">6</span>), <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">type =</span> <span class="st">"pdp"</span>, <span class="dt">grid.resolution =</span> <span class="dv">100</span>)) <span class="op">+</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="st">    </span><span class="kw">xs</span>(ptratio, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">5</span>), <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">type =</span> <span class="st">"pdp"</span>, <span class="dt">grid.resolution =</span> <span class="dv">100</span>)) <span class="op">+</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="st">    </span>age,</span>
+<span id="cb1-12"><a href="#cb1-12"></a>  <span class="dt">model =</span> boston_rf,</span>
+<span id="cb1-13"><a href="#cb1-13"></a>  <span class="dt">xs_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">monotonic =</span> <span class="st">"auto"</span>))</span>
+<span id="cb1-14"><a href="#cb1-14"></a>)</span>
+<span id="cb1-15"><a href="#cb1-15"></a></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"ptratio"</span>, <span class="dt">plot_deriv =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p><img src="extras_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"lstat"</span>, <span class="dt">plot_deriv =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"lstat"</span>, <span class="dt">plot_deriv =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p><img src="extras_files/figure-html/unnamed-chunk-1-2.png" width="700"></p>
 </div>
 <div id="choose-if-approximation-is-better" class="section level1">
@@ -143,20 +143,20 @@
 <code>compare_stat</code> - function of <code>lm</code> class object. It defines statistic that should be used in decision between spline model and linear one. The function should have the attribute <code>higher</code>. When the attribute has <code>"better"</code> value then the model with higher statistic value is chosen.</li>
 </ul>
 <p>You can see the feature in above example:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">boston_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(cmedv <span class="op">~</span><span class="st"> </span>lstat <span class="op">+</span><span class="st"> </span>ptratio <span class="op">+</span><span class="st"> </span>age, <span class="dt">data =</span> boston)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">model_pdp_auto &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  cmedv <span class="op">~</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">    </span><span class="kw">xs</span>(lstat, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">6</span>), <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">type =</span> <span class="st">"pdp"</span>, <span class="dt">grid.resolution =</span> <span class="dv">60</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="st">    </span><span class="kw">xs</span>(ptratio, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">4</span>), <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">type =</span> <span class="st">"pdp"</span>, <span class="dt">grid.resolution =</span> <span class="dv">40</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="st">    </span>age,</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">  <span class="dt">model =</span> boston_rf,</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">  <span class="dt">xs_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">alter =</span> <span class="st">"auto"</span>))</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">)</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co"># aic statistic is used by default</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_pdp_auto)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>boston_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(cmedv <span class="op">~</span><span class="st"> </span>lstat <span class="op">+</span><span class="st"> </span>ptratio <span class="op">+</span><span class="st"> </span>age, <span class="dt">data =</span> boston)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>model_pdp_auto &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  cmedv <span class="op">~</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="st">    </span><span class="kw">xs</span>(lstat, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">6</span>), <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">type =</span> <span class="st">"pdp"</span>, <span class="dt">grid.resolution =</span> <span class="dv">60</span>)) <span class="op">+</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="st">    </span><span class="kw">xs</span>(ptratio, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">4</span>), <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">type =</span> <span class="st">"pdp"</span>, <span class="dt">grid.resolution =</span> <span class="dv">40</span>)) <span class="op">+</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="st">    </span>age,</span>
+<span id="cb3-8"><a href="#cb3-8"></a>  <span class="dt">model =</span> boston_rf,</span>
+<span id="cb3-9"><a href="#cb3-9"></a>  <span class="dt">xs_opts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">alter =</span> <span class="st">"auto"</span>))</span>
+<span id="cb3-10"><a href="#cb3-10"></a>)</span>
+<span id="cb3-11"><a href="#cb3-11"></a></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co"># aic statistic is used by default</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_pdp_auto)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = cmedv ~ xs(lstat) + ptratio + age, family = family, 
@@ -191,19 +191,19 @@
 <p>Link parameters stores info about what function should be used to transform the response. The transformation is used in the final model fitting. The standard link is the identity (for gaussian distribution) - for binomial distribution logit is used.</p>
 <p>See more at <code>??stats::family.glm</code>.</p>
 <p><code>xspline</code> function allows you to decide which response should be used in the final model. Let’s check the example below in which poisson distribution with log link is used.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">z &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">y &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Poisson">rpois</a></span>(<span class="dv">100</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">exp</a></span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z))</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(x, y, z)</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z, <span class="dt">data =</span> data)</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">model_xs_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf)</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9">model_xs_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf, <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">poisson</a></span>(), <span class="dt">link =</span> <span class="st">"log"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>z &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>y &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Poisson">rpois</a></span>(<span class="dv">100</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">exp</a></span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z))</span>
+<span id="cb5-6"><a href="#cb5-6"></a>data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(x, y, z)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z, <span class="dt">data =</span> data)</span>
+<span id="cb5-8"><a href="#cb5-8"></a>model_xs_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>model_xs_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf, <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">poisson</a></span>(), <span class="dt">link =</span> <span class="st">"log"</span>)</span></code></pre></div>
 <p>Let’s compare two models by checking its AIC statistics:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">model_xs_<span class="dv">1</span><span class="op">$</span>aic</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>model_xs_<span class="dv">1</span><span class="op">$</span>aic</span></code></pre></div>
 <pre><code>## [1] 672.5753</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">model_xs_<span class="dv">2</span><span class="op">$</span>aic</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>model_xs_<span class="dv">2</span><span class="op">$</span>aic</span></code></pre></div>
 <pre><code>## [1] 580.0274</code></pre>
 <p>As we can see the second model is better.</p>
 </div>
@@ -211,15 +211,15 @@
 <h1 class="hasAnchor">
 <a href="#transformed-response" class="anchor"></a>Transformed response</h1>
 <p>In some cases you may want to transform model response with you own function. Let’s check the example below with random forest model:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">z &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">y &lt;-<span class="st"> </span>x <span class="op">*</span><span class="st"> </span>z <span class="op">*</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(x, z, y)</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log</a></span>(y) <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z, <span class="dt">data =</span> data)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">10</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>z &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">10</span>)</span>
+<span id="cb10-4"><a href="#cb10-4"></a>y &lt;-<span class="st"> </span>x <span class="op">*</span><span class="st"> </span>z <span class="op">*</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)</span>
+<span id="cb10-5"><a href="#cb10-5"></a>data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(x, z, y)</span>
+<span id="cb10-6"><a href="#cb10-6"></a>model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log</a></span>(y) <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z, <span class="dt">data =</span> data)</span></code></pre></div>
 <p>In this case log transformation for y, removes interaction of x and z. In xspliner same transformation is used by default:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf)</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = log(y) ~ xs(x) + xs(z), family = family, 
@@ -244,7 +244,7 @@
 ## AIC: -193.88
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</span></code></pre></div>
 <p><img src="extras_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
 <div id="multiplicative-form" class="section level1">
@@ -253,14 +253,14 @@
 <p>When interactions between predictors occurs black box models in fact deal much better that linear models. xspliner offers using formulas with variables interactions.</p>
 <p>You can do it in two possible forms.</p>
 <p>Lets start with creating data and building black box:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">z &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">y &lt;-<span class="st"> </span>x <span class="op">+</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>z <span class="op">+</span><span class="st"> </span>z <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(x, y, z)</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z, <span class="dt">data =</span> data)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>z &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>y &lt;-<span class="st"> </span>x <span class="op">+</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>z <span class="op">+</span><span class="st"> </span>z <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="fl">0.1</span>)</span>
+<span id="cb14-4"><a href="#cb14-4"></a>data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(x, y, z)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z, <span class="dt">data =</span> data)</span></code></pre></div>
 <p>The first option is specifying formula with <code>*</code> sign, as in standard linear models.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>z, <span class="dt">model =</span> model_rf)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>z, <span class="dt">model =</span> model_rf)</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = y ~ x * z, family = family, data = data)
@@ -285,11 +285,11 @@
 ## AIC: -153.1
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</span></code></pre></div>
 <p><img src="extras_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>The second one is adding form parameter equal to “multiplicative” in case of passing just the model or dot formula.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf, <span class="dt">form =</span> <span class="st">"multiplicative"</span>)</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(model_rf, <span class="dt">form =</span> <span class="st">"multiplicative"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = y ~ xs(x) * xs(z), family = family, data = data)
@@ -314,10 +314,10 @@
 ## AIC: 94.46
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</span></code></pre></div>
 <p><img src="extras_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(y <span class="op">~</span><span class="st"> </span>., <span class="dt">model =</span> model_rf, <span class="dt">form =</span> <span class="st">"multiplicative"</span>)</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(y <span class="op">~</span><span class="st"> </span>., <span class="dt">model =</span> model_rf, <span class="dt">form =</span> <span class="st">"multiplicative"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = y ~ xs(x) * xs(z), family = family, data = data)
@@ -342,23 +342,23 @@
 ## AIC: 94.46
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> data)</span></code></pre></div>
 <p><img src="extras_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 </div>
 <div id="subset-formula" class="section level1">
 <h1 class="hasAnchor">
 <a href="#subset-formula" class="anchor"></a>Subset formula</h1>
 <p>Every example we saw before used to use the same variables in black box and xspliner model. In fact this is not obligatory. How can it be used? For example to build a simpler model based on truncated amount of predictors. Let’s see below example:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</a>
-<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
-<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(airquality)</a>
-<a class="sourceLine" id="cb24-4" data-line-number="4">air &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/na.fail">na.omit</a></span>(airquality)</a>
-<a class="sourceLine" id="cb24-5" data-line-number="5">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> air)</a>
-<a class="sourceLine" id="cb24-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/varImpPlot">varImpPlot</a></span>(model_rf)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(airquality)</span>
+<span id="cb24-4"><a href="#cb24-4"></a>air &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/na.fail">na.omit</a></span>(airquality)</span>
+<span id="cb24-5"><a href="#cb24-5"></a>model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> air)</span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/varImpPlot">varImpPlot</a></span>(model_rf)</span></code></pre></div>
 <p><img src="extras_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>As we can see Wind and Temp variables are of the highest importance. Let’s build xspliner basing on just the Two variables.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Temp), <span class="dt">model =</span> model_rf)</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Temp), <span class="dt">model =</span> model_rf)</span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = Ozone ~ xs(Wind) + xs(Temp), family = family, 
@@ -383,11 +383,11 @@
 ## AIC: 960.62
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> air)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> air)</span></code></pre></div>
 <p><img src="extras_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <p>Or model including variables interaction:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(Wind) <span class="op">*</span><span class="st"> </span><span class="kw">xs</span>(Temp), <span class="dt">model =</span> model_rf)</a>
-<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(Wind) <span class="op">*</span><span class="st"> </span><span class="kw">xs</span>(Temp), <span class="dt">model =</span> model_rf)</span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = Ozone ~ xs(Wind) * xs(Temp), family = family, 
@@ -413,7 +413,7 @@
 ## AIC: 953.43
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> air)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_rf, <span class="dt">data =</span> air)</span></code></pre></div>
 <p><img src="extras_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
   </div>
