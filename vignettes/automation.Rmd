@@ -206,7 +206,7 @@ They are:
 - Building the black box with formula
 - Black box training data stores factors in long form (the factor is one column, not spread into binary wide form)
 
-Most of R based ML models satisfy the above condition. One of exceptions is XGBoost which in actual xspliner version needs to be handled in the more complex xspline call. You can see it in [use cases](./use_cases.html) 
+Most of R based ML models satisfy the above condition. One of exceptions is XGBoost which in actual xspliner version needs to be handled in the more complex xspline call. You can see it in [use cases](./cases.html) 
 
 ## Excluding predictors from transformation
 

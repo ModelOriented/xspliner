@@ -84,26 +84,5 @@ summary(iris.xs, "Species")
 summary(iris.xs, model = iris.rf, newdata = data)
 
 # Classification model
-data <- droplevels(iris[51:150, ]) # selecting only two species data
-iris.rf <- randomForest(Species ~ ., data = data)
-iris.xs <- xspline(iris.rf)
-
-# Comparing summaries requires providing prediction function
-# Prediction as probability for success
-prob_rf <- function(object, newdata) predict(object, newdata = newdata, type = "prob")[, 2]
-prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
-summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(prob_xs, prob_rf))
-# Prediction as final category
-response_rf <- function(object, newdata) predict(object, newdata = newdata)
-response_xs <- function(object, newdata) {
-  y_levels <- levels(newdata[[environment(object)$response]])
-  factor(
-    y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1],
-    levels = y_levels
-  )
-}
-response_rf(iris.rf, newdata = data)
-response_xs(iris.xs, newdata = data)
-summary(iris.xs, model = iris.rf, newdata = data, prediction_funs = list(response_xs, response_rf))
 
 }

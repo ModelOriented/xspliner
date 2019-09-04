@@ -88,7 +88,7 @@
       <h1>Basic theory and usage</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2019-08-31</h4>
+            <h4 class="date">2019-09-05</h4>
       
       
       <div class="hidden name"><code>xspliner.Rmd</code></div>
@@ -150,29 +150,29 @@
 <a href="#defining-formula" class="anchor"></a>Defining formula</h3>
 <p>This sections shows, how to build formula interpretable by xspliner package using Boston Housing Data from <code>pdp</code> package.</p>
 <p>Read the data</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(boston)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(boston)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#&gt; 'data.frame':    506 obs. of  16 variables:</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt;  $ lon    : num  -71 -71 -70.9 -70.9 -70.9 ...</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt;  $ lat    : num  42.3 42.3 42.3 42.3 42.3 ...</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">#&gt;  $ cmedv  : num  24 21.6 34.7 33.4 36.2 28.7 22.9 22.1 16.5 18.9 ...</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt;  $ crim   : num  0.00632 0.02731 0.02729 0.03237 0.06905 ...</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt;  $ zn     : num  18 0 0 0 0 0 12.5 12.5 12.5 12.5 ...</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt;  $ indus  : num  2.31 7.07 7.07 2.18 2.18 2.18 7.87 7.87 7.87 7.87 ...</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt;  $ chas   : Factor w/ 2 levels "0","1": 1 1 1 1 1 1 1 1 1 1 ...</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;  $ nox    : num  0.538 0.469 0.469 0.458 0.458 0.458 0.524 0.524 0.524 0.524 ...</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt;  $ rm     : num  6.58 6.42 7.18 7 7.15 ...</span></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt;  $ age    : num  65.2 78.9 61.1 45.8 54.2 58.7 66.6 96.1 100 85.9 ...</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt;  $ dis    : num  4.09 4.97 4.97 6.06 6.06 ...</span></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="co">#&gt;  $ rad    : int  1 2 2 3 3 3 5 5 5 5 ...</span></a>
-<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="co">#&gt;  $ tax    : int  296 242 242 222 222 222 311 311 311 311 ...</span></a>
-<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="co">#&gt;  $ ptratio: num  15.3 17.8 17.8 18.7 18.7 18.7 15.2 15.2 15.2 15.2 ...</span></a>
-<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="co">#&gt;  $ b      : num  397 397 393 395 397 ...</span></a>
-<a class="sourceLine" id="cb1-19" data-line-number="19"><span class="co">#&gt;  $ lstat  : num  4.98 9.14 4.03 2.94 5.33 ...</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(boston)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(boston)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#&gt; 'data.frame':    506 obs. of  16 variables:</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">#&gt;  $ lon    : num  -71 -71 -70.9 -70.9 -70.9 ...</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">#&gt;  $ lat    : num  42.3 42.3 42.3 42.3 42.3 ...</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt;  $ cmedv  : num  24 21.6 34.7 33.4 36.2 28.7 22.9 22.1 16.5 18.9 ...</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt;  $ crim   : num  0.00632 0.02731 0.02729 0.03237 0.06905 ...</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt;  $ zn     : num  18 0 0 0 0 0 12.5 12.5 12.5 12.5 ...</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt;  $ indus  : num  2.31 7.07 7.07 2.18 2.18 2.18 7.87 7.87 7.87 7.87 ...</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt;  $ chas   : Factor w/ 2 levels "0","1": 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt;  $ nox    : num  0.538 0.469 0.469 0.458 0.458 0.458 0.524 0.524 0.524 0.524 ...</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt;  $ rm     : num  6.58 6.42 7.18 7 7.15 ...</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co">#&gt;  $ age    : num  65.2 78.9 61.1 45.8 54.2 58.7 66.6 96.1 100 85.9 ...</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co">#&gt;  $ dis    : num  4.09 4.97 4.97 6.06 6.06 ...</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="co">#&gt;  $ rad    : int  1 2 2 3 3 3 5 5 5 5 ...</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="co">#&gt;  $ tax    : int  296 242 242 222 222 222 311 311 311 311 ...</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="co">#&gt;  $ ptratio: num  15.3 17.8 17.8 18.7 18.7 18.7 15.2 15.2 15.2 15.2 ...</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="co">#&gt;  $ b      : num  397 397 393 395 397 ...</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="co">#&gt;  $ lstat  : num  4.98 9.14 4.03 2.94 5.33 ...</span></span></code></pre></div>
 <p>We’re going to build model based on formula</p>
 <pre><code>cmedv ~ rm + lstat + nox</code></pre>
 <p>So let’s build a random forest black box model, that we use as a base for further steps:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">boston_rf &lt;-<span class="st"> </span><span class="kw">randomForest</span>(cmedv <span class="op">~</span><span class="st"> </span>rm <span class="op">+</span><span class="st"> </span>lstat <span class="op">+</span><span class="st"> </span>nox, <span class="dt">data =</span> boston)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>boston_rf &lt;-<span class="st"> </span><span class="kw">randomForest</span>(cmedv <span class="op">~</span><span class="st"> </span>rm <span class="op">+</span><span class="st"> </span>lstat <span class="op">+</span><span class="st"> </span>nox, <span class="dt">data =</span> boston)</span></code></pre></div>
 <p>Now let’s specify which variables should be transformed. In this example only <code>nox</code> variable will use random forest effect (PDP or ALEPlot).</p>
 <p>To indicate transformation use <code>xs(nos)</code> symbol.</p>
 <p>So we have:</p>
@@ -201,17 +201,17 @@
 <p>Below we will use PDP random forest effect, that returns 40 response points for <code>nox</code> variable. By checking <code><a href="https://www.rdocumentation.org/packages/pdp/topics/partial">?pdp::partial</a></code> we can see that <code>grid.resolution</code> parameter specifies predictor grid.</p>
 <p>Now we should just specify: <code>xs(nox, effect = list(type = "pdp", grid.resolution = 40))</code>.</p>
 <p>Let’s verify correctness of this parameters with the bare usage of <code><a href="https://www.rdocumentation.org/packages/pdp/topics/partial">pdp::partial</a></code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">rf_effect &lt;-<span class="st"> </span>pdp<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/pdp/topics/partial">partial</a></span>(boston_rf, <span class="st">"nox"</span>, <span class="dt">grid.resolution =</span> <span class="dv">40</span>)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(rf_effect)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;         nox     yhat</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; 1 0.3850000 23.38131</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 2 0.3974615 23.40352</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; 3 0.4099231 23.49511</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; 4 0.4223846 23.62153</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; 5 0.4348462 23.60978</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; 6 0.4473077 23.69874</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(rf_effect)</a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; [1] 40</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>rf_effect &lt;-<span class="st"> </span>pdp<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/pdp/topics/partial">partial</a></span>(boston_rf, <span class="st">"nox"</span>, <span class="dt">grid.resolution =</span> <span class="dv">40</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(rf_effect)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt;         nox     yhat</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; 1 0.3850000 23.38131</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; 2 0.3974615 23.40352</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; 3 0.4099231 23.49511</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; 4 0.4223846 23.62153</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; 5 0.4348462 23.60978</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; 6 0.4473077 23.69874</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(rf_effect)</span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; [1] 40</span></span></code></pre></div>
 <p>We got data.frame with predictor and response values containing 40 rows. So parameter should correctly specify our expectations.</p>
 <p><em>Remark</em></p>
 <p>Here we can see that response function is presented as data.frame with two columns:</p>
@@ -253,40 +253,40 @@
 <p>Having the formula defined, we almost have all the required data provided to build GLM. The only one left, that the approach requires is the black box model that is the basis of our resulting model.</p>
 <p>We will use here <code>model_rf</code> random forest model that was built before.</p>
 <p>The final step is to use <code><a href="../reference/xspline.html">xspliner::xspline</a></code> to build the desired model.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">xp_model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">  cmedv <span class="op">~</span><span class="st"> </span>rm <span class="op">+</span><span class="st"> </span>lstat <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">    </span><span class="kw">xs</span>(nox, </a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">       <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">type =</span> <span class="st">"pdp"</span>, <span class="dt">grid.resolution =</span> <span class="dv">40</span>), </a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">       <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">10</span>, <span class="dt">bs =</span> <span class="st">"cr"</span>)),</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">  <span class="dt">model =</span> boston_rf</a>
-<a class="sourceLine" id="cb10-7" data-line-number="7">)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>xp_model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(</span>
+<span id="cb10-2"><a href="#cb10-2"></a>  cmedv <span class="op">~</span><span class="st"> </span>rm <span class="op">+</span><span class="st"> </span>lstat <span class="op">+</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="st">    </span><span class="kw">xs</span>(nox, </span>
+<span id="cb10-4"><a href="#cb10-4"></a>       <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">type =</span> <span class="st">"pdp"</span>, <span class="dt">grid.resolution =</span> <span class="dv">40</span>), </span>
+<span id="cb10-5"><a href="#cb10-5"></a>       <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">k =</span> <span class="dv">10</span>, <span class="dt">bs =</span> <span class="st">"cr"</span>)),</span>
+<span id="cb10-6"><a href="#cb10-6"></a>  <span class="dt">model =</span> boston_rf</span>
+<span id="cb10-7"><a href="#cb10-7"></a>)</span></code></pre></div>
 <p>Lets check the model summary:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(xp_model)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; Call:</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; stats::glm(formula = cmedv ~ rm + lstat + xs(nox), family = family, </span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt;     data = data)</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; Deviance Residuals: </span></a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt;      Min        1Q    Median        3Q       Max  </span></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; -13.4873   -3.2935   -0.8747    1.9991   26.9926  </span></a>
-<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; Coefficients:</span></a>
-<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span></a>
-<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt; (Intercept) -34.29942    5.05680  -6.783 3.32e-11 ***</span></a>
-<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; rm            5.23681    0.41600  12.589  &lt; 2e-16 ***</span></a>
-<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; lstat        -0.52504    0.04355 -12.057  &lt; 2e-16 ***</span></a>
-<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; xs(nox)       1.31670    0.16255   8.100 4.20e-15 ***</span></a>
-<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; ---</span></a>
-<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></a>
-<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt; (Dispersion parameter for gaussian family taken to be 26.81888)</span></a>
-<a class="sourceLine" id="cb11-21" data-line-number="21"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-22" data-line-number="22"><span class="co">#&gt;     Null deviance: 42578  on 505  degrees of freedom</span></a>
-<a class="sourceLine" id="cb11-23" data-line-number="23"><span class="co">#&gt; Residual deviance: 13463  on 502  degrees of freedom</span></a>
-<a class="sourceLine" id="cb11-24" data-line-number="24"><span class="co">#&gt; AIC: 3106.2</span></a>
-<a class="sourceLine" id="cb11-25" data-line-number="25"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-26" data-line-number="26"><span class="co">#&gt; Number of Fisher Scoring iterations: 2</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(xp_model)</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt; </span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; stats::glm(formula = cmedv ~ rm + lstat + xs(nox), family = family, </span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt;     data = data)</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; </span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; Deviance Residuals: </span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt;      Min        1Q    Median        3Q       Max  </span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; -13.4873   -3.2935   -0.8747    1.9991   26.9926  </span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt; </span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; (Intercept) -34.29942    5.05680  -6.783 3.32e-11 ***</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; rm            5.23681    0.41600  12.589  &lt; 2e-16 ***</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt; lstat        -0.52504    0.04355 -12.057  &lt; 2e-16 ***</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="co">#&gt; xs(nox)       1.31670    0.16255   8.100 4.20e-15 ***</span></span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt; ---</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="co">#&gt; </span></span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="co">#&gt; (Dispersion parameter for gaussian family taken to be 26.81888)</span></span>
+<span id="cb11-21"><a href="#cb11-21"></a><span class="co">#&gt; </span></span>
+<span id="cb11-22"><a href="#cb11-22"></a><span class="co">#&gt;     Null deviance: 42578  on 505  degrees of freedom</span></span>
+<span id="cb11-23"><a href="#cb11-23"></a><span class="co">#&gt; Residual deviance: 13463  on 502  degrees of freedom</span></span>
+<span id="cb11-24"><a href="#cb11-24"></a><span class="co">#&gt; AIC: 3106.2</span></span>
+<span id="cb11-25"><a href="#cb11-25"></a><span class="co">#&gt; </span></span>
+<span id="cb11-26"><a href="#cb11-26"></a><span class="co">#&gt; Number of Fisher Scoring iterations: 2</span></span></code></pre></div>
 <p>As the final model is just the GLM, the summary is also standard. One difference that we can see here is the formula call. It has missing <code>xs</code> parameters, and <code>xs</code> is treated as standard R function (previously it was just the symbol used in formula).</p>
 <p>More details about can be found in following sections:</p>
 <ul>
@@ -304,7 +304,7 @@
 <a href="./cases.html">Use cases</a> - see <code>xspliner</code> in action with examples</li>
 </ul>
 <p>Here we shortly show how the plot random forest effect and transition for <code>nox</code> variable:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(xp_model, <span class="st">"nox"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(xp_model, <span class="st">"nox"</span>)</span></code></pre></div>
 <p><img src="xspliner_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 </div>

@@ -204,7 +204,7 @@ get_predictors_classes <- function(data) {
 try_get <- function(possible) {
   possible_response <- try(possible, silent = TRUE)
   if (!("try-error" %in% class(possible_response))) {
-    if (length(possible_response) == 0 || possible_response == "NULL") {
+    if (length(possible_response) == 0 || identical(possible_response, "NULL")) {
       NULL
     } else {
       possible_response

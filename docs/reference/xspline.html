@@ -209,23 +209,23 @@ call are considered in transition.</p></td>
 #&gt; 
 #&gt; Deviance Residuals: 
 #&gt;      Min        1Q    Median        3Q       Max  
-#&gt; -0.67881  -0.07692  -0.03106   0.09672   0.46649  
+#&gt; -0.67489  -0.07877  -0.03048   0.09804   0.46780  
 #&gt; 
 #&gt; Coefficients:
 #&gt;                       Estimate Std. Error t value Pr(&gt;|t|)    
-#&gt; (Intercept)           -1.52021    0.29110  -5.222 6.02e-07 ***
-#&gt; xs(Sepal.Length)       0.33583    0.35190   0.954   0.3415    
-#&gt; xs(Petal.Length)       1.84254    0.38360   4.803 3.85e-06 ***
-#&gt; xf(Species)versicolor  0.07022    0.17859   0.393   0.6947    
-#&gt; xf(Species)virginica   0.39507    0.23856   1.656   0.0999 .  
+#&gt; (Intercept)           -1.40810    0.30407  -4.631 8.03e-06 ***
+#&gt; xs(Sepal.Length)       0.39342    0.36819   1.069   0.2871    
+#&gt; xs(Petal.Length)       1.67365    0.35387   4.730 5.28e-06 ***
+#&gt; xf(Species)versicolor  0.08582    0.17800   0.482   0.6304    
+#&gt; xf(Species)virginica   0.41758    0.23705   1.762   0.0802 .  
 #&gt; ---
 #&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #&gt; 
-#&gt; (Dispersion parameter for gaussian family taken to be 0.03105335)
+#&gt; (Dispersion parameter for gaussian family taken to be 0.03102474)
 #&gt; 
 #&gt;     Null deviance: 86.5699  on 149  degrees of freedom
-#&gt; Residual deviance:  4.5027  on 145  degrees of freedom
-#&gt; AIC: -88.211
+#&gt; Residual deviance:  4.4986  on 145  degrees of freedom
+#&gt; AIC: -88.349
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 2
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-1.png' alt='' width='700' height='433' /></div><div class='input'>
@@ -238,23 +238,23 @@ call are considered in transition.</p></td>
 #&gt; 
 #&gt; Deviance Residuals: 
 #&gt;      Min        1Q    Median        3Q       Max  
-#&gt; -0.67881  -0.07692  -0.03106   0.09672   0.46649  
+#&gt; -0.67489  -0.07877  -0.03048   0.09804   0.46780  
 #&gt; 
 #&gt; Coefficients:
 #&gt;                       Estimate Std. Error t value Pr(&gt;|t|)    
-#&gt; (Intercept)           -1.52021    0.29110  -5.222 6.02e-07 ***
-#&gt; xs(Sepal.Length)       0.33583    0.35190   0.954   0.3415    
-#&gt; xs(Petal.Length)       1.84254    0.38360   4.803 3.85e-06 ***
-#&gt; xf(Species)versicolor  0.07022    0.17859   0.393   0.6947    
-#&gt; xf(Species)virginica   0.39507    0.23856   1.656   0.0999 .  
+#&gt; (Intercept)           -1.40810    0.30407  -4.631 8.03e-06 ***
+#&gt; xs(Sepal.Length)       0.39342    0.36819   1.069   0.2871    
+#&gt; xs(Petal.Length)       1.67365    0.35387   4.730 5.28e-06 ***
+#&gt; xf(Species)versicolor  0.08582    0.17800   0.482   0.6304    
+#&gt; xf(Species)virginica   0.41758    0.23705   1.762   0.0802 .  
 #&gt; ---
 #&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #&gt; 
-#&gt; (Dispersion parameter for gaussian family taken to be 0.03105335)
+#&gt; (Dispersion parameter for gaussian family taken to be 0.03102474)
 #&gt; 
 #&gt;     Null deviance: 86.5699  on 149  degrees of freedom
-#&gt; Residual deviance:  4.5027  on 145  degrees of freedom
-#&gt; AIC: -88.211
+#&gt; Residual deviance:  4.4986  on 145  degrees of freedom
+#&gt; AIC: -88.349
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 2
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-2.png' alt='' width='700' height='433' /></div><div class='input'>
@@ -269,7 +269,7 @@ call are considered in transition.</p></td>
 #&gt;   -&gt; data              :  150  rows  4  cols (</span><span style='color: #BBBB00;'>extracted from the model</span><span>)
 #&gt;   -&gt; target variable   :  not specified! (</span><span style='color: #BB0000;'>WARNING</span><span>)
 #&gt;   -&gt; predict function  :  yhat.randomForest  will be used (</span><span style='color: #BBBB00;'>default</span><span>)
-#&gt;   -&gt; predicted values  :  numerical, min =  0.1991898 , mean =  1.199876 , max =  2.134114  
+#&gt;   -&gt; predicted values  :  numerical, min =  0.1977761 , mean =  1.199116 , max =  2.143874  
 #&gt;   -&gt; residual function :  difference between y and yhat (</span><span style='color: #BBBB00;'>default</span><span>)
 #&gt; </span><span style='color: #00BB00;'>A new explainer has been created!</span><span></div><div class='input'><span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(<span class='no'>rf_iris</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
@@ -279,23 +279,23 @@ call are considered in transition.</p></td>
 #&gt; 
 #&gt; Deviance Residuals: 
 #&gt;      Min        1Q    Median        3Q       Max  
-#&gt; -0.67881  -0.07692  -0.03106   0.09672   0.46649  
+#&gt; -0.67489  -0.07877  -0.03048   0.09804   0.46780  
 #&gt; 
 #&gt; Coefficients:
 #&gt;                       Estimate Std. Error t value Pr(&gt;|t|)    
-#&gt; (Intercept)           -1.52021    0.29110  -5.222 6.02e-07 ***
-#&gt; xs(Sepal.Length)       0.33583    0.35190   0.954   0.3415    
-#&gt; xs(Petal.Length)       1.84254    0.38360   4.803 3.85e-06 ***
-#&gt; xf(Species)versicolor  0.07022    0.17859   0.393   0.6947    
-#&gt; xf(Species)virginica   0.39507    0.23856   1.656   0.0999 .  
+#&gt; (Intercept)           -1.40810    0.30407  -4.631 8.03e-06 ***
+#&gt; xs(Sepal.Length)       0.39342    0.36819   1.069   0.2871    
+#&gt; xs(Petal.Length)       1.67365    0.35387   4.730 5.28e-06 ***
+#&gt; xf(Species)versicolor  0.08582    0.17800   0.482   0.6304    
+#&gt; xf(Species)virginica   0.41758    0.23705   1.762   0.0802 .  
 #&gt; ---
 #&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #&gt; 
-#&gt; (Dispersion parameter for gaussian family taken to be 0.03105335)
+#&gt; (Dispersion parameter for gaussian family taken to be 0.03102474)
 #&gt; 
 #&gt;     Null deviance: 86.5699  on 149  degrees of freedom
-#&gt; Residual deviance:  4.5027  on 145  degrees of freedom
-#&gt; AIC: -88.211
+#&gt; Residual deviance:  4.4986  on 145  degrees of freedom
+#&gt; AIC: -88.349
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 2
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-3.png' alt='' width='700' height='433' /></div><div class='input'>

@@ -88,7 +88,7 @@
       <h1>Classification and discrete predictors</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2019-08-31</h4>
+            <h4 class="date">2019-09-05</h4>
       
       
       <div class="hidden name"><code>discrete.Rmd</code></div>
@@ -103,8 +103,8 @@
 <a href="#qualitative-predictors" class="anchor"></a>Qualitative predictors</h1>
 <p>As before let’s explain the approach basing on a random forest model. For this case we use HR_data from breakDown package.</p>
 <p>Let’s load the data</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">HR_data &lt;-<span class="st"> </span>breakDown<span class="op">::</span>HR_data</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(HR_data)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>HR_data &lt;-<span class="st"> </span>breakDown<span class="op">::</span>HR_data</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(HR_data)</span></code></pre></div>
 <pre><code>## 'data.frame':    14999 obs. of  10 variables:
 ##  $ satisfaction_level   : num  0.38 0.8 0.11 0.72 0.37 0.41 0.1 0.92 0.89 0.42 ...
 ##  $ last_evaluation      : num  0.53 0.86 0.88 0.87 0.52 0.5 0.77 0.85 1 0.53 ...
@@ -117,8 +117,8 @@
 ##  $ sales                : Factor w/ 10 levels "accounting","hr",..: 8 8 8 8 8 8 8 8 8 8 ...
 ##  $ salary               : Factor w/ 3 levels "high","low","medium": 2 3 3 2 2 2 2 2 2 2 ...</code></pre>
 <p>and build random forest in which we predict <code>average_montly_hours</code> based on <code>last_evaluation</code>, <code>salary</code> and <code>satisfaction_level</code> predictors.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(average_montly_hours <span class="op">~</span><span class="st"> </span>last_evaluation <span class="op">+</span><span class="st"> </span>salary <span class="op">+</span><span class="st"> </span>satisfaction_level, <span class="dt">data =</span> HR_data)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(average_montly_hours <span class="op">~</span><span class="st"> </span>last_evaluation <span class="op">+</span><span class="st"> </span>salary <span class="op">+</span><span class="st"> </span>satisfaction_level, <span class="dt">data =</span> HR_data)</span></code></pre></div>
 <p>We’re going to make some transformation/simplification on <code>salary</code> variable. To do so, we need to transform formula passed into <code>xspline</code> function.</p>
 <p>Similarly to continuous variable it is enough to use <code>xf</code> symbol on <code>salary</code> variable, i.e. use formula:</p>
 <pre><code>average_monthly_hours ~ last_evaluation + xf(salary) + satisfaction_level</code></pre>
@@ -149,13 +149,13 @@
 <p>In order to customize variable transition, just specified (inherited from above functions) parameters inside <code>transition</code> parameter of <code>xf</code> formula symbol. For example to use “fast-adaptive” method for groups merging with optimal partition at GIC statistics value of 4, we set:</p>
 <pre><code>xf(salary, transition = list(method = "fast-adaptive", value = 4))</code></pre>
 <p>In below example, we will transform <code>salary</code> predictor with cutting of GIC statistics at value = 2. As in continuous case we need to use the formula within <code>xspline</code> function:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">  average_montly_hours <span class="op">~</span><span class="st"> </span>last_evaluation <span class="op">+</span><span class="st"> </span><span class="kw">xf</span>(salary, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">value =</span> <span class="dv">2</span>)) <span class="op">+</span><span class="st"> </span>satisfaction_level,</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">  <span class="dt">model =</span> model_rf</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  average_montly_hours <span class="op">~</span><span class="st"> </span>last_evaluation <span class="op">+</span><span class="st"> </span><span class="kw">xf</span>(salary, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">value =</span> <span class="dv">2</span>)) <span class="op">+</span><span class="st"> </span>satisfaction_level,</span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="dt">model =</span> model_rf</span>
+<span id="cb7-5"><a href="#cb7-5"></a>)</span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = average_montly_hours ~ last_evaluation + 
@@ -183,13 +183,13 @@
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Checking out the model summary, we can realize that “low” and “medium” values were merged into single level (generating “lowmedium” level).</p>
 <p>It can be also found by:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs, <span class="st">"salary"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs, <span class="st">"salary"</span>)</span></code></pre></div>
 <pre><code>##     orig      pred
 ## 1   high      high
 ## 2    low lowmedium
 ## 3 medium lowmedium</code></pre>
 <p>The graphical result if fully sourced from factorMerger. It is enough to run:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"salary"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"salary"</span>)</span></code></pre></div>
 <p><img src="discrete_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 </div>
@@ -199,17 +199,17 @@
 <p>xspliner can work with classification problems as well. As the final GLM model can work only with binary classification, the only limit here is the number of levels for predicted value (equals to 2).</p>
 <p>Let’s check below example based on SVM algorithm (<code><a href="https://www.rdocumentation.org/packages/e1071/topics/svm">e1071::svm</a></code>), and modified iris data.</p>
 <p>Preparing data (we drop “setosa” level on Species value):</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">iris_data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/droplevels">droplevels</a></span>(iris[iris<span class="op">$</span>Species <span class="op">!=</span><span class="st"> "setosa"</span>, ])</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>iris_data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/droplevels">droplevels</a></span>(iris[iris<span class="op">$</span>Species <span class="op">!=</span><span class="st"> "setosa"</span>, ])</span></code></pre></div>
 <p>Building SVM:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(e1071) </a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">model_svm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/e1071/topics/svm">svm</a></span>(Species <span class="op">~</span><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Petal.Width, </a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">                 <span class="dt">data =</span> iris_data, <span class="dt">probability =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(e1071) </span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>model_svm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/e1071/topics/svm">svm</a></span>(Species <span class="op">~</span><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Petal.Width, </span>
+<span id="cb13-4"><a href="#cb13-4"></a>                 <span class="dt">data =</span> iris_data, <span class="dt">probability =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>When the base model response variable is of class factor (or integer with two unique values) then xspliner automatically detects classification problem. To force specific model response distribution you can set family and link parameters. In this case we can use xspliner in standard way.</p>
 <p>As each predictor is continuous variable, let’s transform it with <code>xs</code> usage on standard parameters, and build the model:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Species <span class="op">~</span><span class="st">  </span><span class="kw">xs</span>(Sepal.Length) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Sepal.Width) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Petal.Length) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Petal.Width),</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">                    <span class="dt">model =</span> model_svm)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Species <span class="op">~</span><span class="st">  </span><span class="kw">xs</span>(Sepal.Length) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Sepal.Width) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Petal.Length) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Petal.Width),</span>
+<span id="cb14-2"><a href="#cb14-2"></a>                    <span class="dt">model =</span> model_svm)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = Species ~ xs(Sepal.Length) + xs(Sepal.Width) + 
@@ -221,11 +221,11 @@
 ## 
 ## Coefficients:
 ##                  Estimate Std. Error z value Pr(&gt;|z|)   
-## (Intercept)        0.7125     1.3240   0.538  0.59049   
-## xs(Sepal.Length)  11.3979    16.4565   0.693  0.48856   
-## xs(Sepal.Width)    7.6981     4.7353   1.626  0.10402   
-## xs(Petal.Length)   2.9544     1.2031   2.456  0.01406 * 
-## xs(Petal.Width)    3.3565     1.2797   2.623  0.00872 **
+## (Intercept)         1.369      1.742   0.786  0.43189   
+## xs(Sepal.Length)   11.796     17.032   0.693  0.48856   
+## xs(Sepal.Width)     7.967      4.901   1.626  0.10402   
+## xs(Petal.Length)    3.058      1.245   2.456  0.01406 * 
+## xs(Petal.Width)     3.474      1.324   2.623  0.00872 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -237,7 +237,7 @@
 ## 
 ## Number of Fisher Scoring iterations: 8</code></pre>
 <p>Simple plot for Petal.Width shows that approximation almost fully covers the PDP.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"Petal.Width"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"Petal.Width"</span>)</span></code></pre></div>
 <p><img src="discrete_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
   </div>

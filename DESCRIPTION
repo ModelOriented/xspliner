@@ -1,6 +1,6 @@
 Package: xspliner
 Title: Assisted Model Building, using Surrogate Black-Box Models to Train Interpretable Spline Based Additive Models
-Version: 0.0.2.9005
+Version: 0.0.3
 Authors@R: c(
   person("Krystian", "Igras", email = "krystian8207@gmail.com", role = c("aut", "cre")),
   person("Przemyslaw", "Biecek", role =  c("aut", "ths")))
@@ -20,7 +20,7 @@ Imports: stats,
     magrittr,
     purrr,
     tidyr,
-    pROC
+    pROC (>= 1.15.3)
 Suggests:
     ALEPlot,
     factorMerger,
