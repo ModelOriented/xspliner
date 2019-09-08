@@ -41,7 +41,7 @@ approx_with_monotonic_spline <- function(effect_data, response,
   if (monotonic == "auto") {
     model_up <- approx_with_monotonic_spline(effect_data, response, predictor, env = parent.frame(), "up", ...)
     model_down <- approx_with_monotonic_spline(effect_data, response, predictor, env = parent.frame(), "down", ...)
-    if (summary(model_up)$r.sq > summary(model_down)$r.sq) {
+    if (model_up$rmse < model_down$rmse) {
       return(model_up)
     } else {
       return(model_down)
@@ -78,6 +78,7 @@ approx_with_monotonic_spline <- function(effect_data, response,
   G$p[-1] <- 0
   coeffs <- mgcv::pcls(G) ## constrained fit
   gam_init$coefficients <- coeffs
+  gam_init$rmse <- sqrt(sum((effect_data$yhat - mgcv::predict.gam(gam_init, newdata = effect_data)) ^ 2))
   gam_init
 }
 
