@@ -41,7 +41,7 @@ approx_with_monotonic_spline <- function(effect_data, response,
   if (monotonic == "auto") {
     model_up <- approx_with_monotonic_spline(effect_data, response, predictor, env = parent.frame(), "up", ...)
     model_down <- approx_with_monotonic_spline(effect_data, response, predictor, env = parent.frame(), "down", ...)
-    if (summary(model_up)$r.sq > summary(model_up)$r.sq) {
+    if (summary(model_up)$r.sq > summary(model_down)$r.sq) {
       return(model_up)
     } else {
       return(model_down)
@@ -51,7 +51,11 @@ approx_with_monotonic_spline <- function(effect_data, response,
   s <- mgcv::s
   formula <- build_approximation_formula(response, predictor, env, ...)
   G <- mgcv::gam(formula, data = effect_data, fit = FALSE)
-  contraint_sign <- if (monotonic == "up") 1 else -1
+  contraint_sign <- if (monotonic == "up") {
+    1
+  } else {
+    -1
+  }
   gam_init <- mgcv::gam(G = G)
 
   ## generate constraints, by finite differencing
@@ -60,7 +64,7 @@ approx_with_monotonic_spline <- function(effect_data, response,
   x_range <- range(effect_data[[predictor]])
   diff_grid_0 <- diff_grid_1 <- data.frame(x = seq(x_range[1], x_range[2], length.out = 100))
   colnames(diff_grid_0) <- colnames(diff_grid_1) <- predictor
-  diff_grid_1$x <- diff_grid_1[[predictor]] + eps
+  diff_grid_1[[predictor]] <- diff_grid_1[[predictor]] + eps
   spline_vals_on_interv_start <- mgcv::predict.gam(gam_init, newdata = diff_grid_0, type = "lpmatrix")
   spline_vals_on_interv_end <- mgcv::predict.gam(gam_init, newdata = diff_grid_1, type = "lpmatrix")
   x_var_constraints <- contraint_sign * (spline_vals_on_interv_end - spline_vals_on_interv_start) / eps ## Xx %*% coef(b) must be positive
