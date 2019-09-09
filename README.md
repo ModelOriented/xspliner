@@ -1,49 +1,38 @@
-# xspliner - Using surrogate black-boxes to train interpretable spline based additive models
+# Train Interpretable, Spline Based, Additive, Surrogate Models
 
-## xspliner's pipeline: *model %>% xspline(...)* and analyze
+[![Build Status](https://api.travis-ci.org/ModelOriented/xspliner.png)](https://travis-ci.org/ModelOriented/xspliner)
+[![Coverage
+Status](https://img.shields.io/codecov/c/github/ModelOriented/xspliner/master.svg)](https://codecov.io/github/ModelOriented/xspliner?branch=master)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/xspliner)](https://cran.r-project.org/package=xspliner)
+[![Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/xspliner?color=orange)](http://cranlogs.r-pkg.org/badges/grand-total/xspliner)
+
+## Overview
+
+The `xspliner` package is a collection of tools for training interpretable surrogate ML models.
+
+The package helps to build simple, interpretable models that inherits informations provided by more complicated ones - resulting model may be treated as explanation of provided black box, that was supplied prior to the algorithm.
+Provided functionality offers graphical and statistical evaluation both for overall model and its components.
+
+Key functions: 
+
+* `xspline()` or `model_surrogate_xspliner()` for training surrogate model, 
+* `plot_model_comparison()` or `plot` generic for visual predictions comparison of surrogate and original ML model,
+* `plot_variable_transition()` or `plot` generic for graphical presentation of variables profiles and related information,
+* `summary()` for statistical comparison of surrogate and original ML models,
+* `print()` for getting details about surrogate model components.
+ 
+The approach that stands behind surrogate model construction offered by `xspliner` sums up below graphics:
 
 ![](vignettes/xspliner.png)
 
-## Installation from CRAN
-```
-install.packages("xspliner")
-```
+More details can be found in  [xspliner's page](https://modeloriented.github.io/xspliner).
 
-## Installation from Github
-```
+## Installation
+
+```{r}
+# the easiest way to get xspliner is to install it from CRAN:
+install.packages("xspliner")
+
+# Or the the development version from GitHub:
 devtools::install_github("ModelOriented/xspliner")
 ```
-
-## [News](NEWS.md)
-
-## [Reference Manual](https://ModelOriented.github.io/xspliner/)
-
-## DEMO
-
-```
-library(xspliner)
-library(randomForest)
-library(pdp)
-data(boston)
-set.seed(123)
-# fitting random forest model
-model_rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
-
-# building GLM (with standard black box response - Partial Dependence)
-xspliner <- xspline(model_rf)
-
-# see standard glm results
-summary(xspliner)
-
-# see ptratio variable transformation
-plot(xspliner, "ptratio")
-
-# compare xspliner and base model responses
-plot(xspliner, model = model_rf, data = boston)
-
-```
-
-For more info check project [vignettes](https://ModelOriented.github.io/xspliner/articles/) or [examples](https://github.com/ModelOriented/xspliner/tree/master/examples).
-
-## Further work
-See [github issues](https://github.com/ModelOriented/xspliner/issues) 
