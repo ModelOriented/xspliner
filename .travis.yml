@@ -9,6 +9,9 @@ r:
 notifications:
   email: false
 
+before_install:
+    - R -e 'install.packages("devtools")'
+
 r_packages:
   - covr
 
