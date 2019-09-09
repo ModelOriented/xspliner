@@ -14,9 +14,16 @@ notifications:
   email: false
 
 r_packages:
-  - archivist
+  - devtools
   - ggplot2
   - covr
+  - pdp
+  - dplyr
+  - mgcv
+  - magrittr
+  - purrr
+  - tidyr
+  - pROC
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
