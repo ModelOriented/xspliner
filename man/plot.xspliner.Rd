@@ -40,5 +40,5 @@
 }
 \description{
 The method provides all plotting methods offered by 'xspliner' package.
-See \link{plot_variable_transition} and \link{plot_models_comparision} for more details.
+See \link{plot_variable_transition} and \link{plot_model_comparison} for more details.
 }
