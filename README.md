@@ -1,5 +1,12 @@
 # xspliner - Using surrogate black-boxes to train interpretable spline based additive models
 
+[![Build Status](https://api.travis-ci.org/ModelOriented/xspliner.png)](https://travis-ci.org/ModelOriented/xspliner)
+[![Coverage
+Status](https://img.shields.io/codecov/c/github/ModelOriented/xspliner/master.svg)](https://codecov.io/github/ModelOriented/xspliner?branch=master)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/xspliner)](https://cran.r-project.org/package=xspliner)
+
+## Overview
+
 ## xspliner's pipeline: *model %>% xspline(...)* and analyze
 
 ![](vignettes/xspliner.png)
