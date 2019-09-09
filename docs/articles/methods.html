@@ -88,7 +88,7 @@
       <h1>Methods and xspliner environment</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2019-09-05</h4>
+            <h4 class="date">2019-09-09</h4>
       
       
       <div class="hidden name"><code>methods.Rmd</code></div>
@@ -117,7 +117,7 @@
 <span id="cb1-14"><a href="#cb1-14"></a>  <span class="dt">Species =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="st">"virginica"</span>, <span class="dt">levels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/levels">levels</a></span>(iris<span class="op">$</span>Species)))</span>
 <span id="cb1-15"><a href="#cb1-15"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(model_xs, <span class="dt">newdata =</span> newdata)</span></code></pre></div>
 <pre><code>##          1 
-## -0.3923137</code></pre>
+## -0.3907999</code></pre>
 </div>
 <div id="print" class="section level1">
 <h1 class="hasAnchor">
@@ -130,13 +130,13 @@
 ## 
 ## Coefficients:
 ##                    (Intercept)                    Sepal.Length  
-##                      -2.244882                       -0.009104  
+##                       -2.08410                        -0.01442  
 ##               xs(Petal.Length)  xf(Species)versicolorvirginica  
-##                       3.340926                       -0.654606  
+##                        3.22523                        -0.63656  
 ## 
 ## Degrees of Freedom: 149 Total (i.e. Null);  146 Residual
 ## Null Deviance:       86.57 
-## Residual Deviance: 5.172     AIC: -69.44</code></pre>
+## Residual Deviance: 5.119     AIC: -70.96</code></pre>
 <div id="predictor-based-print" class="section level2">
 <h2 class="hasAnchor">
 <a href="#predictor-based-print" class="anchor"></a>Predictor based print</h2>
@@ -153,9 +153,9 @@
 ## yhat ~ s(Petal.Length, bs = "cr")
 ## 
 ## Estimated degrees of freedom:
-## 8.83  total = 9.83 
+## 8.81  total = 9.81 
 ## 
-## GCV score: 0.001315672</code></pre>
+## GCV score: 0.001448078</code></pre>
 <p><em>Qualitative variable</em></p>
 <p>In case of qualitative predictor, standard <code>print.factorMerger</code> method is used.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(model_xs, <span class="st">"Species"</span>)</span></code></pre></div>
@@ -165,9 +165,9 @@
 ## 
 ##      groupA       groupB                     model   pvalVsFull   pvalVsPrevious
 ## ---  -----------  --------------------  ----------  -----------  ---------------
-## 0                                        -257.6859            1                1
-## 1    versicolor   virginica              -273.8312            0                0
-## 2    setosa       versicolorvirginica    -352.9511            0                0</code></pre>
+## 0                                        -264.7737            1                1
+## 1    versicolor   virginica              -280.9715            0                0
+## 2    setosa       versicolorvirginica    -354.4514            0                0</code></pre>
 </div>
 </div>
 <div id="plot" class="section level1">
@@ -187,21 +187,21 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Petal.Length"</span>, <span class="dt">type =</span> <span class="st">"data"</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="st">  </span>head</span></code></pre></div>
 <pre><code>##   Petal.Length      yhat
-## 1     1.000000 0.7501526
-## 2     1.059596 0.7499859
-## 3     1.119192 0.7499859
-## 4     1.178788 0.7531005
-## 5     1.238384 0.7549714
-## 6     1.297980 0.7583468</code></pre>
+## 1     1.000000 0.7395640
+## 2     1.059596 0.7394440
+## 3     1.119192 0.7394440
+## 4     1.178788 0.7415638
+## 5     1.238384 0.7428548
+## 6     1.297980 0.7454448</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"data"</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="st">  </span>head</span></code></pre></div>
 <pre><code>##      Species      yhat yhat.id
-## 1     setosa 0.2437544       1
-## 2 versicolor 0.6966708       1
-## 3  virginica 0.8499297       1
-## 4     setosa 0.2157778       2
-## 5 versicolor 0.6923198       2
-## 6  virginica 0.8465953       2</code></pre>
+## 1     setosa 0.2469506       1
+## 2 versicolor 0.6851045       1
+## 3  virginica 0.8509814       1
+## 4     setosa 0.2166681       2
+## 5 versicolor 0.6812774       2
+## 6  virginica 0.8483076       2</code></pre>
 </div>
 <div id="extracting-transition-model" class="section level2">
 <h2 class="hasAnchor">
@@ -217,9 +217,9 @@
 ## yhat ~ s(Petal.Length, bs = "cr")
 ## 
 ## Estimated degrees of freedom:
-## 8.83  total = 9.83 
+## 8.81  total = 9.81 
 ## 
-## GCV score: 0.001315672</code></pre>
+## GCV score: 0.001448078</code></pre>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"base"</span>)</span></code></pre></div>
 <pre><code>## Family: gaussian Factor Merger.
 ## 
@@ -227,9 +227,9 @@
 ## 
 ##      groupA       groupB                     model   pvalVsFull   pvalVsPrevious
 ## ---  -----------  --------------------  ----------  -----------  ---------------
-## 0                                        -257.6859            1                1
-## 1    versicolor   virginica              -273.8312            0                0
-## 2    setosa       versicolorvirginica    -352.9511            0                0</code></pre>
+## 0                                        -264.7737            1                1
+## 1    versicolor   virginica              -280.9715            0                0
+## 2    setosa       versicolorvirginica    -354.4514            0                0</code></pre>
 </div>
 <div id="extracting-transition-function" class="section level2">
 <h2 class="hasAnchor">
@@ -262,22 +262,22 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.68163  -0.07833  -0.02037   0.10712   0.50143  
+## -0.69620  -0.08712  -0.02211   0.10873   0.51061  
 ## 
 ## Coefficients:
-##                                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                    -2.244882   0.146470 -15.327  &lt; 2e-16 ***
-## Sepal.Length                   -0.009104   0.036244  -0.251    0.802    
-## xs(Petal.Length)                3.340926   0.231635  14.423  &lt; 2e-16 ***
-## xf(Species)versicolorvirginica -0.654606   0.123765  -5.289 4.41e-07 ***
+##                                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                    -2.08410    0.14202 -14.675  &lt; 2e-16 ***
+## Sepal.Length                   -0.01442    0.03625  -0.398    0.691    
+## xs(Petal.Length)                3.22523    0.22169  14.548  &lt; 2e-16 ***
+## xf(Species)versicolorvirginica -0.63656    0.12162  -5.234 5.66e-07 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03542157)
+## (Dispersion parameter for gaussian family taken to be 0.03506288)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  5.1715  on 146  degrees of freedom
-## AIC: -69.438
+## Residual deviance:  5.1192  on 146  degrees of freedom
+## AIC: -70.965
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 </div>
@@ -298,18 +298,18 @@
 ## 
 ## Parametric coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 1.207191   0.003444   350.5   &lt;2e-16 ***
+## (Intercept) 1.208339   0.003614   334.4   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Approximate significance of smooth terms:
 ##                   edf Ref.df     F p-value    
-## s(Petal.Length) 8.827  8.991 733.4  &lt;2e-16 ***
+## s(Petal.Length) 8.812  8.989 707.6  &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## R-sq.(adj) =  0.985   Deviance explained = 98.7%
-## GCV = 0.0013157  Scale est. = 0.0011864  n = 100</code></pre>
+## R-sq.(adj) =  0.985   Deviance explained = 98.6%
+## GCV = 0.0014481  Scale est. = 0.001306  n = 100</code></pre>
 <p><em>Qualitative variable</em></p>
 <p>In case of qualitative predictor, the method displays data.frame storing information how factors were merged during the transition.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs, <span class="st">"Species"</span>)</span></code></pre></div>

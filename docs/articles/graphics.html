@@ -88,7 +88,7 @@
       <h1>Graphics</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2019-09-05</h4>
+            <h4 class="date">2019-09-09</h4>
       
       
       <div class="hidden name"><code>graphics.Rmd</code></div>
@@ -132,113 +132,118 @@
 <p>Also let’s build xspliner model with lstat and ptratio transformation.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
 <span id="cb4-2"><a href="#cb4-2"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(cmedv <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(lstat) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(ptratio) <span class="op">+</span><span class="st"> </span>age, <span class="dt">model =</span> boston.rf)</span></code></pre></div>
-<p>In order to plot specified predictor transformation just use:</p>
+<p>In order to plot specified predictor transformation you can use general plot method:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"lstat"</span>)</span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p>or use explicit function</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="../reference/plot_variable_transition.html">plot_variable_transition</a></span>(model_xs, <span class="st">"lstat"</span>)</span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p>In general plot method provides all functionality that xspliner provides for graphics. For transition plotting you may use explicit <code>plot_variable_transition</code> or general <code>plot</code> with providing corresponding parameters.</p>
 <p>You can also add some additional information for the plot.</p>
 <p><strong>Plotting training data</strong></p>
 <p>Just add two parameters: <code>data = &lt;training data&gt;</code> and flag <code>plot_data = TRUE</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"lstat"</span>, <span class="dt">data =</span> boston, <span class="dt">plot_data =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="../reference/plot_variable_transition.html">plot_variable_transition</a></span>(model_xs, <span class="st">"lstat"</span>, <span class="dt">data =</span> boston, <span class="dt">plot_data =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p><strong>Plotting approximation derivative</strong></p>
 <p>The derivative is plotted on scale of the second axis. To display it just add: <code>plot_deriv = TRUE</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"lstat"</span>, <span class="dt">plot_deriv =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw"><a href="../reference/plot_variable_transition.html">plot_variable_transition</a></span>(model_xs, <span class="st">"lstat"</span>, <span class="dt">plot_deriv =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>You can also specify if the model effect or transition should be displayed. Parameters responsible for that are <code>plot_response</code> and <code>plot_approx</code> respectively.</p>
 <p>For example below we display just the approximation and derivative for ptratio variable:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"ptratio"</span>, <span class="dt">plot_response =</span> <span class="ot">FALSE</span>, <span class="dt">plot_deriv =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw"><a href="../reference/plot_variable_transition.html">plot_variable_transition</a></span>(model_xs, <span class="st">"ptratio"</span>, <span class="dt">plot_response =</span> <span class="ot">FALSE</span>, <span class="dt">plot_deriv =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
 <div id="models-comparison" class="section level1">
 <h1 class="hasAnchor">
 <a href="#models-comparison" class="anchor"></a>Models comparison</h1>
 <p>As we may want to compare the final GLM model with its parent black box, xspliner provides one simple tool.</p>
-<p>For comparison just add model parameter for plot method, and provide data:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> boston.rf, <span class="dt">data =</span> boston)</span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p>For comparison just add use <code>plot_model_comparison</code> or use general <code>plot</code> method with corresponding parameters:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw"><a href="../reference/plot_model_comparison.html">plot_model_comparison</a></span>(model_xs, <span class="dt">model =</span> boston.rf, <span class="dt">data =</span> boston)</span></code></pre></div>
+<p>or</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> boston.rf, <span class="dt">data =</span> boston)</span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>The resulting graphics compares predicted values for both GLM and black box model.</p>
 <p>For predicting values standard predict method is used: <code>function(object, newdata) predict(object, newdata)</code>. So for regression models the results are on the same scale.</p>
 <p>The notable difference occurs in the classification models. GLM models by default return “link” function values, so for classification it can be any real number. Contrary to that, randomForest function returns predicted levels.</p>
 <p>To avoid the problem, <code>predictor_funs</code> parameter was added. This is the list of prediction functions for each model (in order: black box, xspliner). Let’s see it on SVM example:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>iris_data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/droplevels">droplevels</a></span>(iris[iris<span class="op">$</span>Species <span class="op">!=</span><span class="st"> "setosa"</span>, ])</span>
-<span id="cb10-2"><a href="#cb10-2"></a></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(e1071) </span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
-<span id="cb10-5"><a href="#cb10-5"></a>model_svm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/e1071/topics/svm">svm</a></span>(Species <span class="op">~</span><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Petal.Width, </span>
-<span id="cb10-6"><a href="#cb10-6"></a>                 <span class="dt">data =</span> iris_data, <span class="dt">probability =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb10-7"><a href="#cb10-7"></a></span>
-<span id="cb10-8"><a href="#cb10-8"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Species <span class="op">~</span><span class="st">  </span><span class="kw">xs</span>(Sepal.Length) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Sepal.Width) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Petal.Length) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Petal.Width),</span>
-<span id="cb10-9"><a href="#cb10-9"></a>                    <span class="dt">model =</span> model_svm)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>iris_data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/droplevels">droplevels</a></span>(iris[iris<span class="op">$</span>Species <span class="op">!=</span><span class="st"> "setosa"</span>, ])</span>
+<span id="cb12-2"><a href="#cb12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(e1071) </span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
+<span id="cb12-5"><a href="#cb12-5"></a>model_svm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/e1071/topics/svm">svm</a></span>(Species <span class="op">~</span><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Petal.Width, </span>
+<span id="cb12-6"><a href="#cb12-6"></a>                 <span class="dt">data =</span> iris_data, <span class="dt">probability =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb12-7"><a href="#cb12-7"></a></span>
+<span id="cb12-8"><a href="#cb12-8"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Species <span class="op">~</span><span class="st">  </span><span class="kw">xs</span>(Sepal.Length) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Sepal.Width) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Petal.Length) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Petal.Width),</span>
+<span id="cb12-9"><a href="#cb12-9"></a>                    <span class="dt">model =</span> model_svm)</span></code></pre></div>
 <p>Now we specify predict functions to return probability of virginica response.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>prob_svm &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">probability =</span> <span class="ot">TRUE</span>), <span class="st">"probabilities"</span>)[, <span class="dv">2</span>]</span>
-<span id="cb11-2"><a href="#cb11-2"></a>prob_xs &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">type =</span> <span class="st">"response"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>prob_svm &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">probability =</span> <span class="ot">TRUE</span>), <span class="st">"probabilities"</span>)[, <span class="dv">2</span>]</span>
+<span id="cb13-2"><a href="#cb13-2"></a>prob_xs &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">type =</span> <span class="st">"response"</span>)</span></code></pre></div>
 <p>And plot the result</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_svm, <span class="dt">data =</span> iris_data,</span>
-<span id="cb12-2"><a href="#cb12-2"></a>     <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(prob_xs, prob_svm)</span>
-<span id="cb12-3"><a href="#cb12-3"></a>)  </span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw"><a href="../reference/plot_model_comparison.html">plot_model_comparison</a></span>(model_xs, <span class="dt">model =</span> model_svm, <span class="dt">data =</span> iris_data,</span>
+<span id="cb14-2"><a href="#cb14-2"></a>     <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(prob_xs, prob_svm)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>)  </span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <p>It is also possible to sort the values of heatmap according to chosen model:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_svm, <span class="dt">data =</span> iris_data,</span>
-<span id="cb13-2"><a href="#cb13-2"></a>     <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(prob_xs, prob_svm),</span>
-<span id="cb13-3"><a href="#cb13-3"></a>     <span class="dt">sort_by =</span> <span class="st">"svm"</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>)  </span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
-<p>In case of class predictions, let’s create class prediction function first:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>class_svm &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata)</span>
-<span id="cb14-2"><a href="#cb14-2"></a>response_levels &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/levels">levels</a></span>(iris_data<span class="op">$</span>Species)</span>
-<span id="cb14-3"><a href="#cb14-3"></a>class_xs &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) {</span>
-<span id="cb14-4"><a href="#cb14-4"></a>  probs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb14-5"><a href="#cb14-5"></a>  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ifelse">ifelse</a></span>(probs <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>, response_levels[<span class="dv">2</span>], response_levels[<span class="dv">1</span>]), <span class="dt">levels =</span> response_levels)</span>
-<span id="cb14-6"><a href="#cb14-6"></a>}</span></code></pre></div>
-<p>And plot the result:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_svm, <span class="dt">data =</span> iris_data,</span>
-<span id="cb15-2"><a href="#cb15-2"></a>     <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(class_xs, class_svm)</span>
-<span id="cb15-3"><a href="#cb15-3"></a>)  </span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="../reference/plot_model_comparison.html">plot_model_comparison</a></span>(model_xs, <span class="dt">model =</span> model_svm, <span class="dt">data =</span> iris_data,</span>
+<span id="cb15-2"><a href="#cb15-2"></a>     <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(prob_xs, prob_svm),</span>
+<span id="cb15-3"><a href="#cb15-3"></a>     <span class="dt">sort_by =</span> <span class="st">"svm"</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>)  </span></code></pre></div>
 <p><img src="graphics_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<p>In case of class predictions, let’s create class prediction function first:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>class_svm &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>response_levels &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/levels">levels</a></span>(iris_data<span class="op">$</span>Species)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>class_xs &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) {</span>
+<span id="cb16-4"><a href="#cb16-4"></a>  probs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ifelse">ifelse</a></span>(probs <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>, response_levels[<span class="dv">2</span>], response_levels[<span class="dv">1</span>]), <span class="dt">levels =</span> response_levels)</span>
+<span id="cb16-6"><a href="#cb16-6"></a>}</span></code></pre></div>
+<p>And plot the result:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw"><a href="../reference/plot_model_comparison.html">plot_model_comparison</a></span>(model_xs, <span class="dt">model =</span> model_svm, <span class="dt">data =</span> iris_data,</span>
+<span id="cb17-2"><a href="#cb17-2"></a>     <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(class_xs, class_svm)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>)  </span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 <p>Sorting values according to specified model is also possible:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">model =</span> model_svm, <span class="dt">data =</span> iris_data,</span>
-<span id="cb16-2"><a href="#cb16-2"></a>     <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(class_xs, class_svm),</span>
-<span id="cb16-3"><a href="#cb16-3"></a>     <span class="dt">sort_by =</span> <span class="st">"svm"</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a>)  </span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw"><a href="../reference/plot_model_comparison.html">plot_model_comparison</a></span>(model_xs, <span class="dt">model =</span> model_svm, <span class="dt">data =</span> iris_data,</span>
+<span id="cb18-2"><a href="#cb18-2"></a>     <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(class_xs, class_svm),</span>
+<span id="cb18-3"><a href="#cb18-3"></a>     <span class="dt">sort_by =</span> <span class="st">"svm"</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>)  </span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <div id="comparing-with-another-models" class="section level2">
 <h2 class="hasAnchor">
 <a href="#comparing-with-another-models" class="anchor"></a>Comparing with another models</h2>
 <p>Following above approach it’s easy to generate similar graphics for higher amount of models.</p>
 <p>Just include additional models inside <code>compare_with</code> parameter (named list), and add corresponding predict functions to them to <code>predictor_funs</code> parameter (if omitted, the default one is used).</p>
 <p>See below example on airquality data</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mgcv)</span>
-<span id="cb17-2"><a href="#cb17-2"></a></span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(airquality)</span>
-<span id="cb17-4"><a href="#cb17-4"></a>ozone &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/na.fail">na.omit</a></span>(airquality),</span>
-<span id="cb17-5"><a href="#cb17-5"></a>                <span class="dt">select =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Ozone"</span>, <span class="st">"Solar.R"</span>, <span class="st">"Wind"</span>, <span class="st">"Temp"</span>))</span>
-<span id="cb17-6"><a href="#cb17-6"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</span>
-<span id="cb17-7"><a href="#cb17-7"></a></span>
-<span id="cb17-8"><a href="#cb17-8"></a>model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> ozone)</span>
-<span id="cb17-9"><a href="#cb17-9"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(Solar.R) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Temp), model_rf, <span class="dt">data =</span> ozone)</span>
-<span id="cb17-10"><a href="#cb17-10"></a>model_glm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> ozone)</span>
-<span id="cb17-11"><a href="#cb17-11"></a>model_gam &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Solar.R) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Temp), <span class="dt">data =</span> ozone)</span>
-<span id="cb17-12"><a href="#cb17-12"></a></span>
-<span id="cb17-13"><a href="#cb17-13"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, </span>
-<span id="cb17-14"><a href="#cb17-14"></a>     <span class="dt">model =</span> model_rf, </span>
-<span id="cb17-15"><a href="#cb17-15"></a>     <span class="dt">data =</span> ozone, </span>
-<span id="cb17-16"><a href="#cb17-16"></a>     <span class="dt">compare_with =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">glm =</span> model_glm, <span class="dt">gam =</span> model_gam),</span>
-<span id="cb17-17"><a href="#cb17-17"></a>     <span class="dt">sort_by =</span> <span class="st">"xspliner"</span>)</span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mgcv)</span>
+<span id="cb19-2"><a href="#cb19-2"></a></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(airquality)</span>
+<span id="cb19-4"><a href="#cb19-4"></a>ozone &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/na.fail">na.omit</a></span>(airquality),</span>
+<span id="cb19-5"><a href="#cb19-5"></a>                <span class="dt">select =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Ozone"</span>, <span class="st">"Solar.R"</span>, <span class="st">"Wind"</span>, <span class="st">"Temp"</span>))</span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</span>
+<span id="cb19-7"><a href="#cb19-7"></a></span>
+<span id="cb19-8"><a href="#cb19-8"></a>model_rf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> ozone)</span>
+<span id="cb19-9"><a href="#cb19-9"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw">xs</span>(Solar.R) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(Temp), model_rf, <span class="dt">data =</span> ozone)</span>
+<span id="cb19-10"><a href="#cb19-10"></a>model_glm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(Ozone <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> ozone)</span>
+<span id="cb19-11"><a href="#cb19-11"></a>model_gam &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Ozone <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Solar.R) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Wind) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/s">s</a></span>(Temp), <span class="dt">data =</span> ozone)</span>
+<span id="cb19-12"><a href="#cb19-12"></a></span>
+<span id="cb19-13"><a href="#cb19-13"></a><span class="kw"><a href="../reference/plot_model_comparison.html">plot_model_comparison</a></span>(model_xs, </span>
+<span id="cb19-14"><a href="#cb19-14"></a>     <span class="dt">model =</span> model_rf, </span>
+<span id="cb19-15"><a href="#cb19-15"></a>     <span class="dt">data =</span> ozone, </span>
+<span id="cb19-16"><a href="#cb19-16"></a>     <span class="dt">compare_with =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">glm =</span> model_glm, <span class="dt">gam =</span> model_gam),</span>
+<span id="cb19-17"><a href="#cb19-17"></a>     <span class="dt">sort_by =</span> <span class="st">"xspliner"</span>)</span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 </div>
 </div>
 <div id="plotting-more-transitions-at-once" class="section level1">
 <h1 class="hasAnchor">
 <a href="#plotting-more-transitions-at-once" class="anchor"></a>Plotting more transitions at once</h1>
 <p>If you want to display many transitions on one plot just pass xspliner model to plot:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs)</span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-16-1.png" width="912"></p>
-<p>For models trained on top of many predictors, there will be displayed plots for 6 first transformed variables. To change that value just set <code>n_plots</code> variable:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="dt">n_plots =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="graphics_files/figure-html/unnamed-chunk-17-1.png" width="912"></p>
-<p>You can select interesting variables to plot just passing predictor names in vector:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Wind"</span>, <span class="st">"Temp"</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw"><a href="../reference/plot_variable_transition.html">plot_variable_transition</a></span>(model_xs)</span></code></pre></div>
 <p><img src="graphics_files/figure-html/unnamed-chunk-18-1.png" width="912"></p>
+<p>For models trained on top of many predictors, there will be displayed plots for 6 first transformed variables. To change that value just set <code>n_plots</code> variable:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw"><a href="../reference/plot_variable_transition.html">plot_variable_transition</a></span>(model_xs, <span class="dt">n_plots =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-19-1.png" width="912"></p>
+<p>You can select interesting variables to plot just passing predictor names in vector:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw"><a href="../reference/plot_variable_transition.html">plot_variable_transition</a></span>(model_xs, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Wind"</span>, <span class="st">"Temp"</span>))</span></code></pre></div>
+<p><img src="graphics_files/figure-html/unnamed-chunk-20-1.png" width="912"></p>
 </div>
   </div>
 

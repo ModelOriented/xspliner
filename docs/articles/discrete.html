@@ -88,7 +88,7 @@
       <h1>Classification and discrete predictors</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2019-09-05</h4>
+            <h4 class="date">2019-09-09</h4>
       
       
       <div class="hidden name"><code>discrete.Rmd</code></div>
@@ -189,7 +189,7 @@
 ## 2    low lowmedium
 ## 3 medium lowmedium</code></pre>
 <p>The graphical result if fully sourced from factorMerger. It is enough to run:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"salary"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw"><a href="../reference/plot_variable_transition.html">plot_variable_transition</a></span>(model_xs, <span class="st">"salary"</span>)</span></code></pre></div>
 <p><img src="discrete_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 </div>
@@ -221,11 +221,11 @@
 ## 
 ## Coefficients:
 ##                  Estimate Std. Error z value Pr(&gt;|z|)   
-## (Intercept)         1.369      1.742   0.786  0.43189   
-## xs(Sepal.Length)   11.796     17.032   0.693  0.48856   
-## xs(Sepal.Width)     7.967      4.901   1.626  0.10402   
-## xs(Petal.Length)    3.058      1.245   2.456  0.01406 * 
-## xs(Petal.Width)     3.474      1.324   2.623  0.00872 **
+## (Intercept)       -0.8395     0.7493  -1.120  0.26255   
+## xs(Sepal.Length)  12.2961    17.7534   0.693  0.48856   
+## xs(Sepal.Width)    8.3047     5.1085   1.626  0.10402   
+## xs(Petal.Length)   3.1873     1.2979   2.456  0.01406 * 
+## xs(Petal.Width)    3.6210     1.3806   2.623  0.00872 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -237,7 +237,7 @@
 ## 
 ## Number of Fisher Scoring iterations: 8</code></pre>
 <p>Simple plot for Petal.Width shows that approximation almost fully covers the PDP.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(model_xs, <span class="st">"Petal.Width"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw"><a href="../reference/plot_variable_transition.html">plot_variable_transition</a></span>(model_xs, <span class="st">"Petal.Width"</span>)</span></code></pre></div>
 <p><img src="discrete_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
   </div>

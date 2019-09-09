@@ -127,7 +127,7 @@ In this case log transformation for y, removes interaction of x and z. In xsplin
 ```{r message = FALSE}
 model_xs <- xspline(model_rf)
 summary(model_xs)
-plot(model_xs, model = model_rf, data = data)
+plot_model_comparison(model_xs, model = model_rf, data = data)
 ```
 
 # Multiplicative form
@@ -151,20 +151,20 @@ The first option is specifying formula with `*` sign, as in standard linear mode
 ```{r message = FALSE}
 model_xs <- xspline(y ~ x * z, model = model_rf)
 summary(model_xs)
-plot(model_xs, model = model_rf, data = data)
+plot_model_comparison(model_xs, model = model_rf, data = data)
 ```
 
 The second one is adding form parameter equal to "multiplicative" in case of passing just the model or dot formula.
 ```{r message = FALSE}
 model_xs <- xspline(model_rf, form = "multiplicative")
 summary(model_xs)
-plot(model_xs, model = model_rf, data = data)
+plot_model_comparison(model_xs, model = model_rf, data = data)
 ```
 
 ```{r message = FALSE}
 model_xs <- xspline(y ~ ., model = model_rf, form = "multiplicative")
 summary(model_xs)
-plot(model_xs, model = model_rf, data = data)
+plot_model_comparison(model_xs, model = model_rf, data = data)
 ```
 
 # Subset formula
@@ -186,12 +186,12 @@ As we can see Wind and Temp variables are of the highest importance. Let's build
 ```{r message = FALSE}
 model_xs <- xspline(Ozone ~ xs(Wind) + xs(Temp), model = model_rf)
 summary(model_xs)
-plot(model_xs, model = model_rf, data = air)
+plot_model_comparison(model_xs, model = model_rf, data = air)
 ```
 
 Or model including variables interaction:
 ```{r message = FALSE}
 model_xs <- xspline(Ozone ~ xs(Wind) * xs(Temp), model = model_rf)
 summary(model_xs)
-plot(model_xs, model = model_rf, data = air)
+plot_model_comparison(model_xs, model = model_rf, data = air)
 ```

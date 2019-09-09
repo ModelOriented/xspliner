@@ -36,10 +36,16 @@ library(xspliner)
 model_xs <- xspline(cmedv ~ xs(lstat) + xs(ptratio) + age, model = boston.rf)
 ```
 
-In order to plot specified predictor transformation just use:
-```{r}
+In order to plot specified predictor transformation you can use general plot method:
+```{r eval = FALSE}
 plot(model_xs, "lstat")
 ```
+or use explicit function
+```{r}
+plot_variable_transition(model_xs, "lstat")
+```
+
+In general plot method provides all functionality that xspliner provides for graphics. For transition plotting you may use explicit `plot_variable_transition` or general `plot` with providing corresponding parameters.
 
 You can also add some additional information for the plot.
 
@@ -47,28 +53,32 @@ You can also add some additional information for the plot.
 
 Just add two parameters: `data = <training data>` and flag `plot_data = TRUE`.
 ```{r}
-plot(model_xs, "lstat", data = boston, plot_data = TRUE)
+plot_variable_transition(model_xs, "lstat", data = boston, plot_data = TRUE)
 ```
 
 **Plotting approximation derivative**
 
 The derivative is plotted on scale of the second axis. To display it just add: `plot_deriv = TRUE`.
 ```{r}
-plot(model_xs, "lstat", plot_deriv = TRUE)
+plot_variable_transition(model_xs, "lstat", plot_deriv = TRUE)
 ```
 
 You can also specify if the model effect or transition should be displayed. Parameters responsible for that are `plot_response` and `plot_approx` respectively.
 
 For example below we display just the approximation and derivative for ptratio variable:
 ```{r}
-plot(model_xs, "ptratio", plot_response = FALSE, plot_deriv = TRUE)
+plot_variable_transition(model_xs, "ptratio", plot_response = FALSE, plot_deriv = TRUE)
 ```
 
 # Models comparison
 
 As we may want to compare the final GLM model with its parent black box, xspliner provides one simple tool.
 
-For comparison just add model parameter for plot method, and provide data:
+For comparison just add use `plot_model_comparison` or use general `plot` method with corresponding parameters:
+```{r eval = FALSE}
+plot_model_comparison(model_xs, model = boston.rf, data = boston)
+```
+or
 ```{r}
 plot(model_xs, model = boston.rf, data = boston)
 ```
@@ -102,7 +112,7 @@ prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "
 
 And plot the result
 ```{r}
-plot(model_xs, model = model_svm, data = iris_data,
+plot_model_comparison(model_xs, model = model_svm, data = iris_data,
      prediction_funs = list(prob_xs, prob_svm)
 )  
 ```
@@ -110,7 +120,7 @@ plot(model_xs, model = model_svm, data = iris_data,
 It is also possible to sort the values of heatmap according to chosen model:
 
 ```{r}
-plot(model_xs, model = model_svm, data = iris_data,
+plot_model_comparison(model_xs, model = model_svm, data = iris_data,
      prediction_funs = list(prob_xs, prob_svm),
      sort_by = "svm"
 )  
@@ -128,7 +138,7 @@ class_xs <- function(object, newdata) {
 
 And plot the result:
 ```{r}
-plot(model_xs, model = model_svm, data = iris_data,
+plot_model_comparison(model_xs, model = model_svm, data = iris_data,
      prediction_funs = list(class_xs, class_svm)
 )  
 ```
@@ -136,7 +146,7 @@ plot(model_xs, model = model_svm, data = iris_data,
 Sorting values according to specified model is also possible:
 
 ```{r}
-plot(model_xs, model = model_svm, data = iris_data,
+plot_model_comparison(model_xs, model = model_svm, data = iris_data,
      prediction_funs = list(class_xs, class_svm),
      sort_by = "svm"
 )  
@@ -162,7 +172,7 @@ model_xs <- xspline(Ozone ~ xs(Solar.R) + xs(Wind) + xs(Temp), model_rf, data = 
 model_glm <- glm(Ozone ~ ., data = ozone)
 model_gam <- mgcv::gam(Ozone ~ s(Solar.R) + s(Wind) + s(Temp), data = ozone)
 
-plot(model_xs, 
+plot_model_comparison(model_xs, 
      model = model_rf, 
      data = ozone, 
      compare_with = list(glm = model_glm, gam = model_gam),
@@ -173,17 +183,17 @@ plot(model_xs,
 
 If you want to display many transitions on one plot just pass xspliner model to plot:
 ```{r fig.width = 9.5}
-plot(model_xs)
+plot_variable_transition(model_xs)
 ```
 
 For models trained on top of many predictors, there will be displayed plots for 6 first transformed variables.
 To change that value just set `n_plots` variable:
 
 ```{r fig.width = 9.5}
-plot(model_xs, n_plots = 2)
+plot_variable_transition(model_xs, n_plots = 2)
 ```
 
 You can select interesting variables to plot just passing predictor names in vector:
 ```{r fig.width = 9.5}
-plot(model_xs, c("Wind", "Temp"))
+plot_variable_transition(model_xs, c("Wind", "Temp"))
 ```
