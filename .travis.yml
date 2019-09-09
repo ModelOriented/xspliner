@@ -9,8 +9,7 @@ r:
 notifications:
   email: false
 
-before_install:
-    - R -e 'install.packages("devtools")'
+before_install: R -e 'source("https://install-github.me/r-lib/remotes")'
 
 r_packages:
   - covr
