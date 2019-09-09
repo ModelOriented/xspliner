@@ -14,6 +14,7 @@ notifications:
   email: false
 
 r_packages:
+  - devtools
   - archivist
   - ggplot2
   - covr
