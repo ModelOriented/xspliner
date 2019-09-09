@@ -84,123 +84,42 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-    
-<div id="xspliner---using-surrogate-black-boxes-to-train-interpretable-spline-based-additive-models" class="section level1">
+    <div id="train-interpretable-spline-based-additive-surrogate-models" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#xspliner---using-surrogate-black-boxes-to-train-interpretable-spline-based-additive-models" class="anchor"></a>xspliner - Using surrogate black-boxes to train interpretable spline based additive models</h1></div>
-<div id="xspliners-pipeline-model--xspline-and-analyze" class="section level2">
-<h2 class="hasAnchor">
-<a href="#xspliners-pipeline-model--xspline-and-analyze" class="anchor"></a>xspliner’s pipeline: <em>model %&gt;% xspline(…)</em> and analyze</h2>
-<p><img src="articles/xspliner.png"></p>
-</div>
-<div id="installation-from-cran" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation-from-cran" class="anchor"></a>Installation from CRAN</h2>
-<pre><code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages("xspliner")</a></code></pre>
-</div>
-<div id="installation-from-github" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation-from-github" class="anchor"></a>Installation from Github</h2>
-<pre><code><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">devtools::install_github("ModelOriented/xspliner")</a></code></pre>
-</div>
-<div id="news" class="section level2">
-<h2 class="hasAnchor">
-<a href="#news" class="anchor"></a><a href="NEWS.html">News</a>
-</h2>
-</div>
-<div id="reference-manual" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reference-manual" class="anchor"></a><a href="https://ModelOriented.github.io/xspliner/">Reference Manual</a>
-</h2>
-</div>
-<div id="demo" class="section level2">
-<h2 class="hasAnchor">
-<a href="#demo" class="anchor"></a>DEMO</h2>
-<pre><code><a href="https://www.rdocumentation.org/packages/base/topics/library">library(xspliner)
-library(randomForest)
-library(pdp)
-data(boston)
-set.seed(123)
-# fitting random forest model
-model_rf &lt;- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
+<a href="#train-interpretable-spline-based-additive-surrogate-models" class="anchor"></a>Train Interpretable, Spline Based, Additive, Surrogate Models</h1></div>
 
-# building GLM (with standard black box response - Partial Dependence)
-xspliner &lt;- xspline(model_rf)
-
-# see standard glm results
-summary(xspliner)
-
-# see ptratio variable transformation
-plot(xspliner, "ptratio")
-
-# compare xspliner and base model responses
-plot(xspliner, model = model_rf, data = boston)
-</a></code></pre>
-<p>For more info check project <a href="https://ModelOriented.github.io/xspliner/articles/">vignettes</a> or <a href="https://github.com/ModelOriented/xspliner/tree/master/examples">examples</a>.</p>
-</div>
-<div id="further-work" class="section level2">
-<h2 class="hasAnchor">
-<a href="#further-work" class="anchor"></a>Further work</h2>
-<p>See <a href="https://github.com/ModelOriented/xspliner/issues">github issues</a></p>
-<hr>
-</div>
-</div>
-<div id="train-interpretable-spline-based-additive-surrogate-models" class="section level1">
-<h1 class="hasAnchor">
-<a href="#train-interpretable-spline-based-additive-surrogate-models" class="anchor"></a>Train Interpretable, Spline Based, Additive, Surrogate Models</h1>
-<p><a href="https://travis-ci.org/ModelOriented/xspliner"><img src="https://api.travis-ci.org/ModelOriented/xspliner.png" alt="Build Status"></a> <a href="https://codecov.io/github/ModelOriented/ingredients?branch=master"><img src="https://img.shields.io/codecov/c/github/ModelOriented/ingredients/master.svg" alt="Coverage Status"></a> <a href="https://cran.r-project.org/package=ingredients"><img src="http://www.r-pkg.org/badges/version/ingredients" alt="CRAN_Status_Badge"></a> <a href="http://cranlogs.r-pkg.org/badges/grand-total/ingredients"><img src="http://cranlogs.r-pkg.org/badges/grand-total/ingredients?color=orange" alt="Total Downloads"></a></p>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
-<p>The <code>ingredients</code> package is a collection of tools for assessment of feature importance and feature effects.</p>
+<p>The <code>xspliner</code> package is a collection of tools for training interpretable surrogate ML models.</p>
+<p>The package helps to build simple, interpretable models that inherits informations provided by more complicated ones - resulting model may be treated as explanation of provided black box, that was supplied prior to the algorithm. Provided functionality offers graphical and statistical evaluation both for overall model and its components.</p>
 <p>Key functions:</p>
 <ul>
 <li>
-<code>feature_importance()</code> for assessment of global level feature importance,</li>
+<code><a href="reference/xspline.html">xspline()</a></code> or <code><a href="reference/xspline.html">model_surrogate_xspliner()</a></code> for training surrogate model,</li>
 <li>
-<code>ceteris_paribus()</code> for calculation of the Ceteris Paribus / What-If Profiles (read more at <a href="https://pbiecek.github.io/PM_VEE/ceterisParibus.html" class="uri">https://pbiecek.github.io/PM_VEE/ceterisParibus.html</a>),</li>
+<code><a href="reference/plot_model_comparison.html">plot_model_comparison()</a></code> or <code>plot</code> generic for visual predictions comparison of surrogate and original ML model,</li>
 <li>
-<code>partial_dependency()</code> for Partial Dependency Plots,</li>
+<code><a href="reference/plot_variable_transition.html">plot_variable_transition()</a></code> or <code>plot</code> generic for graphical presentation of variables profiles and related information,</li>
 <li>
-<code>conditional_dependency()</code> for Conditional Dependency Plots also called M Plots,</li>
+<code><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary()</a></code> for statistical comparison of surrogate and original ML models,</li>
 <li>
-<code>accumulated_dependency()</code> for Accumulated Local Effects Plots,</li>
-<li>
-<code>aggregate_profiles()</code> and <code>cluster_profiles()</code> for aggregation of Ceteris Paribus Profiles,</li>
-<li>
-<code>aspect_importance()</code> for LIME style explanations,</li>
-<li>
-<code>calculate_oscillations()</code> for calculation of the Ceteris Paribus Oscillations (read more at <a href="https://pbiecek.github.io/PM_VEE/ceterisParibusOscillations.html" class="uri">https://pbiecek.github.io/PM_VEE/ceterisParibusOscillations.html</a>),</li>
-<li>
-<code>ceteris_paribus_2d()</code> for Ceteris Paribus 2D Profiles (read more at <a href="https://pbiecek.github.io/PM_VEE/ceterisParibus2d.html" class="uri">https://pbiecek.github.io/PM_VEE/ceterisParibus2d.html</a>),</li>
-<li>generic <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code> and <code><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot()</a></code> for better usability of selected explainers,</li>
-<li>generic <code>plotD3()</code> for interactive, D3 based explanations,</li>
-<li>generic <code>describe()</code> for explanations in natural language.</li>
+<code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code> for getting details about surrogate model components.</li>
 </ul>
-<p>The philosophy behind <code>ingredients</code> explanations is described in the <a href="https://pbiecek.github.io/PM_VEE/">Predictive Models: Explore, Explain, and Debug</a> e-book. The <code>ingredients</code> package is a part of <a href="http://DrWhy.AI">DrWhy.AI</a> universe.</p>
+<p>The approach that stands behind surrogate model construction offered by <code>xspliner</code> sums up below graphics:</p>
+<p><img src="articles/xspliner.png"></p>
+<p>More details can be found in <a href="https://modeloriented.github.io/xspliner">xspliner’s page</a>.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<pre class="{r}"><code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages"># the easiest way to get ingredients is to install it from CRAN:
-install.packages("ingredients")
+<pre class="{r}"><code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages"># the easiest way to get xspliner is to install it from CRAN:
+install.packages("xspliner")
 
 # Or the the development version from GitHub:
-# install.packages("devtools")
-devtools::install_github("ModelOriented/ingredients")</a></code></pre>
-</div>
-<div id="interactive-plots-with-d3" class="section level2">
-<h2 class="hasAnchor">
-<a href="#interactive-plots-with-d3" class="anchor"></a>Interactive plots with D3</h2>
-<p><code>feature_importance()</code>, <code>ceteris_paribus()</code> and <code>aggregated_profiles()</code> also work with <strong>D3</strong>! <a href="https://modeloriented.github.io/ingredients/ceterisParibusDemo.html">see an example</a> <img src="images/demo.gif" alt="plotD3"></p>
-</div>
-<div id="acknowledgments" class="section level2">
-<h2 class="hasAnchor">
-<a href="#acknowledgments" class="anchor"></a>Acknowledgments</h2>
-<p>Work on this package was financially supported by the ‘NCN Opus grant 2016/21/B/ST6/02176’.</p>
+devtools::install_github("ModelOriented/xspliner")</a></code></pre>
 </div>
 </div>
-
   </div>
 
   <div class="col-md-3" id="sidebar">
@@ -234,7 +153,16 @@ devtools::install_github("ModelOriented/ingredients")</a></code></pre>
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://travis-ci.org/ModelOriented/xspliner"><img src="https://api.travis-ci.org/ModelOriented/xspliner.png" alt="Build Status"></a></li>
+<li><a href="https://codecov.io/github/ModelOriented/xspliner?branch=master"><img src="https://img.shields.io/codecov/c/github/ModelOriented/xspliner/master.svg" alt="Coverage Status"></a></li>
+<li><a href="https://cran.r-project.org/package=xspliner"><img src="http://www.r-pkg.org/badges/version/xspliner" alt="CRAN_Status_Badge"></a></li>
+<li><a href="http://cranlogs.r-pkg.org/badges/grand-total/xspliner"><img src="http://cranlogs.r-pkg.org/badges/grand-total/xspliner?color=orange" alt="Total Downloads"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
