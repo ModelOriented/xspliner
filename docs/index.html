@@ -84,7 +84,8 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-    <div id="xspliner---using-surrogate-black-boxes-to-train-interpretable-spline-based-additive-models" class="section level1">
+    
+<div id="xspliner---using-surrogate-black-boxes-to-train-interpretable-spline-based-additive-models" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#xspliner---using-surrogate-black-boxes-to-train-interpretable-spline-based-additive-models" class="anchor"></a>xspliner - Using surrogate black-boxes to train interpretable spline based additive models</h1></div>
 <div id="xspliners-pipeline-model--xspline-and-analyze" class="section level2">
@@ -141,8 +142,65 @@ plot(xspliner, model = model_rf, data = boston)
 <h2 class="hasAnchor">
 <a href="#further-work" class="anchor"></a>Further work</h2>
 <p>See <a href="https://github.com/ModelOriented/xspliner/issues">github issues</a></p>
+<hr>
 </div>
 </div>
+<div id="train-interpretable-spline-based-additive-surrogate-models" class="section level1">
+<h1 class="hasAnchor">
+<a href="#train-interpretable-spline-based-additive-surrogate-models" class="anchor"></a>Train Interpretable, Spline Based, Additive, Surrogate Models</h1>
+<p><a href="https://travis-ci.org/ModelOriented/xspliner"><img src="https://api.travis-ci.org/ModelOriented/xspliner.png" alt="Build Status"></a> <a href="https://codecov.io/github/ModelOriented/ingredients?branch=master"><img src="https://img.shields.io/codecov/c/github/ModelOriented/ingredients/master.svg" alt="Coverage Status"></a> <a href="https://cran.r-project.org/package=ingredients"><img src="http://www.r-pkg.org/badges/version/ingredients" alt="CRAN_Status_Badge"></a> <a href="http://cranlogs.r-pkg.org/badges/grand-total/ingredients"><img src="http://cranlogs.r-pkg.org/badges/grand-total/ingredients?color=orange" alt="Total Downloads"></a></p>
+<div id="overview" class="section level2">
+<h2 class="hasAnchor">
+<a href="#overview" class="anchor"></a>Overview</h2>
+<p>The <code>ingredients</code> package is a collection of tools for assessment of feature importance and feature effects.</p>
+<p>Key functions:</p>
+<ul>
+<li>
+<code>feature_importance()</code> for assessment of global level feature importance,</li>
+<li>
+<code>ceteris_paribus()</code> for calculation of the Ceteris Paribus / What-If Profiles (read more at <a href="https://pbiecek.github.io/PM_VEE/ceterisParibus.html" class="uri">https://pbiecek.github.io/PM_VEE/ceterisParibus.html</a>),</li>
+<li>
+<code>partial_dependency()</code> for Partial Dependency Plots,</li>
+<li>
+<code>conditional_dependency()</code> for Conditional Dependency Plots also called M Plots,</li>
+<li>
+<code>accumulated_dependency()</code> for Accumulated Local Effects Plots,</li>
+<li>
+<code>aggregate_profiles()</code> and <code>cluster_profiles()</code> for aggregation of Ceteris Paribus Profiles,</li>
+<li>
+<code>aspect_importance()</code> for LIME style explanations,</li>
+<li>
+<code>calculate_oscillations()</code> for calculation of the Ceteris Paribus Oscillations (read more at <a href="https://pbiecek.github.io/PM_VEE/ceterisParibusOscillations.html" class="uri">https://pbiecek.github.io/PM_VEE/ceterisParibusOscillations.html</a>),</li>
+<li>
+<code>ceteris_paribus_2d()</code> for Ceteris Paribus 2D Profiles (read more at <a href="https://pbiecek.github.io/PM_VEE/ceterisParibus2d.html" class="uri">https://pbiecek.github.io/PM_VEE/ceterisParibus2d.html</a>),</li>
+<li>generic <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code> and <code><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot()</a></code> for better usability of selected explainers,</li>
+<li>generic <code>plotD3()</code> for interactive, D3 based explanations,</li>
+<li>generic <code>describe()</code> for explanations in natural language.</li>
+</ul>
+<p>The philosophy behind <code>ingredients</code> explanations is described in the <a href="https://pbiecek.github.io/PM_VEE/">Predictive Models: Explore, Explain, and Debug</a> e-book. The <code>ingredients</code> package is a part of <a href="http://DrWhy.AI">DrWhy.AI</a> universe.</p>
+</div>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<pre class="{r}"><code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages"># the easiest way to get ingredients is to install it from CRAN:
+install.packages("ingredients")
+
+# Or the the development version from GitHub:
+# install.packages("devtools")
+devtools::install_github("ModelOriented/ingredients")</a></code></pre>
+</div>
+<div id="interactive-plots-with-d3" class="section level2">
+<h2 class="hasAnchor">
+<a href="#interactive-plots-with-d3" class="anchor"></a>Interactive plots with D3</h2>
+<p><code>feature_importance()</code>, <code>ceteris_paribus()</code> and <code>aggregated_profiles()</code> also work with <strong>D3</strong>! <a href="https://modeloriented.github.io/ingredients/ceterisParibusDemo.html">see an example</a> <img src="images/demo.gif" alt="plotD3"></p>
+</div>
+<div id="acknowledgments" class="section level2">
+<h2 class="hasAnchor">
+<a href="#acknowledgments" class="anchor"></a>Acknowledgments</h2>
+<p>Work on this package was financially supported by the ‘NCN Opus grant 2016/21/B/ST6/02176’.</p>
+</div>
+</div>
+
   </div>
 
   <div class="col-md-3" id="sidebar">

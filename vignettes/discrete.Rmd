@@ -103,7 +103,7 @@ summary(model_xs, "salary")
 
 The graphical result if fully sourced from factorMerger. It is enough to run:
 ```{r}
-plot(model_xs, "salary")
+plot_variable_transition(model_xs, "salary")
 ```
 
 # Quantitative predictors
@@ -138,5 +138,5 @@ summary(model_xs)
 
 Simple plot for Petal.Width shows that approximation almost fully covers the PDP.
 ```{r}
-plot(model_xs, "Petal.Width")
+plot_variable_transition(model_xs, "Petal.Width")
 ```
