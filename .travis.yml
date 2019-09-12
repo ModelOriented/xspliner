@@ -9,4 +9,4 @@ notifications:
   email: false
 
 before_install:
- - R -e 'print("oko")'
+  - Rscript -e 'install.packages(c("devtools"));if (!all(c("devtools") %in% installed.packages())) { q(status = 1, save = "no")}'
