@@ -5,9 +5,6 @@ use_devtools: false
 r:
   - release
 
-notifications:
-  email: false
-
-before_install:
-  - echo "siema"
+install:
+- R -e 'devtools::install_deps(dep = T)'
 
