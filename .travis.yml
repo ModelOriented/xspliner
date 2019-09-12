@@ -2,6 +2,9 @@ language: R
 sudo: false
 cache: packages
 
+before_install:
+  - R -e 'install.packages("devtools")'
+
 r:
   - release
   - devel
