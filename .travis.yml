@@ -1,10 +1,6 @@
 language: R
 sudo: false
-use_devtools: false
 
 r:
   - release
-
-install:
-- R -e 'install.packages("devtools")'
 
