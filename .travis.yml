@@ -9,4 +9,5 @@ notifications:
   email: false
 
 before_install:
-  - travis cache --delete
+  - echo "siema"
+
