@@ -1,6 +1,5 @@
 language: R
 sudo: false
-cache: packages
 use_devtools: false
 
 r:
