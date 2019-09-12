@@ -4,14 +4,9 @@ use_devtools: false
 
 r:
   - release
-  - devel
 
 notifications:
   email: false
 
-r_packages:
-  - covr
-
-after_success:
-- Rscript -e 'library(covr); codecov()'
-
+before_install:
+ - R -e 'print("oko")'
