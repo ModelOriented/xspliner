@@ -1,12 +1,11 @@
 language: R
 sudo: false
 cache: packages
-
-before_install:
-  - R -e 'install.packages("devtools")'
+use_devtools: false
 
 r:
-  - oldrel
+  - release
+  - devel
 
 notifications:
   email: false
