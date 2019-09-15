@@ -68,22 +68,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/discrete.html">Classification and discrete predictors</a>
-    </li>
-    <li>
-      <a href="../articles/graphics.html">Graphics</a>
-    </li>
-    <li>
       <a href="../articles/automation.html">Automate your work</a>
     </li>
     <li>
-      <a href="../articles/methods.html">Methods and xspliner environment</a>
+      <a href="../articles/cases.html">Use cases</a>
+    </li>
+    <li>
+      <a href="../articles/discrete.html">Classification and discrete predictors</a>
     </li>
     <li>
       <a href="../articles/extras.html">Extra information about the package</a>
     </li>
     <li>
-      <a href="../articles/cases.html">Use cases</a>
+      <a href="../articles/graphics.html">Graphics</a>
+    </li>
+    <li>
+      <a href="../articles/methods.html">Methods and xspliner environment</a>
     </li>
   </ul>
 </li>
@@ -100,14 +100,13 @@
 <!--/.navbar -->
 
       
-
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Methods and xspliner environment</h1>
                         <h4 class="author">Krystian Igras</h4>
             
-            <h4 class="date">2019-09-13</h4>
+            <h4 class="date">2019-09-15</h4>
       
       
       <div class="hidden name"><code>methods.Rmd</code></div>
@@ -119,51 +118,51 @@
 <div id="predict" class="section level1">
 <h1 class="hasAnchor">
 <a href="#predict" class="anchor"></a>Predict</h1>
-<p>As xspliner final model is GLM, predict method is just wrapper of <code><a href="https://rdrr.io/r/stats/predict.glm.html">stats::predict.glm</a></code> function. Let’s see it on the below example:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(xspliner)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(randomForest)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(magrittr)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">rf_iris &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span>(Petal.Width <span class="op">~</span><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Petal.Width <span class="op">~</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">  </span><span class="kw">xs</span>(Petal.Length, <span class="dt">effect =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">grid.resolution =</span> <span class="dv">100</span>), <span class="dt">transition =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">bs =</span> <span class="st">"cr"</span>)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">  </span><span class="kw">xf</span>(Species, <span class="dt">transition =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">stat =</span> <span class="st">"loglikelihood"</span>, <span class="dt">value =</span> <span class="dv">-300</span>)),</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">  <span class="dt">model =</span> rf_iris)</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">newdata &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">  <span class="dt">Sepal.Length =</span> <span class="dv">10</span>, </a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">  <span class="dt">Petal.Length =</span> <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb1-14" data-line-number="14">  <span class="dt">Species =</span> <span class="kw"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="st">"virginica"</span>, <span class="dt">levels =</span> <span class="kw"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(iris<span class="op">$</span>Species)))</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model_xs, <span class="dt">newdata =</span> newdata)</a></code></pre></div>
-<pre><code>##          1 
-## -0.4572177</code></pre>
+<p>As xspliner final model is GLM, predict method is just wrapper of <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict.glm">stats::predict.glm</a></code> function. Let’s see it on the below example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(randomForest)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(magrittr)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>rf_iris &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/randomForest/topics/randomForest">randomForest</a></span>(Petal.Width <span class="op">~</span><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>model_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(Petal.Width <span class="op">~</span><span class="st"> </span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="st">  </span><span class="kw">xs</span>(Petal.Length, <span class="dt">effect =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">grid.resolution =</span> <span class="dv">100</span>), <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">bs =</span> <span class="st">"cr"</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="st">  </span><span class="kw">xf</span>(Species, <span class="dt">transition =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">stat =</span> <span class="st">"loglikelihood"</span>, <span class="dt">value =</span> <span class="dv">-300</span>)),</span>
+<span id="cb1-10"><a href="#cb1-10"></a>  <span class="dt">model =</span> rf_iris)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>newdata &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(</span>
+<span id="cb1-12"><a href="#cb1-12"></a>  <span class="dt">Sepal.Length =</span> <span class="dv">10</span>, </span>
+<span id="cb1-13"><a href="#cb1-13"></a>  <span class="dt">Petal.Length =</span> <span class="dv">2</span>, </span>
+<span id="cb1-14"><a href="#cb1-14"></a>  <span class="dt">Species =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="st">"virginica"</span>, <span class="dt">levels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/levels">levels</a></span>(iris<span class="op">$</span>Species)))</span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(model_xs, <span class="dt">newdata =</span> newdata)</span></code></pre></div>
+<pre><code>##         1 
+## -0.322698</code></pre>
 </div>
 <div id="print" class="section level1">
 <h1 class="hasAnchor">
 <a href="#print" class="anchor"></a>Print</h1>
 <p>Print method works similarly to the summary. In case of passing just the model, standard <code>print.glm</code> is used.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:  stats::glm(formula = Petal.Width ~ Sepal.Length + xs(Petal.Length) + 
 ##     xf(Species), family = family, data = data)
 ## 
 ## Coefficients:
 ##                    (Intercept)                    Sepal.Length  
-##                      -2.064898                       -0.004034  
+##                       -2.24322                        -0.01549  
 ##               xs(Petal.Length)  xf(Species)versicolorvirginica  
-##                       3.251369                       -0.763931  
+##                        3.32901                        -0.56094  
 ## 
 ## Degrees of Freedom: 149 Total (i.e. Null);  146 Residual
 ## Null Deviance:       86.57 
-## Residual Deviance: 5.22  AIC: -68.03</code></pre>
+## Residual Deviance: 5.089     AIC: -71.86</code></pre>
 <div id="predictor-based-print" class="section level2">
 <h2 class="hasAnchor">
 <a href="#predictor-based-print" class="anchor"></a>Predictor based print</h2>
 <p>Summary method allows you to check details about transformation of specific variable.</p>
-<p>Standard usage <code><a href="https://rdrr.io/r/base/print.html">print(xspliner_object, variable_name)</a></code></p>
+<p>Standard usage <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print(xspliner_object, variable_name)</a></code></p>
 <p><em>Quantitative variable</em></p>
 <p>When predictor is the quantitative variable its transition is based on GAM model. For this case print uses standard <code>print.gam</code> method.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(model_xs, <span class="st">"Petal.Length"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(model_xs, <span class="st">"Petal.Length"</span>)</span></code></pre></div>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -172,21 +171,21 @@
 ## yhat ~ s(Petal.Length, bs = "cr")
 ## 
 ## Estimated degrees of freedom:
-## 8.8  total = 9.8 
+## 8.82  total = 9.82 
 ## 
-## GCV score: 0.001813506</code></pre>
+## GCV score: 0.001247236</code></pre>
 <p><em>Qualitative variable</em></p>
 <p>In case of qualitative predictor, standard <code>print.factorMerger</code> method is used.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(model_xs, <span class="st">"Species"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(model_xs, <span class="st">"Species"</span>)</span></code></pre></div>
 <pre><code>## Family: gaussian Factor Merger.
 ## 
 ## Factor levels were merged in the following order:
 ## 
 ##      groupA       groupB                     model   pvalVsFull   pvalVsPrevious
 ## ---  -----------  --------------------  ----------  -----------  ---------------
-## 0                                        -269.5463            1                1
-## 1    versicolor   virginica              -284.5832            0                0
-## 2    setosa       versicolorvirginica    -355.9142            0                0</code></pre>
+## 0                                        -242.5544            1                1
+## 1    versicolor   virginica              -259.5013            0                0
+## 2    setosa       versicolorvirginica    -349.3103            0                0</code></pre>
 </div>
 </div>
 <div id="plot" class="section level1">
@@ -203,31 +202,31 @@
 <a href="#extracting-effect" class="anchor"></a>Extracting effect</h2>
 <p>Each transition is built on top of the black box response data. For example the default response for quantitative variables is PDP - for qualitative ones ICE.</p>
 <p>In order to extract the effect use transition method with <code>type</code> parameter equals to data</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Petal.Length"</span>, <span class="dt">type =</span> <span class="st">"data"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span>head</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Petal.Length"</span>, <span class="dt">type =</span> <span class="st">"data"</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="st">  </span>head</span></code></pre></div>
 <pre><code>##   Petal.Length      yhat
-## 1     1.000000 0.7107417
-## 2     1.059596 0.7107417
-## 3     1.119192 0.7107417
-## 4     1.178788 0.7133258
-## 5     1.238384 0.7142053
-## 6     1.297980 0.7163931</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"data"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span>head</a></code></pre></div>
+## 1     1.000000 0.7635452
+## 2     1.059596 0.7634952
+## 3     1.119192 0.7634952
+## 4     1.178788 0.7660010
+## 5     1.238384 0.7680270
+## 6     1.297980 0.7694952</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"data"</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="st">  </span>head</span></code></pre></div>
 <pre><code>##      Species      yhat yhat.id
-## 1     setosa 0.2471100       1
-## 2 versicolor 0.6695663       1
-## 3  virginica 0.8135981       1
-## 4     setosa 0.2183036       2
-## 5 versicolor 0.6638024       2
-## 6  virginica 0.8094642       2</code></pre>
+## 1     setosa 0.2470559       1
+## 2 versicolor 0.7307232       1
+## 3  virginica 0.9012810       1
+## 4     setosa 0.2075282       2
+## 5 versicolor 0.7251840       2
+## 6  virginica 0.8936324       2</code></pre>
 </div>
 <div id="extracting-transition-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#extracting-transition-model" class="anchor"></a>Extracting transition model</h2>
 <p>After we built transition basing on continuity of variable specific model is created. In case of quantitative predictor we build GAM model in order to get spline approximation of effect. In case of qualitative predictor we build factorMerger object and get optimal factor division on that.</p>
 <p>To extract the model, use transition method with <code>type = "base"</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Petal.Length"</span>, <span class="dt">type =</span> <span class="st">"base"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Petal.Length"</span>, <span class="dt">type =</span> <span class="st">"base"</span>)</span></code></pre></div>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -236,31 +235,31 @@
 ## yhat ~ s(Petal.Length, bs = "cr")
 ## 
 ## Estimated degrees of freedom:
-## 8.8  total = 9.8 
+## 8.82  total = 9.82 
 ## 
-## GCV score: 0.001813506</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"base"</span>)</a></code></pre></div>
+## GCV score: 0.001247236</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"base"</span>)</span></code></pre></div>
 <pre><code>## Family: gaussian Factor Merger.
 ## 
 ## Factor levels were merged in the following order:
 ## 
 ##      groupA       groupB                     model   pvalVsFull   pvalVsPrevious
 ## ---  -----------  --------------------  ----------  -----------  ---------------
-## 0                                        -269.5463            1                1
-## 1    versicolor   virginica              -284.5832            0                0
-## 2    setosa       versicolorvirginica    -355.9142            0                0</code></pre>
+## 0                                        -242.5544            1                1
+## 1    versicolor   virginica              -259.5013            0                0
+## 2    setosa       versicolorvirginica    -349.3103            0                0</code></pre>
 </div>
 <div id="extracting-transition-function" class="section level2">
 <h2 class="hasAnchor">
 <a href="#extracting-transition-function" class="anchor"></a>Extracting transition function</h2>
 <p>The final result of building transition is transformation function, that is used in the final GLM model estimation.</p>
 <p>To extract the function just use transition method with <code>type = "function"</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">petal_length_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Petal.Length"</span>, <span class="dt">type =</span> <span class="st">"function"</span>)</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dt">length.out =</span> <span class="dv">50</span>)</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(x, <span class="kw">petal_length_xs</span>(x))</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>petal_length_xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Petal.Length"</span>, <span class="dt">type =</span> <span class="st">"function"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dt">length.out =</span> <span class="dv">50</span>)</span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(x, <span class="kw">petal_length_xs</span>(x))</span></code></pre></div>
 <p><img src="methods_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">species_xf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"function"</span>)</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">species_xf</span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"setosa"</span>, <span class="st">"versicolor"</span>, <span class="st">"virginica"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>species_xf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/transition.html">transition</a></span>(model_xs, <span class="dt">predictor =</span> <span class="st">"Species"</span>, <span class="dt">type =</span> <span class="st">"function"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="kw">species_xf</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"setosa"</span>, <span class="st">"versicolor"</span>, <span class="st">"virginica"</span>))</span></code></pre></div>
 <pre><code>## [1] setosa              versicolorvirginica versicolorvirginica
 ## Levels: setosa versicolorvirginica</code></pre>
 </div>
@@ -273,7 +272,7 @@
 <h2 class="hasAnchor">
 <a href="#glm-summary" class="anchor"></a>GLM summary</h2>
 <p>Standard summary method is just wrapper for <code>summary::glm</code>. In order to use this just type:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::glm(formula = Petal.Width ~ Sepal.Length + xs(Petal.Length) + 
@@ -281,22 +280,22 @@
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67567  -0.08205  -0.03185   0.11127   0.50198  
+## -0.70255  -0.08898  -0.01343   0.10384   0.51289  
 ## 
 ## Coefficients:
-##                                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                    -2.064898   0.143110 -14.429  &lt; 2e-16 ***
-## Sepal.Length                   -0.004034   0.036230  -0.111    0.911    
-## xs(Petal.Length)                3.251369   0.227234  14.308  &lt; 2e-16 ***
-## xf(Species)versicolorvirginica -0.763931   0.131807  -5.796 4.04e-08 ***
+##                                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                    -2.24322    0.14514 -15.455  &lt; 2e-16 ***
+## Sepal.Length                   -0.01549    0.03616  -0.428    0.669    
+## xs(Petal.Length)                3.32901    0.22767  14.622  &lt; 2e-16 ***
+## xf(Species)versicolorvirginica -0.56094    0.11628  -4.824  3.5e-06 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03575459)
+## (Dispersion parameter for gaussian family taken to be 0.0348531)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  5.2202  on 146  degrees of freedom
-## AIC: -68.034
+## Residual deviance:  5.0886  on 146  degrees of freedom
+## AIC: -71.865
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 </div>
@@ -304,10 +303,10 @@
 <h2 class="hasAnchor">
 <a href="#predictor-based-summary" class="anchor"></a>Predictor based summary</h2>
 <p>Summary method allows you to check details about transformation of specific variable.</p>
-<p>Standard usage <code><a href="https://rdrr.io/r/base/summary.html">summary(xspliner_object, variable_name)</a></code></p>
+<p>Standard usage <code><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary(xspliner_object, variable_name)</a></code></p>
 <p><em>Quantitative variable</em></p>
 <p>When predictor is quantitative variable its transition is based on GAM model. For this case summary displays summary of that model.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(model_xs, <span class="st">"Petal.Length"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs, <span class="st">"Petal.Length"</span>)</span></code></pre></div>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -317,21 +316,21 @@
 ## 
 ## Parametric coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 1.202642   0.004044   297.4   &lt;2e-16 ***
+## (Intercept) 1.204707   0.003354   359.2   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Approximate significance of smooth terms:
 ##                   edf Ref.df     F p-value    
-## s(Petal.Length) 8.799  8.988 601.2  &lt;2e-16 ***
+## s(Petal.Length) 8.816   8.99 728.3  &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## R-sq.(adj) =  0.982   Deviance explained = 98.4%
-## GCV = 0.0018135  Scale est. = 0.0016358  n = 100</code></pre>
+## R-sq.(adj) =  0.985   Deviance explained = 98.6%
+## GCV = 0.0012472  Scale est. = 0.0011248  n = 100</code></pre>
 <p><em>Qualitative variable</em></p>
 <p>In case of qualitative predictor, the method displays data.frame storing information how factors were merged during the transition.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(model_xs, <span class="st">"Species"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model_xs, <span class="st">"Species"</span>)</span></code></pre></div>
 <pre><code>##         orig                pred
 ## 1     setosa              setosa
 ## 2 versicolor versicolorvirginica
@@ -342,16 +341,16 @@
 <a href="#surrogate-vs-black-box-comparison" class="anchor"></a>Surrogate vs Black Box comparison</h2>
 <p>Providing <code>model</code> parameter instead of <code>predictor</code>, the summary displays a few statistics that compares original model with surrogate one. All statistics definitions are included in <code>summary.xspline</code> documentation.</p>
 <p>Here we show one example for classification model.</p>
-<p>For this example we use <code><a href="https://rdrr.io/pkg/ISLR/man/Default.html">ISLR::Default</a></code> data and build svm model as black box. The model aims to predict <code>default</code> variable, indicating whether the customer defaulted on their debt.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(xspliner)</a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(e1071)</a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb26-4" data-line-number="4">data &lt;-<span class="st"> </span>ISLR<span class="op">::</span>Default</a>
-<a class="sourceLine" id="cb26-5" data-line-number="5">default.svm &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/e1071/man/svm.html">svm</a></span>(default <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> data, <span class="dt">probability =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb26-6" data-line-number="6">default.xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(default <span class="op">~</span><span class="st"> </span>student <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(balance) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(income), <span class="dt">model =</span> default.svm)</a></code></pre></div>
+<p>For this example we use <code><a href="https://www.rdocumentation.org/packages/ISLR/topics/Default">ISLR::Default</a></code> data and build svm model as black box. The model aims to predict <code>default</code> variable, indicating whether the customer defaulted on their debt.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(xspliner)</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(e1071)</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>)</span>
+<span id="cb26-4"><a href="#cb26-4"></a>data &lt;-<span class="st"> </span>ISLR<span class="op">::</span>Default</span>
+<span id="cb26-5"><a href="#cb26-5"></a>default.svm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/e1071/topics/svm">svm</a></span>(default <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> data, <span class="dt">probability =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb26-6"><a href="#cb26-6"></a>default.xs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/xspline.html">xspline</a></span>(default <span class="op">~</span><span class="st"> </span>student <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(balance) <span class="op">+</span><span class="st"> </span><span class="kw">xs</span>(income), <span class="dt">model =</span> default.svm)</span></code></pre></div>
 <p>In order to check the summary, we need to specify prediction functions for each model. In this case predictions are probabilities of success:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">prob_svm &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">probability =</span> <span class="ot">TRUE</span>), <span class="st">"probabilities"</span>)[, <span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb27-2" data-line-number="2">prob_xs &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">type =</span> <span class="st">"response"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>prob_svm &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">probability =</span> <span class="ot">TRUE</span>), <span class="st">"probabilities"</span>)[, <span class="dv">2</span>]</span>
+<span id="cb27-2"><a href="#cb27-2"></a>prob_xs &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">type =</span> <span class="st">"response"</span>)</span></code></pre></div>
 <p>Almost each summary statistic compares models basing on some data.</p>
 <p>In this case we’re going to compare models on training data providing:</p>
 <ul>
@@ -362,7 +361,7 @@
 <li>
 <code>prediction_funs</code> as a list of prediction functions (for surrogate and original model respectively)</li>
 </ul>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(default.xs, <span class="dt">model =</span> default.svm, <span class="dt">newdata =</span> data, <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(prob_xs, prob_svm))</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(default.xs, <span class="dt">model =</span> default.svm, <span class="dt">newdata =</span> data, <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(prob_xs, prob_svm))</span></code></pre></div>
 <pre><code>## Models comparison 
 ##   1 - Max prediction normed-diff:  0.5268109 
 ##   R^2:  0.9185403</code></pre>
@@ -371,13 +370,13 @@
 <pre><code>##   1 - Max ROC diff:  0.8712113 
 ##   1 - Mean ROC diff:  0.9506292</code></pre>
 <p>Another set of statistics is generated for prediction functions that return response levels.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">response_svm &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(object, <span class="dt">newdata =</span> newdata)</a>
-<a class="sourceLine" id="cb32-2" data-line-number="2">response_xs &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) {</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3">  y_levels &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(newdata[[<span class="kw"><a href="https://rdrr.io/r/base/environment.html">environment</a></span>(object)<span class="op">$</span>response]])</a>
-<a class="sourceLine" id="cb32-4" data-line-number="4">  <span class="kw"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(y_levels[(<span class="kw"><a href="https://rdrr.io/r/stats/predict.glm.html">predict.glm</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">type =</span> <span class="st">"link"</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>], <span class="dt">levels =</span> y_levels)</a>
-<a class="sourceLine" id="cb32-5" data-line-number="5">}</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>response_svm &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(object, <span class="dt">newdata =</span> newdata)</span>
+<span id="cb32-2"><a href="#cb32-2"></a>response_xs &lt;-<span class="st"> </span><span class="cf">function</span>(object, newdata) {</span>
+<span id="cb32-3"><a href="#cb32-3"></a>  y_levels &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/levels">levels</a></span>(newdata[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/environment">environment</a></span>(object)<span class="op">$</span>response]])</span>
+<span id="cb32-4"><a href="#cb32-4"></a>  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(y_levels[(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict.glm">predict.glm</a></span>(object, <span class="dt">newdata =</span> newdata, <span class="dt">type =</span> <span class="st">"link"</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>], <span class="dt">levels =</span> y_levels)</span>
+<span id="cb32-5"><a href="#cb32-5"></a>}</span></code></pre></div>
 <p>And similarly to previous example:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(default.xs, <span class="dt">model =</span> default.svm, <span class="dt">newdata =</span> data, <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(response_xs, response_svm))</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(default.xs, <span class="dt">model =</span> default.svm, <span class="dt">newdata =</span> data, <span class="dt">prediction_funs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(response_xs, response_svm))</span></code></pre></div>
 <pre><code>## Models comparison 
 ##   Mean predictions similarity:  0.9966 
 ##   ACC Black Box:  0.9719 
@@ -420,19 +419,16 @@
 </div>
 
 
-
       <footer><div class="author">
   <p>
     Developed by Krystian Igras, Przemyslaw Biecek.
     Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
   </p>
 </div>
-
       </footer>
 </div>
 
   
-
 
   </body>
 </html>

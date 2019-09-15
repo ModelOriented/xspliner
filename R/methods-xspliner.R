@@ -14,16 +14,17 @@
 #' @param compare_with Named list. Other models that should be compared with xspliner and \code{model}.
 #' @param n_plots Threshold for number of plots when plotting all variables.
 #' @param sort_by When comparing models determines according to which model should observations be ordered.
+#' @param use_coeff If TRUE both PDP function and its approximation is scaled with corresponding surrogate model coefficient.
 #' @param prediction_funs Prediction functions that should be used in model comparison.
 #' @param ... Another arguments passed into model specific method.
 #'
 #' @export
 plot.xspliner <- function(x, variable_names = NULL, model = NULL, plot_response = TRUE, plot_approx = TRUE,
-                    data = NULL, plot_data = FALSE, plot_deriv = FALSE, n_plots = 6, sort_by = NULL,
+                    data = NULL, plot_data = FALSE, plot_deriv = FALSE, n_plots = 6, sort_by = NULL, use_coeff = TRUE,
                     compare_with = list(), prediction_funs = list(function(object, newdata) predict(object, newdata)),
                     ...) {
   if (is.null(model)) {
-    plot_variable_transition(x, variable_names, plot_response, plot_approx, data, plot_data, plot_deriv, n_plots)
+    plot_variable_transition(x, variable_names, plot_response, plot_approx, data, plot_data, plot_deriv, n_plots, use_coeff)
   } else {
     if (is.null(data)) {
       stop("Data must be provided.")

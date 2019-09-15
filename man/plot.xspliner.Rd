@@ -7,7 +7,7 @@
 \method{plot}{xspliner}(x, variable_names = NULL, model = NULL,
   plot_response = TRUE, plot_approx = TRUE, data = NULL,
   plot_data = FALSE, plot_deriv = FALSE, n_plots = 6,
-  sort_by = NULL, compare_with = list(),
+  sort_by = NULL, use_coeff = TRUE, compare_with = list(),
   prediction_funs = list(function(object, newdata) predict(object,
   newdata)), ...)
 }
@@ -31,6 +31,8 @@
 \item{n_plots}{Threshold for number of plots when plotting all variables.}
 
 \item{sort_by}{When comparing models determines according to which model should observations be ordered.}
+
+\item{use_coeff}{If TRUE both PDP function and its approximation is scaled with corresponding surrogate model coefficient.}
 
 \item{compare_with}{Named list. Other models that should be compared with xspliner and \code{model}.}
 
