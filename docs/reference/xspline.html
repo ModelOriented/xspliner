@@ -62,7 +62,6 @@ See details in vignette(&quot;xspliner&quot;)." />
 
  gtag('config', 'UA-5650686-14');
 </script>
-
   </head>
 
   <body>
@@ -109,22 +108,22 @@ See details in vignette(&quot;xspliner&quot;)." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/discrete.html">Classification and discrete predictors</a>
-    </li>
-    <li>
-      <a href="../articles/graphics.html">Graphics</a>
-    </li>
-    <li>
       <a href="../articles/automation.html">Automate your work</a>
     </li>
     <li>
-      <a href="../articles/methods.html">Methods and xspliner environment</a>
+      <a href="../articles/cases.html">Use cases</a>
+    </li>
+    <li>
+      <a href="../articles/discrete.html">Classification and discrete predictors</a>
     </li>
     <li>
       <a href="../articles/extras.html">Extra information about the package</a>
     </li>
     <li>
-      <a href="../articles/cases.html">Use cases</a>
+      <a href="../articles/graphics.html">Graphics</a>
+    </li>
+    <li>
+      <a href="../articles/methods.html">Methods and xspliner environment</a>
     </li>
   </ul>
 </li>
@@ -139,7 +138,6 @@ See details in vignette(&quot;xspliner&quot;)." />
 </div><!--/.navbar -->
 
       
-
       </header>
 
 <div class="row">
@@ -163,14 +161,14 @@ See details in <code><a href='../articles/xspliner.html'>vignette("xspliner")</a
 <span class='co'># S3 method for default</span>
 <span class='fu'>xspline</span>(<span class='no'>object</span>, <span class='kw'>lhs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>response</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>predictors</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>form</span> <span class='kw'>=</span> <span class='st'>"additive"</span>, <span class='kw'>bare</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='no'>...</span>)
+  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)
 
 <span class='co'># S3 method for formula</span>
 <span class='fu'>xspline</span>(<span class='no'>object</span>, <span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>consider</span> <span class='kw'>=</span> <span class='st'>"specials"</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='no'>...</span>)
+  <span class='kw'>consider</span> <span class='kw'>=</span> <span class='st'>"specials"</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)
 
 <span class='co'># S3 method for explainer</span>
-<span class='fu'>xspline</span>(<span class='no'>object</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='no'>...</span>)</pre>
+<span class='fu'>xspline</span>(<span class='no'>object</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -218,7 +216,7 @@ variables transformation. See vignette("xspliner") for details.</p></td>
     </tr>
     <tr>
       <th>consider</th>
-      <td><p>One of <code><a href='https://rdrr.io/r/base/c.html'>c("specials", "all")</a></code>. If "specials", only components with xs or xf
+      <td><p>One of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("specials", "all")</a></code>. If "specials", only components with xs or xf
 call are considered in transition.</p></td>
     </tr>
     </table>
@@ -232,8 +230,8 @@ call are considered in transition.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># preparing blackbox model</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>randomForest</span>)
-<span class='no'>rf_iris</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/randomForest/man/randomForest.html'>randomForest</a></span>(
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>randomForest</span>)
+<span class='no'>rf_iris</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/randomForest/topics/randomForest'>randomForest</a></span>(
   <span class='no'>Petal.Width</span> ~  <span class='no'>Sepal.Length</span> + <span class='no'>Petal.Length</span> + <span class='no'>Species</span>,
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
 
@@ -241,7 +239,7 @@ call are considered in transition.</p></td>
 <span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(
   <span class='no'>Petal.Width</span> ~ <span class='fu'>xs</span>(<span class='no'>Sepal.Length</span>) + <span class='fu'>xs</span>(<span class='no'>Petal.Length</span>) + <span class='fu'>xf</span>(<span class='no'>Species</span>),
   <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>rf_iris</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
 #&gt; Call:
 #&gt; stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 #&gt;     xf(Species), family = family, data = data)
@@ -267,10 +265,10 @@ call are considered in transition.</p></td>
 #&gt; AIC: -88.349
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 2
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-1.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># passing just the model</span>
 <span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(<span class='no'>rf_iris</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
 #&gt; Call:
 #&gt; stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 #&gt;     xf(Species), family = family, data = data)
@@ -296,12 +294,14 @@ call are considered in transition.</p></td>
 #&gt; AIC: -88.349
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 2
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-2.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># using DALEX</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DALEX</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'DALEX':</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>DALEX</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'DALEX':</span>
 #&gt; <span class='message'>  method            from     </span>
 #&gt; <span class='message'>  print.description questionr</span></div><div class='output co'>#&gt; <span class='message'>Welcome to DALEX (version: 0.4.7).</span>
-#&gt; <span class='message'>Find examples and detailed introduction at: https://pbiecek.github.io/PM_VEE/</span></div><div class='input'><span class='no'>xs_iris_explainer</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DALEX/man/explain.html'>explain</a></span>(<span class='no'>rf_iris</span>)</div><div class='output co'>#&gt; Preparation of a new explainer is initiated
+#&gt; <span class='message'>Find examples and detailed introduction at: https://pbiecek.github.io/PM_VEE/</span>
+#&gt; <span class='message'>Additional features will be available after installation of: iBreakDown.</span>
+#&gt; <span class='message'>Use 'install_dependencies()' to get all suggested dependencies</span></div><div class='input'><span class='no'>xs_iris_explainer</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DALEX/topics/explain'>explain</a></span>(<span class='no'>rf_iris</span>)</div><div class='output co'>#&gt; Preparation of a new explainer is initiated
 #&gt;   -&gt; model label       :  randomForest  (<span style='color: #BBBB00;'>default</span><span>)
 #&gt;   -&gt; data              :  150  rows  4  cols (</span><span style='color: #BBBB00;'>extracted from the model</span><span>)
 #&gt;   -&gt; target variable   :  not specified! (</span><span style='color: #BB0000;'>WARNING</span><span>)
@@ -309,7 +309,7 @@ call are considered in transition.</p></td>
 #&gt;   -&gt; predicted values  :  numerical, min =  0.1977761 , mean =  1.199116 , max =  2.143874  
 #&gt;   -&gt; residual function :  difference between y and yhat (</span><span style='color: #BBBB00;'>default</span><span>)
 #&gt; </span><span style='color: #00BB00;'>A new explainer has been created!</span><span></div><div class='input'><span class='no'>xs_iris</span> <span class='kw'>&lt;-</span> <span class='fu'>xspline</span>(<span class='no'>rf_iris</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xs_iris</span>)</div><div class='output co'>#&gt; 
 #&gt; Call:
 #&gt; stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 #&gt;     xf(Species), family = family, data = data)
@@ -335,7 +335,7 @@ call are considered in transition.</p></td>
 #&gt; AIC: -88.349
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 2
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-3.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xs_iris</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='xspline-3.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -350,7 +350,6 @@ call are considered in transition.</p></td>
   </div>
 </div>
 
-
       <footer>
       <div class="author">
   <p>
@@ -358,14 +357,11 @@ call are considered in transition.</p></td>
     Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
   </p>
 </div>
-
       </footer>
    </div>
 
   
 
-
   </body>
 </html>
-
 

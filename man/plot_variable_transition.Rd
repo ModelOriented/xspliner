@@ -6,7 +6,8 @@
 \usage{
 plot_variable_transition(x, variable_names = NULL,
   plot_response = TRUE, plot_approx = TRUE, data = NULL,
-  plot_data = FALSE, plot_deriv = FALSE, n_plots = 6)
+  plot_data = FALSE, plot_deriv = FALSE, n_plots = 6,
+  use_coeff = TRUE)
 }
 \arguments{
 \item{variable_names}{Names of predictors which transitions should be plotted.}
@@ -22,6 +23,8 @@ plot_variable_transition(x, variable_names = NULL,
 \item{plot_deriv}{If TRUE derivative of approximation is showed on plot.}
 
 \item{n_plots}{Threshold for number of plots when plotting all variables.}
+
+\item{use_coeff}{If TRUE both PDP function and its approximation is scaled with corresponding surrogate model coefficient.}
 }
 \description{
 The function plots variable profile.

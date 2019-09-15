@@ -60,7 +60,6 @@
 
  gtag('config', 'UA-5650686-14');
 </script>
-
   </head>
 
   <body>
@@ -107,22 +106,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/discrete.html">Classification and discrete predictors</a>
-    </li>
-    <li>
-      <a href="../articles/graphics.html">Graphics</a>
-    </li>
-    <li>
       <a href="../articles/automation.html">Automate your work</a>
     </li>
     <li>
-      <a href="../articles/methods.html">Methods and xspliner environment</a>
+      <a href="../articles/cases.html">Use cases</a>
+    </li>
+    <li>
+      <a href="../articles/discrete.html">Classification and discrete predictors</a>
     </li>
     <li>
       <a href="../articles/extras.html">Extra information about the package</a>
     </li>
     <li>
-      <a href="../articles/cases.html">Use cases</a>
+      <a href="../articles/graphics.html">Graphics</a>
+    </li>
+    <li>
+      <a href="../articles/methods.html">Methods and xspliner environment</a>
     </li>
   </ul>
 </li>
@@ -137,7 +136,6 @@
 </div><!--/.navbar -->
 
       
-
       </header>
 
 <div class="row">
@@ -152,8 +150,8 @@
     <p>The function plots models comparison based on them predictions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_model_comparison</span>(<span class='no'>x</span>, <span class='no'>model</span>, <span class='no'>data</span>, <span class='kw'>compare_with</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>object</span>,
+    <pre class="usage"><span class='fu'>plot_model_comparison</span>(<span class='no'>x</span>, <span class='no'>model</span>, <span class='no'>data</span>, <span class='kw'>compare_with</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(),
+  <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>,
   <span class='no'>newdata</span>)), <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -187,35 +185,35 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>iris_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span>(<span class='no'>iris</span>[<span class='no'>iris</span>$<span class='no'>Species</span> <span class='kw'>!=</span> <span class='st'>"setosa"</span>, ])
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>e1071</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>randomForest</span>)</div><div class='output co'>#&gt; <span class='message'>randomForest 4.6-14</span></div><div class='output co'>#&gt; <span class='message'>Type rfNews() to see new features/changes/bug fixes.</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>xspliner</span>)
+    <pre class="examples"><div class='input'><span class='no'>iris_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/droplevels'>droplevels</a></span>(<span class='no'>iris</span>[<span class='no'>iris</span>$<span class='no'>Species</span> <span class='kw'>!=</span> <span class='st'>"setosa"</span>, ])
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>e1071</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>randomForest</span>)</div><div class='output co'>#&gt; <span class='message'>randomForest 4.6-14</span></div><div class='output co'>#&gt; <span class='message'>Type rfNews() to see new features/changes/bug fixes.</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>xspliner</span>)
 <span class='co'># Build SVM model, random forest model and surrogate one constructed on top od SVM</span>
-<span class='no'>model_svm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/e1071/man/svm.html'>svm</a></span>(<span class='no'>Species</span> ~  <span class='no'>Sepal.Length</span> + <span class='no'>Sepal.Width</span> + <span class='no'>Petal.Length</span> + <span class='no'>Petal.Width</span>,
+<span class='no'>model_svm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/e1071/topics/svm'>svm</a></span>(<span class='no'>Species</span> ~  <span class='no'>Sepal.Length</span> + <span class='no'>Sepal.Width</span> + <span class='no'>Petal.Length</span> + <span class='no'>Petal.Width</span>,
                  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris_data</span>, <span class='kw'>probability</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>model_rf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/randomForest/man/randomForest.html'>randomForest</a></span>(<span class='no'>Species</span> ~  <span class='no'>Sepal.Length</span> + <span class='no'>Sepal.Width</span> + <span class='no'>Petal.Length</span> + <span class='no'>Petal.Width</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris_data</span>)
+<span class='no'>model_rf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/randomForest/topics/randomForest'>randomForest</a></span>(<span class='no'>Species</span> ~  <span class='no'>Sepal.Length</span> + <span class='no'>Sepal.Width</span> + <span class='no'>Petal.Length</span> + <span class='no'>Petal.Width</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris_data</span>)
 
 <span class='no'>model_xs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='xspline.html'>xspline</a></span>(<span class='no'>Species</span> ~  <span class='fu'>xs</span>(<span class='no'>Sepal.Length</span>) + <span class='fu'>xs</span>(<span class='no'>Sepal.Width</span>) + <span class='fu'>xs</span>(<span class='no'>Petal.Length</span>) + <span class='fu'>xs</span>(<span class='no'>Petal.Width</span>),
                     <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>model_svm</span>)
 <span class='co'># Prepare prediction functions returning label probability</span>
-<span class='no'>prob_svm</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>newdata</span>, <span class='kw'>probability</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='st'>"probabilities"</span>)[, <span class='fl'>2</span>]
-<span class='no'>prob_rf</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>newdata</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"prob"</span>)[, <span class='fl'>2</span>]
-<span class='no'>prob_xs</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>newdata</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>)
+<span class='no'>prob_svm</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>newdata</span>, <span class='kw'>probability</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='st'>"probabilities"</span>)[, <span class='fl'>2</span>]
+<span class='no'>prob_rf</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>newdata</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"prob"</span>)[, <span class='fl'>2</span>]
+<span class='no'>prob_xs</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>newdata</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>)
 
 <span class='co'># Plotting predictions for original SVM and surrogate model on training data</span>
 <span class='fu'>plot_model_comparison</span>(
   <span class='no'>model_xs</span>, <span class='no'>model_svm</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris_data</span>,
-  <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>xs</span> <span class='kw'>=</span> <span class='no'>prob_xs</span>, <span class='kw'>svm</span> <span class='kw'>=</span> <span class='no'>prob_svm</span>)
+  <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>xs</span> <span class='kw'>=</span> <span class='no'>prob_xs</span>, <span class='kw'>svm</span> <span class='kw'>=</span> <span class='no'>prob_svm</span>)
 )</div><div class='img'><img src='plot_model_comparison-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Plotting predictions for original SVM, surrogate model and random forest on training data</span>
 <span class='fu'>plot_model_comparison</span>(
   <span class='no'>model_xs</span>, <span class='no'>model_svm</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris_data</span>,
-  <span class='kw'>compare_with</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>rf</span> <span class='kw'>=</span> <span class='no'>model_rf</span>),
-  <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>xs</span> <span class='kw'>=</span> <span class='no'>prob_xs</span>, <span class='kw'>svm</span> <span class='kw'>=</span> <span class='no'>prob_svm</span>, <span class='kw'>rf</span> <span class='kw'>=</span> <span class='no'>prob_rf</span>)
+  <span class='kw'>compare_with</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>rf</span> <span class='kw'>=</span> <span class='no'>model_rf</span>),
+  <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>xs</span> <span class='kw'>=</span> <span class='no'>prob_xs</span>, <span class='kw'>svm</span> <span class='kw'>=</span> <span class='no'>prob_svm</span>, <span class='kw'>rf</span> <span class='kw'>=</span> <span class='no'>prob_rf</span>)
 )</div><div class='img'><img src='plot_model_comparison-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Sorting values according to SVM predictions</span>
 <span class='fu'>plot_model_comparison</span>(
   <span class='no'>model_xs</span>, <span class='no'>model_svm</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris_data</span>,
-  <span class='kw'>compare_with</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>rf</span> <span class='kw'>=</span> <span class='no'>model_rf</span>),
-  <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>xs</span> <span class='kw'>=</span> <span class='no'>prob_xs</span>, <span class='kw'>svm</span> <span class='kw'>=</span> <span class='no'>prob_svm</span>, <span class='kw'>rf</span> <span class='kw'>=</span> <span class='no'>prob_rf</span>),
+  <span class='kw'>compare_with</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>rf</span> <span class='kw'>=</span> <span class='no'>model_rf</span>),
+  <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>xs</span> <span class='kw'>=</span> <span class='no'>prob_xs</span>, <span class='kw'>svm</span> <span class='kw'>=</span> <span class='no'>prob_svm</span>, <span class='kw'>rf</span> <span class='kw'>=</span> <span class='no'>prob_rf</span>),
   <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"svm"</span>
 )</div><div class='img'><img src='plot_model_comparison-3.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
@@ -230,7 +228,6 @@
   </div>
 </div>
 
-
       <footer>
       <div class="author">
   <p>
@@ -238,14 +235,11 @@
     Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
   </p>
 </div>
-
       </footer>
    </div>
 
   
 
-
   </body>
 </html>
-
 

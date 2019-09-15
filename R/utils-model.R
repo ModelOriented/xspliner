@@ -10,7 +10,7 @@ specials <- function(model, type = "all") {
   }
 }
 
-plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data, plot_data, plot_deriv) {
+plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data, plot_data, plot_deriv, use_coeff) {
   if (plot_data && is.null(data)) {
     message("You can plot data points only when data parameter is provided.")
     plot_data <- FALSE
@@ -21,6 +21,10 @@ plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data
     stop("You must specify at least one plot.")
   }
   transition_fun <- transition(x, variable_name, "function")
+  variable_coeff <- 1
+  if (use_coeff) {
+    variable_coeff <- setNames(x$coefficients[-1], all.vars(x$call$formula)[-1])[variable_name]
+  }
 
   if (plot_data) {
     plot_range <- range(data[[variable_name]])
@@ -40,6 +44,7 @@ plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data
   }
   if (plot_response) {
     data <- transition(x, variable_name, "data")
+    data$yhat <- variable_coeff * data$yhat
     colnames(data)[colnames(data) == "yhat"] <- response_var
     names(color_values)[2] <- attr(data, "type")
     data$type <- attr(data, "type")
@@ -47,7 +52,7 @@ plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data
   }
   if (plot_approx) {
     x_var <- seq(from = plot_range[1], to = plot_range[2], length.out = 50)
-    y_var <- transition_fun(x_var)
+    y_var <- variable_coeff * transition_fun(x_var)
     data <- data.frame(y_var, x_var)
     colnames(data) <- c(response_var, variable_name)
     data$type <- "approximation"
@@ -56,7 +61,7 @@ plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data
   if (plot_deriv) {
     eps <- (plot_range[2] - plot_range[1]) / 500
     x_var <- seq(from = plot_range[1], to = plot_range[2], length.out = 50)[-50]
-    y_var <- (transition_fun(x_var + eps) - transition_fun(x_var)) / eps
+    y_var <- variable_coeff * (transition_fun(x_var + eps) - transition_fun(x_var)) / eps
     data <- data.frame(y_var, x_var)
     colnames(data) <- c(response_var, variable_name)
     if (sum(to_plot) == 1) {
@@ -116,6 +121,7 @@ utils::globalVariables(c("Observation", "Model", "Value"))
 #' @param plot_data If TRUE raw data is drawn.
 #' @param plot_deriv If TRUE derivative of approximation is showed on plot.
 #' @param n_plots Threshold for number of plots when plotting all variables.
+#' @param use_coeff If TRUE both PDP function and its approximation is scaled with corresponding surrogate model coefficient.
 #'
 #' @examples
 #' library(randomForest)
@@ -135,7 +141,7 @@ utils::globalVariables(c("Observation", "Model", "Value"))
 #'
 #' @export
 plot_variable_transition <- function(x, variable_names = NULL, plot_response = TRUE, plot_approx = TRUE,
-                                     data = NULL, plot_data = FALSE, plot_deriv = FALSE, n_plots = 6) {
+                                     data = NULL, plot_data = FALSE, plot_deriv = FALSE, n_plots = 6, use_coeff = TRUE) {
   if (is.null(variable_names)) {
     special_vars <- specials(x, "all")
     special_vars_to_plot <- special_vars[1:min(n_plots, length(special_vars))]
@@ -152,7 +158,7 @@ plot_variable_transition <- function(x, variable_names = NULL, plot_response = T
   } else if (variable_names %in% specials(x, "qualitative")) {
     plot(transition(x, variable_names, "base"))
   } else {
-    plot_quantitative(x, variable_names, plot_response, plot_approx, data, plot_data, plot_deriv)
+    plot_quantitative(x, variable_names, plot_response, plot_approx, data, plot_data, plot_deriv, use_coeff)
   }
 }
 

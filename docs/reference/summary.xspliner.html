@@ -60,7 +60,6 @@
 
  gtag('config', 'UA-5650686-14');
 </script>
-
   </head>
 
   <body>
@@ -107,22 +106,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/discrete.html">Classification and discrete predictors</a>
-    </li>
-    <li>
-      <a href="../articles/graphics.html">Graphics</a>
-    </li>
-    <li>
       <a href="../articles/automation.html">Automate your work</a>
     </li>
     <li>
-      <a href="../articles/methods.html">Methods and xspliner environment</a>
+      <a href="../articles/cases.html">Use cases</a>
+    </li>
+    <li>
+      <a href="../articles/discrete.html">Classification and discrete predictors</a>
     </li>
     <li>
       <a href="../articles/extras.html">Extra information about the package</a>
     </li>
     <li>
-      <a href="../articles/cases.html">Use cases</a>
+      <a href="../articles/graphics.html">Graphics</a>
+    </li>
+    <li>
+      <a href="../articles/methods.html">Methods and xspliner environment</a>
     </li>
   </ul>
 </li>
@@ -137,7 +136,6 @@
 </div><!--/.navbar -->
 
       
-
       </header>
 
 <div class="row">
@@ -153,9 +151,9 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for xspliner</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>object</span>, <span class='no'>predictor</span>, <span class='no'>...</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>)
-  <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>object</span>, <span class='no'>newdata</span>)), <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>())</pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>object</span>, <span class='no'>predictor</span>, <span class='no'>...</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prediction_funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>function</span>(<span class='no'>object</span>, <span class='no'>newdata</span>)
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>object</span>, <span class='no'>newdata</span>)), <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>())</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -201,8 +199,7 @@ The following points decribe the rules:</p><ul>
 <li><p>When variable was qualitative and transformed, factor matching is displayed.</p></li>
 <li><p>When variable was not transformed, glm::summary output is displayed for the model.</p></li>
 </ul>
-
-<p>If both object parameter and model (original black box) was provided, the summary displays comparison of original and surrogate model.
+    <p>If both object parameter and model (original black box) was provided, the summary displays comparison of original and surrogate model.
 The following points decribe the rules (\(y_{s}\) and \(y_{o}\) are predictions of surrogate and original model respectively on provided dataset).
 When comparing statistic is close to 1, this means surrogate model is similiar to black box one (according to this statistic).</p>
 <p>For regression models:</p><ul>
@@ -212,29 +209,26 @@ When comparing statistic is close to 1, this means surrogate model is similiar t
     $$1 - \frac{\sum_{i = 1}^{n} ({y_{s}^{(i)} - y_{o}^{(i)}}) ^ {2}}{\sum_{i = 1}^{n} ({y_{o}^{(i)} - \overline{y_{o}}}) ^ {2}}$$</p></li>
 <li><p>Mean square errors for each model.</p></li>
 </ul>
-
-<p>For classification models the result depends on prediction type.
+    <p>For classification models the result depends on prediction type.
 When predictions are classified levels:</p><ul>
 <li><p>Mean predictions similarity$$\frac{1}{n} \sum_{i = 1}^{n} I_{y_{s}^{(i)} = y_{o}^{(i)}}$$</p></li>
 <li><p>Accuracies for each models.</p></li>
 </ul>
-
-<p>When predictions are response probabilities:</p><ul>
+    <p>When predictions are response probabilities:</p><ul>
 <li><p>R^2 as for regression model.</p></li>
 <li><p>1 - Maximum ROC difference$$1 - \max_{t \in T} ||ROC_{o}(t) - ROC_{s}(t)||_{2}$$ Calculates maximum of euclidean distances between ROC points for specified thresholds set T. In this imlplementation T is union of breakpoints for each ROC curve.</p></li>
 <li><p>1 - Mean ROC difference Above version using mean instead of max measure.</p></li>
 </ul>
 
-
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>randomForest</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>randomForest</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>1</span>)
 <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
 <span class='co'># regression model</span>
-<span class='no'>iris.rf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/randomForest/man/randomForest.html'>randomForest</a></span>(<span class='no'>Petal.Width</span> ~  <span class='no'>Sepal.Length</span> + <span class='no'>Petal.Length</span> + <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+<span class='no'>iris.rf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/randomForest/topics/randomForest'>randomForest</a></span>(<span class='no'>Petal.Width</span> ~  <span class='no'>Sepal.Length</span> + <span class='no'>Petal.Length</span> + <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
 <span class='no'>iris.xs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='xspline.html'>xspline</a></span>(<span class='no'>iris.rf</span>)
 <span class='co'># Summary of quantitative variable transition</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='output co'>#&gt; 
 #&gt; Family: gaussian 
 #&gt; Link function: identity 
 #&gt; 
@@ -255,11 +249,11 @@ When predictions are classified levels:</p><ul>
 #&gt; 
 #&gt; R-sq.(adj) =  0.985   Deviance explained = 98.7%
 #&gt; GCV = 0.00022296  Scale est. = 0.00017975  n = 35</div><div class='input'><span class='co'># Summary of qualitative variable transition</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='st'>"Species"</span>)</div><div class='output co'>#&gt;         orig       pred
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='st'>"Species"</span>)</div><div class='output co'>#&gt;         orig       pred
 #&gt; 1     setosa     setosa
 #&gt; 2 versicolor versicolor
 #&gt; 3  virginica  virginica</div><div class='input'><span class='co'># Comparing surrogate with original model (regression)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>iris.rf</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>data</span>)</div><div class='output co'>#&gt; Models comparison 
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>iris.xs</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>iris.rf</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>data</span>)</div><div class='output co'>#&gt; Models comparison 
 #&gt;   1 - Max prediction normed-diff:  0.8840345 
 #&gt;   R^2:  0.9960708 
 #&gt;   MSE Black Box:  0.02251746 
@@ -279,7 +273,6 @@ When predictions are classified levels:</p><ul>
   </div>
 </div>
 
-
       <footer>
       <div class="author">
   <p>
@@ -287,14 +280,11 @@ When predictions are classified levels:</p><ul>
     Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
   </p>
 </div>
-
       </footer>
    </div>
 
   
 
-
   </body>
 </html>
-
 
