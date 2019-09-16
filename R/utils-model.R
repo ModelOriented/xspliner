@@ -145,14 +145,14 @@ plot_variable_transition <- function(x, variable_names = NULL, plot_response = T
   if (is.null(variable_names)) {
     special_vars <- specials(x, "all")
     special_vars_to_plot <- special_vars[1:min(n_plots, length(special_vars))]
-    plot_specials_grid(x, special_vars_to_plot, plot_response, plot_approx, data, plot_data, plot_deriv)
+    plot_specials_grid(x, special_vars_to_plot, plot_response, plot_approx, data, plot_data, plot_deriv, use_coeff)
   } else if (length(variable_names) > 1) {
     special_vars <- specials(x, "all")
     special_vars_to_plot <- intersect(special_vars, variable_names)
     if (length(special_vars_to_plot) == 0) {
       stop("None of selected variables was transformed.")
     }
-    plot_specials_grid(x, special_vars_to_plot, plot_response, plot_approx, data, plot_data, plot_deriv)
+    plot_specials_grid(x, special_vars_to_plot, plot_response, plot_approx, data, plot_data, plot_deriv, use_coeff)
   } else if (!(variable_names %in% specials(x, "all"))) {
     stop("Variable wasn't transformed.")
   } else if (variable_names %in% specials(x, "qualitative")) {
@@ -254,11 +254,11 @@ plot_model_comparison <- function(x, model, data, compare_with = list(),
   heatmap_plot
 }
 
-plot_specials_grid <- function(x, vars, plot_response, plot_approx, data, plot_data, plot_deriv) {
+plot_specials_grid <- function(x, vars, plot_response, plot_approx, data, plot_data, plot_deriv, use_coeff) {
   plot_list <- list(nrow = ceiling(length(vars) / 3))
   plot_list[["ncol"]] <- ceiling(length(vars) / plot_list$nrow)
   for (var in vars)  {
-    plot_list[[var]] <- plot_variable_transition(x, var, plot_response, plot_approx, data, plot_data, plot_deriv)
+    plot_list[[var]] <- plot_variable_transition(x, var, plot_response, plot_approx, data, plot_data, plot_deriv, use_coeff = use_coeff)
   }
   do.call(grid_arrange_shared_legend, plot_list)
 }
