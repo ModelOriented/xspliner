@@ -10,6 +10,8 @@ plot_variable_transition(x, variable_names = NULL,
   use_coeff = TRUE)
 }
 \arguments{
+\item{x}{Object of class 'xspliner'.}
+
 \item{variable_names}{Names of predictors which transitions should be plotted.}
 
 \item{plot_response}{If TRUE black box model response is drawn.}

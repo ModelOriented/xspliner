@@ -3,7 +3,7 @@
 #' @description The method provides all plotting methods offered by 'xspliner' package.
 #' See \link{plot_variable_transition} and \link{plot_model_comparison} for more details.
 #'
-#' @param x Object of class 'xspliner'
+#' @param x Object of class 'xspliner'.
 #' @param variable_names Names of predictors which transitions should be plotted.
 #' @param model Base model that xspliner is based on.
 #' @param plot_response If TRUE black box model response is drawn.

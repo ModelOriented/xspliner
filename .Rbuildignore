@@ -6,3 +6,6 @@
 ^_pkgdown\.yml$
 ^examples$
 ^cran-comments.md$
+.travis.yml
+^pkgdown$
+

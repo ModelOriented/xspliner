@@ -114,6 +114,7 @@ utils::globalVariables(c("Observation", "Model", "Value"))
 #' In case of qualitative variable it plots merging path for variable levels.
 #' When no variable is specified it plots transitions for first \code{n_plots} variables.
 #'
+#' @param x Object of class 'xspliner'.
 #' @param variable_names Names of predictors which transitions should be plotted.
 #' @param plot_response If TRUE black box model response is drawn.
 #' @param plot_approx If TRUE black box model response approximation is drawn.
@@ -181,14 +182,21 @@ plot_variable_transition <- function(x, variable_names = NULL, plot_response = T
 #' # Build SVM model, random forest model and surrogate one constructed on top od SVM
 #' model_svm <- svm(Species ~  Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
 #'                  data = iris_data, probability = TRUE)
-#' model_rf <- randomForest(Species ~  Sepal.Length + Sepal.Width + Petal.Length + Petal.Width, data = iris_data)
-#'
-#' model_xs <- xspline(Species ~  xs(Sepal.Length) + xs(Sepal.Width) + xs(Petal.Length) + xs(Petal.Width),
-#'                     model = model_svm)
+#' model_rf <- randomForest(
+#'   Species ~  Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
+#'   data = iris_data
+#' )
+#' model_xs <- xspline(
+#'   Species ~  xs(Sepal.Length) + xs(Sepal.Width) + xs(Petal.Length) + xs(Petal.Width),
+#'   model = model_svm
+#' )
 #' # Prepare prediction functions returning label probability
-#' prob_svm <- function(object, newdata) attr(predict(object, newdata = newdata, probability = TRUE), "probabilities")[, 2]
-#' prob_rf <- function(object, newdata) predict(object, newdata = newdata, type = "prob")[, 2]
-#' prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
+#' prob_svm <- function(object, newdata)
+#'   attr(predict(object, newdata = newdata, probability = TRUE), "probabilities")[, 2]
+#' prob_rf <- function(object, newdata)
+#'   predict(object, newdata = newdata, type = "prob")[, 2]
+#' prob_xs <- function(object, newdata)
+#'   predict(object, newdata = newdata, type = "response")
 #'
 #' # Plotting predictions for original SVM and surrogate model on training data
 #' plot_model_comparison(
@@ -224,7 +232,9 @@ plot_model_comparison <- function(x, model, data, compare_with = list(),
       purrr::map(~ prediction_funs[[1]](., data))
   } else {
     if (length(models_list) != length(prediction_funs)) {
-      stop("prediction_funs should provide prediction functions for all models (surrogate, original and model to compare), or common one.")
+      stop(
+        "prediction_funs should provide prediction functions for all models (surrogate, original and model to compare), or common one."
+      )
     }
     fitted <- models_list %>%
       purrr::map2(prediction_funs, function(model, pred_fun) pred_fun(model, data))
@@ -258,7 +268,9 @@ plot_specials_grid <- function(x, vars, plot_response, plot_approx, data, plot_d
   plot_list <- list(nrow = ceiling(length(vars) / 3))
   plot_list[["ncol"]] <- ceiling(length(vars) / plot_list$nrow)
   for (var in vars)  {
-    plot_list[[var]] <- plot_variable_transition(x, var, plot_response, plot_approx, data, plot_data, plot_deriv, use_coeff = use_coeff)
+    plot_list[[var]] <- plot_variable_transition(
+      x, var, plot_response, plot_approx, data, plot_data, plot_deriv, use_coeff = use_coeff
+    )
   }
   do.call(grid_arrange_shared_legend, plot_list)
 }

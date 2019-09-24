@@ -12,7 +12,7 @@
   newdata)), ...)
 }
 \arguments{
-\item{x}{Object of class 'xspliner'}
+\item{x}{Object of class 'xspliner'.}
 
 \item{variable_names}{Names of predictors which transitions should be plotted.}
 

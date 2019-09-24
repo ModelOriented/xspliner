@@ -1,3 +1,8 @@
+# xspliner 0.0.4
+* Fix approximation with monotonic splines
+* Fix measure for fitting best monotonic spline
+* GLM coefficients used for plot scaling
+
 # xspliner 0.0.3
 * Summary method extended with comparison statistics
 * Extended methods for auto-extracting model metadata (lhs, response)
