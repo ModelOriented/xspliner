@@ -60,6 +60,7 @@
 
  gtag('config', 'UA-5650686-14');
 </script>
+
   </head>
 
   <body>
@@ -106,22 +107,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/automation.html">Automate your work</a>
-    </li>
-    <li>
-      <a href="../articles/cases.html">Use cases</a>
-    </li>
-    <li>
       <a href="../articles/discrete.html">Classification and discrete predictors</a>
-    </li>
-    <li>
-      <a href="../articles/extras.html">Extra information about the package</a>
     </li>
     <li>
       <a href="../articles/graphics.html">Graphics</a>
     </li>
     <li>
+      <a href="../articles/automation.html">Automate your work</a>
+    </li>
+    <li>
       <a href="../articles/methods.html">Methods and xspliner environment</a>
+    </li>
+    <li>
+      <a href="../articles/extras.html">Extra information about the package</a>
+    </li>
+    <li>
+      <a href="../articles/cases.html">Use cases</a>
     </li>
   </ul>
 </li>
@@ -136,6 +137,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -151,10 +153,10 @@
     </div>
 
     <pre class="usage"><span class='fu'>approx_with_spline</span>(<span class='no'>effect_data</span>, <span class='no'>response</span>, <span class='no'>predictor</span>,
-  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>...</span>)
+  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='no'>...</span>)
 
 <span class='fu'>approx_with_monotonic_spline</span>(<span class='no'>effect_data</span>, <span class='no'>response</span>, <span class='no'>predictor</span>,
-  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='no'>monotonic</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='no'>monotonic</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,7 +179,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other arguments passed to <a href='https://www.rdocumentation.org/packages/mgcv/topics/s'>s</a> function.</p></td>
+      <td><p>Other arguments passed to <a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a> function.</p></td>
     </tr>
     <tr>
       <th>monotonic</th>
@@ -187,13 +189,13 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Object of class "gam". See <a href='https://www.rdocumentation.org/packages/mgcv/topics/gamObject'>gamObject</a></p>
+    <p>Object of class "gam". See <a href='https://rdrr.io/pkg/mgcv/man/gamObject.html'>gamObject</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>20</span>, <span class='fl'>5</span>, <span class='fl'>5</span>))
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>20</span>, <span class='fl'>2</span>, <span class='fl'>2</span>)
-<span class='no'>env</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/environment'>new.env</a></span>()
-<span class='fu'>approx_with_spline</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>), <span class='st'>"y"</span>, <span class='st'>"x"</span>, <span class='no'>env</span>)</div><div class='output co'>#&gt; 
+    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>20</span>, <span class='fl'>5</span>, <span class='fl'>5</span>))
+<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>20</span>, <span class='fl'>2</span>, <span class='fl'>2</span>)
+<span class='no'>env</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/environment.html'>new.env</a></span>()
+<span class='fu'>approx_with_spline</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>), <span class='st'>"y"</span>, <span class='st'>"x"</span>, <span class='no'>env</span>)</div><div class='output co'>#&gt; 
 #&gt; Family: gaussian 
 #&gt; Link function: identity 
 #&gt; 
@@ -204,7 +206,7 @@
 #&gt; 1  total = 2 
 #&gt; 
 #&gt; GCV score: 4.577151     </div><div class='input'>
-<span class='fu'>approx_with_monotonic_spline</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>), <span class='st'>"y"</span>, <span class='st'>"x"</span>, <span class='no'>env</span>, <span class='st'>"up"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: initial point very close to some inequality constraints</span></div><div class='output co'>#&gt; <span class='warning'>Warning: initial parameters very close to inequality constraints</span></div><div class='output co'>#&gt; 
+<span class='fu'>approx_with_monotonic_spline</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>), <span class='st'>"y"</span>, <span class='st'>"x"</span>, <span class='no'>env</span>, <span class='st'>"up"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: initial point very close to some inequality constraints</span></div><div class='output co'>#&gt; <span class='warning'>Warning: initial parameters very close to inequality constraints</span></div><div class='output co'>#&gt; 
 #&gt; Family: gaussian 
 #&gt; Link function: identity 
 #&gt; 
@@ -227,6 +229,7 @@
   </div>
 </div>
 
+
       <footer>
       <div class="author">
   <p>
@@ -234,11 +237,14 @@
     Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
   </p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

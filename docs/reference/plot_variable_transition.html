@@ -64,6 +64,7 @@ When no variable is specified it plots transitions for first n_plots variables."
 
  gtag('config', 'UA-5650686-14');
 </script>
+
   </head>
 
   <body>
@@ -110,22 +111,22 @@ When no variable is specified it plots transitions for first n_plots variables."
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/automation.html">Automate your work</a>
-    </li>
-    <li>
-      <a href="../articles/cases.html">Use cases</a>
-    </li>
-    <li>
       <a href="../articles/discrete.html">Classification and discrete predictors</a>
-    </li>
-    <li>
-      <a href="../articles/extras.html">Extra information about the package</a>
     </li>
     <li>
       <a href="../articles/graphics.html">Graphics</a>
     </li>
     <li>
+      <a href="../articles/automation.html">Automate your work</a>
+    </li>
+    <li>
       <a href="../articles/methods.html">Methods and xspliner environment</a>
+    </li>
+    <li>
+      <a href="../articles/extras.html">Extra information about the package</a>
+    </li>
+    <li>
+      <a href="../articles/cases.html">Use cases</a>
     </li>
   </ul>
 </li>
@@ -140,6 +141,7 @@ When no variable is specified it plots transitions for first n_plots variables."
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -206,11 +208,11 @@ When no variable is specified it plots transitions for first <code>n_plots</code
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>randomForest</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>1</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>randomForest</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
 <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
 <span class='co'># regression model</span>
-<span class='no'>iris.rf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/randomForest/topics/randomForest'>randomForest</a></span>(<span class='no'>Petal.Width</span> ~  <span class='no'>Sepal.Length</span> + <span class='no'>Petal.Length</span> + <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+<span class='no'>iris.rf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/randomForest/man/randomForest.html'>randomForest</a></span>(<span class='no'>Petal.Width</span> ~  <span class='no'>Sepal.Length</span> + <span class='no'>Petal.Length</span> + <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
 <span class='no'>iris.xs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='xspline.html'>xspline</a></span>(<span class='no'>iris.rf</span>)
 <span class='co'># plot Sepal.Length transition</span>
 <span class='fu'>plot_variable_transition</span>(<span class='no'>iris.xs</span>, <span class='st'>"Sepal.Length"</span>)</div><div class='img'><img src='plot_variable_transition-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot Species transition</span>
@@ -229,6 +231,7 @@ When no variable is specified it plots transitions for first <code>n_plots</code
   </div>
 </div>
 
+
       <footer>
       <div class="author">
   <p>
@@ -236,11 +239,14 @@ When no variable is specified it plots transitions for first <code>n_plots</code
     Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
   </p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
