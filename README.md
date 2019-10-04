@@ -1,4 +1,4 @@
-# Train Interpretable, Spline Based, Additive, Surrogate Models<img src="vignettes/logo.png" align="right" width="150"/>
+# Train Interpretable, Spline Based, Additive, Surrogate Models<img src="man/figures/logo.png" align="right" width="150"/>
 
 [![Build Status](https://api.travis-ci.org/ModelOriented/xspliner.png)](https://travis-ci.org/ModelOriented/xspliner)
 [![Coverage
